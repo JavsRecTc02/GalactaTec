@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import tkinter as tk
 from tkinter import filedialog
+import re
 import os
 import shutil
 
@@ -238,6 +239,8 @@ class RegisterWindow:
                                 print(field["label"], field["text"])
                             if self.user_already_exists():
                                 print("User already exists.")
+                            elif not self.validate_password(self.input_data["user_password"]["text"]):
+                                print("Password incomplete")
                             else:
                                 # Guardar los datos en el archivo .txt
                                 self.save_user_data()
@@ -335,6 +338,21 @@ class RegisterWindow:
                 if data[0] == user_name or data[2] == user_correo:
                     return True
         return False
+    
+    #Verificacion de contraseña
+    def validate_password(self, password):
+        # Verificar longitud mínima de 7 caracteres
+        if len(password) < 7:
+            print("Contraseña demasiado corta, longitud mínima de 7 caracteres")
+            return False
+        
+        # Verificar al menos una mayúscula, un símbolo especial, un número y una minúscula
+        regex = re.compile(r'^(?=.*[A-Z])(?=.*[!@#$%^&*()-_])(?=.*[0-9])(?=.*[a-z]).{7,}$')
+        if not regex.match(password):
+            print("No cumple con los caracteres necesarios, al menos una mayúscula, un símbolo especial, un número y una minúscula ")
+            return False
+        
+        return True
     
     #Guarda name,user_name, correo y password en .txt
     def save_user_data(self):
