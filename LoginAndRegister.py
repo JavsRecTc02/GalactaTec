@@ -7,6 +7,7 @@ import os
 import shutil
 
 import Niveles
+from Email import UsersEmail
 from RifaTurnoJugadores import rifaWindow
 
 #Ventana de Inicio
@@ -193,6 +194,8 @@ class RegisterWindow:
         self.height = height
         self.welcome_window = WelcomeWindow()
         self.welcome_window.show_back_button()
+        # Crea una instancia de UsersEmail
+        self.user_email_instance = None
 
         # Define las coordenadas para las etiquetas y los rectángulos de entrada
         self.input_data = {
@@ -237,10 +240,12 @@ class RegisterWindow:
                             # AQUÍ SE MANDARÍA A LA PANTALLA DE LOGIN
                             for field in self.input_data.values():
                                 print(field["label"], field["text"])
-                            if self.user_already_exists():
-                                print("User already exists.")
+                            if not self.user_already_exists():
+                                print("Invalid User or Email, plis try again :)")
                             elif not self.validate_password(self.input_data["user_password"]["text"]):
                                 print("Password incomplete")
+                            elif not self.validate_email():
+                                print("Invalid Code, please try again")
                             else:
                                 # Guardar los datos en el archivo .txt
                                 self.save_user_data()
@@ -328,31 +333,51 @@ class RegisterWindow:
     def user_already_exists(self):
         # Verificar si el usuario ya existe
         user_name = self.input_data["user_name"]["text"]
-        user_correo = self.input_data["user_correo"]["text"]
+        user_correo = self.input_data["user_correo"]["text"]   
 
+        if not user_correo.endswith("@gmail.com"):
+            print("Invalid email address. Must be use a Gmail address")
+            return False 
+            
         # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
         # Supongamos que tenemos una lista de usuarios existentes en un archivo de texto llamado "users.txt"
         with open("users.txt", "r") as file:
             for line in file:
                 data = line.strip().split(",")
                 if data[0] == user_name or data[2] == user_correo:
-                    return True
-        return False
+                    print("User or email already exists.")
+                    return False
+
+        return True
     
+    #Verificacion de Correo
+    def validate_email(self):
+        user_correo = self.input_data["user_correo"]["text"]
+
+        # Usa la misma instancia de UsersEmail si ya está creada
+        if self.user_email_instance is None:
+            self.user_email_instance = UsersEmail(user_correo)
+            self.user_email_instance.generate_verification_code()
+
+        # Llama a verify_email en la instancia creada
+        self.user_email_instance.verify_email()
+        return self.user_email_instance.verified_email
+
     #Verificacion de contraseña
     def validate_password(self, password):
+        regex = re.compile(r'^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_])(?=.*[0-9])(?=.*[a-z]).{7,}$')
+
         # Verificar longitud mínima de 7 caracteres
         if len(password) < 7:
             print("Contraseña demasiado corta, longitud mínima de 7 caracteres")
             return False
         
         # Verificar al menos una mayúscula, un símbolo especial, un número y una minúscula
-        regex = re.compile(r'^(?=.*[A-Z])(?=.*[!@#$%^&*()-_])(?=.*[0-9])(?=.*[a-z]).{7,}$')
-        if not regex.match(password):
+        elif not regex.match(password):
             print("No cumple con los caracteres necesarios, al menos una mayúscula, un símbolo especial, un número y una minúscula ")
             return False
-        
-        return True
+        else:
+            return True
     
     #Guarda name,user_name, correo y password en .txt
     def save_user_data(self):
