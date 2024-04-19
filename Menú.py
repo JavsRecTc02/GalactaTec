@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-import subprocess
-
 
 #Creación de una clase para abrir las ventanas de cada botón 
 class MainwindowFunctions:
