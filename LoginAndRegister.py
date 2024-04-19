@@ -16,6 +16,7 @@ class WelcomeWindow:
         self.height = 600
         self.window = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Welcome")
+        pygame.mixer.init()
 
         self.WHITE = (255, 255, 255)
         self.back_button_visible = False

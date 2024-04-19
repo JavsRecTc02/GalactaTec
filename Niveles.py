@@ -8,12 +8,11 @@ class nivel1:
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0,0), pygame.RESIZABLE) #Hace que la ventana se ajuste a todo el tamaño de la pantalla  
         self.width, self.height = pygame.display.get_surface().get_size()
+        pygame.mixer.init()
         
         self.username = username
 
-
         self.nave = Nave(self.pantalla, self.username) #Inicializa la clase Nave
-
 
         self.input_data = {
             "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""}
@@ -32,6 +31,7 @@ class nivel1:
                 self.gif_images.append(imagen_escalada)
         self.current_image = 0
 
+
     def run(self):
         clock = pygame.time.Clock()
         running = True
@@ -39,6 +39,8 @@ class nivel1:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
+                
+                self.nave.mover(event) #Cada vez que se tocque una tecla se mueve una sola vez
 
             # Muestra la imagen actual del GIF
             self.pantalla.blit(self.gif_images[self.current_image], (0, 0))
@@ -52,13 +54,13 @@ class nivel1:
                 self.pantalla.blit(self.imagen_perfil, (8, 8))
             
 
+            self.nave.dibujar() #Se dibuja la nave
 
-            self.loadPerfil()
-            self.draw_text_inputs()
+            self.loadPerfil() #Se dibuja la imagen de perfil
+            self.draw_text_inputs() #Se dibujan los datos que se imprimen en la ventana
 
-            keys = pygame.key.get_pressed()
-            self.nave.mover(keys)
-            self.nave.dibujar()
+            self.nave.dibujar_puntos()
+
 
             pygame.display.flip()
             clock.tick(60)  # Limita el juego a 60 FPS
