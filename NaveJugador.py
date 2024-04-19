@@ -26,7 +26,9 @@ class Nave:
 
     def loadNave(self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = 'C://Users//Usuario//Desktop//GalactaTec//User files'
+
+        #cambiar para que funcione en cualquier computadora
+        ruta_directorio_carpetas = r"C:\Users\killt\Documents\GitHub\GalactaTec\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
 
