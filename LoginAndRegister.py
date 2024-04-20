@@ -186,7 +186,6 @@ class LoginWindow:
                 text_surface = font.render(field_data["text"], True, (0, 0, 0))
             self.welcome_window.window.blit(text_surface, (field_data["rect"].x + 5, field_data["rect"].y + 5))
 
-
 #Clase Register - heredada de la clase welcome_window
 class RegisterWindow:
     def __init__(self, width, height):
@@ -214,6 +213,8 @@ class RegisterWindow:
         self.spaceship_image_button_active = False
         self.profile_image_button_active = False
         self.user_song_button_active = False
+
+    
     #Bucle de la ventana de register
     def run(self):
         running = True
@@ -279,6 +280,7 @@ class RegisterWindow:
 
         pygame.quit()
         return ""
+    
     #boton de submit
     def draw_submit_button(self):
         submit_button = pygame.Rect(self.width - 150, self.height - 80, 100, 50)

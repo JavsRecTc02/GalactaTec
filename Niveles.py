@@ -54,14 +54,15 @@ class nivel1:
                 self.pantalla.blit(self.imagen_perfil, (8, 8))
             
 
-            self.nave.dibujar() #Se dibuja la nave
+            self.nave.dibujarBalas() #Se dibuja la nave
 
             self.loadPerfil() #Se dibuja la imagen de perfil
             self.draw_text_inputs() #Se dibujan los datos que se imprimen en la ventana
 
             self.nave.dibujar_puntos()
 
-
+            self.nave.dibujar_vidas()
+            
             pygame.display.flip()
             clock.tick(60)  # Limita el juego a 60 FPS
         pygame.quit()

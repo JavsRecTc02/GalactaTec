@@ -1,6 +1,5 @@
 import pygame
-
-import pygame.mixer
+from pygame import *
 
 class BasicBullet:
     def __init__(self, screen):
@@ -15,10 +14,13 @@ class BasicBullet:
     def mover(self):
         if self.disparada:  # Si la bala ha sido disparada, moverla hacia arriba
             self.rect.y -= self.velocidad_bala
-
+            if self.rect.y < 0:
+                self.disparada = False
 
     def dibujar(self):
-        self.screen.blit(self.imagen, self.rect)
+        if self.disparada:
+            self.screen.blit(self.imagen, self.rect)
+
 
 
 

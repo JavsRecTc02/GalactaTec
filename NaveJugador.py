@@ -16,8 +16,11 @@ class Nave:
         self.sonido_movimiento = pygame.mixer.Sound('C://Users//Usuario//Desktop//GalactaTec//Bullets//MovimientoNave.mp3')
         self.sonido_movimiento.set_volume(0.3)
         pygame.mixer.init()
-
         self.puntos = 0
+
+        self.imagen_vida = pygame.image.load('C://Users//Usuario//Desktop//GalactaTec//Vidas\Vida1.png')
+        self.vidas = 3
+
 
     def mover(self, event):
         if event.type == pygame.KEYDOWN:
@@ -38,16 +41,24 @@ class Nave:
                 bassic_bullet.rect.center = self.rect.center  # Posiciona la bala en el centro de la nave
                 self.balas.append(bassic_bullet)
                 self.sonido_disparo_basico.play()  # Reproduce el sonido del disparo
-
-                self.incrementar_puntos(200)
                 
+                self.incrementar_puntos(200)
 
-    def dibujar(self):
+    def dibujarBalas(self):
         self.pantalla.blit(self.imagen, self.rect)
         # Dibuja todas las balas
         for bala in self.balas:
             bala.dibujar()
             bala.mover()
+
+    def dibujar_vidas(self):
+        self.imagen_vida = pygame.transform.scale(self.imagen_vida, (100, 100))
+        # Dibuja la imagen en la parte inferior izquierda de la pantalla con un margen de 10 píxeles
+        self.pantalla.blit(self.imagen_vida, (10, self.pantalla.get_height() - self.imagen_vida.get_height() - 10))
+
+        fuente = pygame.font.Font(None, 20)  # Crea una fuente
+        texto = fuente.render('Vidas totales: '+str(self.vidas), True, (255, 255, 255))  # Crea un objeto de texto
+        self.pantalla.blit(texto, (100, self.pantalla.get_height() - self.imagen_vida.get_height() + 26))  # Dibuja el texto en la pantalla
 
 
     def loadNave(self):
@@ -72,7 +83,6 @@ class Nave:
                 imagen_nave = pygame.transform.scale(imagen_nave, (100, 100))
                 return imagen_nave  # Devuelve la imagen cargada
         
-
     def incrementar_puntos(self, cantidad):
         self.puntos += cantidad  # Incrementa los puntos
 
@@ -80,4 +90,5 @@ class Nave:
         fuente = pygame.font.Font(None, 36)  # Crea una fuente
         texto = fuente.render('Puntos: ' + str(self.puntos), True, (255, 0, 0))  # Crea un objeto de texto
         self.pantalla.blit(texto, (10, 240))  # Dibuja el texto en la pantalla
+
 
