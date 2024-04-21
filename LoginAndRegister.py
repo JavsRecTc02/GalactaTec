@@ -76,7 +76,9 @@ class WelcomeWindow:
 
         pygame.quit()
 
+#*****************************************************************************************************************************************************
 #Clase Login - heredada de la clase welcome_window
+#*****************************************************************************************************************************************************
 class LoginWindow:
     def __init__(self, width, height):
         self.width = width
@@ -93,7 +95,11 @@ class LoginWindow:
         self.font = pygame.font.Font(None, 25)
         self.label_color = (255, 255, 255)
 
-    #Funcion que carga los strings de info de cada user, para verificar 
+        # Botón "Olvidaste tu contraseña?"
+        self.forgot_password_button_rect = pygame.Rect(215, 450, 200, 30)
+        self.forgot_password_button_active = False
+
+    # Función que carga los strings de info de cada usuario, para verificar 
     def load_user_data(self):
         user_data = {}
         with open("users.txt", "r") as file:
@@ -105,7 +111,7 @@ class LoginWindow:
                 user_data[username] = password
             return user_data
         
-    #Bucle de la ventana de login
+    # Bucle de la ventana de inicio de sesión
     def run(self):
         running = True
         while running:
@@ -119,31 +125,20 @@ class LoginWindow:
                                 field["active"] = True
                             else:
                                 field["active"] = False
+
+                        # Verificar si se hizo clic en el botón "Olvidaste tu contraseña?"
+                        if self.forgot_password_button_rect.collidepoint(event.pos):
+                            self.handle_forgot_password()
+
                         # Verificar si se hizo clic en el botón "Back"
-                        if 520 <= event.pos[0] <= 595 and 520 <= event.pos[1] <= 580:
+                        elif 520 <= event.pos[0] <= 595 and 520 <= event.pos[1] <= 580:
                             self.welcome_window.hide_back_button()
                             pygame.display.set_caption("Welcome")
-                            return "back"
+                            self.welcome_window.run()
+                        
                         # Verificar si se hizo clic en el botón "Entry"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
-                            #Verificar si el username y contrasena coinciden
-                            username = self.input_data["user_name"]["text"]
-                            password = self.input_data["user_password"]["text"]
-                            if username in self.user_data:
-                                if self.user_data[username] == password:
-                                    print("Loggeado")
-
-                                    #mandaria a la la clase main del juego
-                                    niveles_window = Niveles.nivel1(username)
-                                    niveles_window.run()
-
-                                    #En teoría esta clase lleva a las opciones que hace gabriel
-                                    #y de esas al juego, de momento se pone asi para probar el juego
-                                    
-                                else:
-                                    print("Contraseña incorrecta")
-                            else:
-                                print("El usuario no se encuentra registrado")
+                            self.handle_login()
 
                 elif event.type == KEYDOWN:
                     for field in self.input_data.values():
@@ -157,10 +152,29 @@ class LoginWindow:
             self.welcome_window.draw_back_button()
             self.draw_entry_button()
             self.draw_text_inputs()
+            self.draw_forgot_password_button()
             pygame.display.flip()
 
         pygame.quit()
         return ""
+    #Funcion que verifica si los datos ingresados por el usuario coinciden en el .txt
+    def handle_login(self):
+        # Verificar si el usuario y la contraseña coinciden
+        username = self.input_data["user_name"]["text"]
+        password = self.input_data["user_password"]["text"]
+        if username in self.user_data:
+            if self.user_data[username] == password:
+                print("Loggeado")
+                # Aquí puedes continuar con la lógica para iniciar sesión
+            else:
+                print("Contraseña incorrecta")
+        else:
+            print("El usuario no se encuentra registrado")
+
+    def handle_forgot_password(self):
+        #Abre la ventana de recuperacion de contraseña
+        password_recovery_window = PasswordRecoveryWindow(self.width, self.height)
+        password_recovery_window.run()
 
     def draw_entry_button(self):
         entry_button = pygame.Rect(self.width - 150, self.height - 80, 100, 50)
@@ -186,8 +200,212 @@ class LoginWindow:
                 text_surface = font.render(field_data["text"], True, (0, 0, 0))
             self.welcome_window.window.blit(text_surface, (field_data["rect"].x + 5, field_data["rect"].y + 5))
 
+    def draw_forgot_password_button(self):
+        pygame.draw.rect(self.welcome_window.window, (0, 0, 0), self.forgot_password_button_rect)
+        font = pygame.font.Font(None, 20)
+        text_surface = font.render("Olvidaste tu contraseña?", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.forgot_password_button_rect.center)
+        self.welcome_window.window.blit(text_surface, text_rect)
 
-#Clase Register - heredada de la clase welcome_window
+#*****************************************************************************************************************************************************
+#Clase con ventans modificables para la recuperacion de contraseña
+#*****************************************************************************************************************************************************
+class PasswordRecoveryWindow:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.welcome_window = WelcomeWindow()
+        self.welcome_window.show_back_button()
+        self.user_email_changepsw_instance = None
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
+        self.email_to_change_password = None
+        self.input_data = {
+            "user_email": {"label": "Correo electrónico:", "pos": (150, 270), "rect": pygame.Rect(215, 300, 400, 50), "active": False, "text": ""}
+        }
+        self.font = pygame.font.Font(None, 25)
+        self.label_color = (255, 255, 255)
+
+    def is_email_registered(self, email):
+        with open("users.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(",")
+                if parts[2] == email:  # El correo electrónico es el tercer elemento
+                    return True
+        return False
+
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.send_email_button_rect.collidepoint(event.pos):
+                        self.handle_send_email()
+                    for field_name, field_data in self.input_data.items():
+                        if field_data["rect"].collidepoint(event.pos):
+                            field_data["active"] = True
+                        else:
+                            field_data["active"] = False
+                    #Boton back
+                    if 520 <= event.pos[0] <= 595 and 520 <= event.pos[1] <= 580:
+                            self.login_screen = LoginWindow(self.width, self.height)
+                            self.login_screen.run()
+                elif event.type == pygame.KEYDOWN:
+                    for field_data in self.input_data.values():
+                        if field_data["active"]:
+                            if event.key == pygame.K_BACKSPACE:
+                                field_data["text"] = field_data["text"][:-1]
+                            else:
+                                field_data["text"] += event.unicode
+
+            self.draw_interface()
+            self.welcome_window.draw_back_button()
+            pygame.display.flip()
+            self.clock.tick(60)
+
+        pygame.quit()
+
+    def draw_interface(self):
+        self.screen.fill((0, 0, 255))
+        for field_name, field_data in self.input_data.items():
+            pygame.draw.rect(self.screen, (255, 255, 255), field_data["rect"])
+            pygame.draw.rect(self.screen, (0, 0, 0), field_data["rect"], 2)
+            label_surface = self.font.render(field_data["label"], True, self.label_color)
+            self.screen.blit(label_surface, field_data["pos"])
+            font = pygame.font.Font(None, 36)
+            text_surface = font.render(field_data["text"], True, (0, 0, 0))
+            self.screen.blit(text_surface, (field_data["rect"].x + 5, field_data["rect"].y + 5))
+
+        self.draw_send_email_button()
+
+    def draw_send_email_button(self):
+        self.send_email_button_rect = pygame.Rect(self.width - 150, self.height - 80, 100, 50)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.send_email_button_rect)
+        font = pygame.font.Font(None, 24)
+        text_surface = font.render('Enviar correo', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.send_email_button_rect.center)
+        self.screen.blit(text_surface, text_rect)
+
+    def handle_send_email(self):
+        email = self.input_data["user_email"]["text"]
+        if self.is_email_registered(email):
+            print("Correo encontrado en la base de datos. Enviando correo de recuperación...")
+            self.email_to_change_password = email
+            print("Email :", self.email_to_change_password)
+            self.change_password()
+        else:
+            print("El correo electrónico no está registrado en la base de datos.")
+
+    def change_password(self):
+        if not self.validate_changepassword():
+            print("Código inválido, por favor intente de nuevo.")
+        else:
+            print("Se cambiará la contraseña.")
+            pygame.display.update()  # Actualizar la ventana actual
+
+            # Crear una instancia de PasswordRecoveryWindow si aún no existe
+            if not hasattr(self, 'change_password_view'):
+                self.change_password_view = PasswordRecoveryWindow(800, 600)
+
+            # Llamar a show_change_password_interface en la instancia existente
+            self.change_password_view.show_change_password_interface(self.email_to_change_password)
+            self.change_password_view.run()
+
+    def validate_changepassword(self):
+        user_correo = self.input_data["user_email"]["text"]
+        if self.user_email_changepsw_instance is None:
+            self.user_email_changepsw_instance = UsersEmail(user_correo)
+            self.user_email_changepsw_instance.generate_verification_code()
+
+        self.user_email_changepsw_instance.verify_email()
+        return self.user_email_changepsw_instance.verified_email
+
+    def show_change_password_interface(self, user_email):
+        self.email_to_change_password = user_email
+        print(self.email_to_change_password)
+        running = True
+        password = ''
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_BACKSPACE:
+                        password = password[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        self.handle_confirm_button_click(password)
+                    else:
+                        password += event.unicode
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.confirm_button_rect.collidepoint(event.pos):
+                        self.handle_confirm_button_click(password)
+
+            self.draw_change_password_interface(password)
+            pygame.display.flip()
+            self.clock.tick(60)
+
+        pygame.quit()
+
+    def draw_confirm_button(self):
+        self.confirm_button_rect = pygame.Rect(350, 500, 100, 50)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.confirm_button_rect)
+        font = pygame.font.Font(None, 24)
+        text_surface = font.render('Confirmar', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.confirm_button_rect.center)
+        self.screen.blit(text_surface, text_rect)
+
+    def draw_change_password_interface(self, password):
+        self.screen.fill((0, 0, 255))
+        pygame.draw.rect(self.screen, (255, 255, 255), (215, 400, 400, 50))
+        pygame.draw.rect(self.screen, (0, 0, 0), (215, 400, 400, 50), 2)
+        label_surface = self.font.render("Nueva contraseña:", True, self.label_color)
+        self.screen.blit(label_surface, (150, 370))
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(password, True, (0, 0, 0))
+        self.screen.blit(text_surface, (220, 405))
+        self.draw_confirm_button()
+
+    def handle_confirm_button_click(self, password):
+        # Crear una instancia de RegisterWindow
+        register_window = RegisterWindow(800, 600)
+
+        # Llamar al método validate_password de RegisterWindow
+        if register_window.validate_password(password):
+            print("La contraseña es válida. Se procederá con el cambio de contraseña.")
+            self.update_password(self.email_to_change_password,password)
+        else:
+            print("La contraseña no cumple con los requisitos necesarios.")
+
+    def update_password(self, email, new_password):
+    # Leer el archivo "users.txt" y almacenar las líneas en una lista
+        with open("users.txt", "r") as file:
+            lines = file.readlines()
+        # Buscar la línea correspondiente al usuario con el correo electrónico proporcionado
+        for i, line in enumerate(lines):
+            parts = line.strip().split(",")
+            if parts[2] == email:  # El correo electrónico es el tercer elemento
+                print("Contraseña anterior:", parts[-1])
+                # Actualizar la contraseña en la línea encontrada
+                parts[-1] = new_password  # La contraseña es el último elemento
+                print("Nueva contraseña:", new_password)
+                lines[i] = ",".join(parts) + "\n"  # Unir los elementos de parts en una cadena y asignar a lines[i]
+                break
+        else:
+            print("No se encontró ningún usuario con el correo electrónico proporcionado:", email)
+            #return  # Salir de la función si no se encuentra el usuario
+    # Escribir las líneas actualizadas de vuelta al archivo
+        with open("users.txt", "w") as file:
+            file.writelines(lines)
+        print("¡Cambio de contraseña exitoso!")
+        login_window = LoginWindow(self.width, self.height) #Se regresa a la ventana de Login
+        pygame.display.set_caption("Login")
+        login_window.run()
+
+#*****************************************************************************************************************************************************
+#Clase Register 
+#*****************************************************************************************************************************************************
 class RegisterWindow:
     def __init__(self, width, height):
         self.width = width
@@ -216,6 +434,7 @@ class RegisterWindow:
         self.spaceship_image_button_active = False
         self.profile_image_button_active = False
         self.user_song_button_active = False
+
     #Bucle de la ventana de register
     def run(self):
         running = True
@@ -234,10 +453,9 @@ class RegisterWindow:
                         if 520 <= event.pos[0] <= 595 and 520 <= event.pos[1] <= 580:
                             self.welcome_window.hide_back_button()
                             pygame.display.set_caption("Welcome")
-                            return "back"
+                            self.welcome_window.run()
                         # Verificar si se hizo clic en el botón "Submit"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
-                            # AQUÍ SE MANDARÍA A LA PANTALLA DE LOGIN
                             for field in self.input_data.values():
                                 print(field["label"], field["text"])
                             if not self.user_already_exists():
@@ -354,7 +572,7 @@ class RegisterWindow:
     def validate_email(self):
         user_correo = self.input_data["user_correo"]["text"]
 
-        # Usa la misma instancia de UsersEmail si ya está creada
+        # Usa la misma instancia de UsersEmail si ya está creada (Singleton)
         if self.user_email_instance is None:
             self.user_email_instance = UsersEmail(user_correo)
             self.user_email_instance.generate_verification_code()

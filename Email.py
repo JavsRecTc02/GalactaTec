@@ -29,13 +29,13 @@ class UsersEmail:
 
         destiny = [user_email]
         # Datos que contiene el Email, con HTML se pueden agregar hasta imágenes 
-        asunto = 'Welcome. New User Galacta TEC'
-        messagge = f'Código de verificación: {self.code_verify}'  # Usar el código generado
-        html = '<h1>Codigo de verificacion</h1.'
+        asunto = 'Hello GalactaTEC user'
+        mesagge = 'Utilice este código para verificar su correo electrónico o restablecer su contraseña'  # Usar el código generado
+        html = f'<h1>Código de verificación</h1><p>{self.code_verify}</p>'
 
         print("Codigo de verificacion enviado :))")
 
-        yag.send(destiny, asunto, messagge)
+        yag.send(destiny, asunto, [mesagge,html])
 
         verification_window = VerificationWindow(self.code_verify, self)
         verification_window.run()
@@ -46,7 +46,7 @@ class VerificationWindow:
         self.user_instance = user_instance
         self.screen = pygame.display.set_mode((400, 200))
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 30)
+        self.font = pygame.font.Font(None, 25)
         self.entry_text = ""
         self.running = True
 
