@@ -60,6 +60,13 @@ class Nave:
         texto = fuente.render('Vidas totales: '+str(self.vidas), True, (255, 255, 255))  # Crea un objeto de texto
         self.pantalla.blit(texto, (100, self.pantalla.get_height() - self.imagen_vida.get_height() + 26))  # Dibuja el texto en la pantalla
 
+    def perdidaVidas(self, cantidad):
+        self.vidas -= cantidad  #Metodo para bajar la cantidad de vidas de los jugadores
+
+    def ganarVidas(self, cantidad):
+        self.vidas += cantidad #Metodo para subir la cantidad de vidas de los jugadores
+        if self.vidas == 5:
+            self.vidas 
 
     def loadNave(self):
         # Ruta al directorio para archivos del jugador

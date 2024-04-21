@@ -136,7 +136,10 @@ class LoginWindow:
                                     #mandaria a la la clase main del juego
                                     niveles_window = Niveles.nivel1(username)
                                     niveles_window.run()
-
+                                    
+                                    #rifa_window=rifaWindow(username, 'GamerPro77')
+                                    #rifa_window.run()
+                                    
                                     #En teoría esta clase lleva a las opciones que hace gabriel
                                     #y de esas al juego, de momento se pone asi para probar el juego
                                     

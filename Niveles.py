@@ -9,7 +9,7 @@ class nivel1:
         self.pantalla = pygame.display.set_mode((0,0), pygame.RESIZABLE) #Hace que la ventana se ajuste a todo el tamaño de la pantalla  
         self.width, self.height = pygame.display.get_surface().get_size()
         pygame.mixer.init()
-        
+
         self.username = username
 
         self.nave = Nave(self.pantalla, self.username) #Inicializa la clase Nave
@@ -24,29 +24,41 @@ class nivel1:
         # Carga las imágenes del GIF
         self.gif_images = []
         for filename in sorted(os.listdir('C://Users//Usuario//Desktop//GalactaTec//Animación Fondo')):
-            if filename.endswith('.png'):  # Asegúrate de que la extensión coincide con la de tus imágenes
+            if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(os.path.join('C://Users//Usuario//Desktop//GalactaTec//Animación Fondo', filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
         self.current_image = 0
 
+        self.volume_slider = pygame.Rect(20, 620, 200, 50)  # Rectangulo para controlar el volumen
+
 
     def run(self):
         clock = pygame.time.Clock()
         running = True
+
+        self.loadMusic() # Reproduce la musica de fondo escogida por el usuario
         while running:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
-                
-                self.nave.mover(event) #Cada vez que se tocque una tecla se mueve una sola vez
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.volume_slider.collidepoint(event.pos):
+                        volume = ((event.pos[0] - self.volume_slider.x)/self.volume_slider.width)
+                        pygame.mixer.music.set_volume(volume) #Permite controlar el volumen con el rectangulo
+
+                self.nave.mover(event) #Cada vez que se tocque una tecla se realiza la acción una sola vez
+
+
+            pygame.mixer.init()
 
             # Muestra la imagen actual del GIF
             self.pantalla.blit(self.gif_images[self.current_image], (0, 0))
 
+
             # Avanza al siguiente fotograma del GIF cada 100 milisegundos
-            if pygame.time.get_ticks() % 100 == 0:
+            if pygame.time.get_ticks() % 80 == 0:
                 self.current_image = (self.current_image + 1) % len(self.gif_images)
 
             #Es una función que verifica que dentro de la clase si existe la foto de perfil
@@ -62,7 +74,9 @@ class nivel1:
             self.nave.dibujar_puntos()
 
             self.nave.dibujar_vidas()
-            
+
+            pygame.draw.rect(self.pantalla, (255, 255, 255), self.volume_slider)
+
             pygame.display.flip()
             clock.tick(60)  # Limita el juego a 60 FPS
         pygame.quit()
@@ -89,7 +103,6 @@ class nivel1:
                 # Redimensiona la imagen para que se ajuste a la ventana
                 self.imagen_perfil = pygame.transform.scale(self.imagen_perfil, (150, 200))
 
-    
     def draw_text_inputs(self):
         for field_name, field_data in self.input_data.items():
             # Renderizar las etiquetas
@@ -97,5 +110,32 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
             # Renderizar el texto de entrada
             font = pygame.font.Font(None, 36)
+
+    def loadMusic(self):
+        # Ruta al directorio para archivos del jugador
+        ruta_directorio_carpetas = 'C://Users//Usuario//Desktop//GalactaTec//User files'
+        # Obtiene una lista de todas las carpetas en el directorio
+        carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
+        # Clasifica las carpetas por nombre
+        carpetas.sort()
+        if self.username in carpetas:
+            # Ruta a la carpeta del usuario
+            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username)
+            # Obtiene una lista de todos los archivos en la carpeta del usuario
+            archivos = os.listdir(ruta_carpeta_usuario)
+            # Busca los archivos que se llamen "cancion"
+            archivos_cancion = [archivo for archivo in archivos if archivo.startswith('cancion')]
+            for archivo in archivos_cancion:
+                # Carga la canción
+                ruta_cancion = os.path.join(ruta_carpeta_usuario, archivo)
+                pygame.mixer.init()  # Inicializa el mixer
+                pygame.mixer.music.load(ruta_cancion)
+                pygame.mixer.music.set_volume(1.0)  # Ajusta el volumen
+                pygame.mixer.music.play(-1)  # El -1 hará que la canción se repita indefinidamente
+
+
+
+
+
     
 
