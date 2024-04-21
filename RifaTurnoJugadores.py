@@ -23,7 +23,6 @@ class rifaWindow:
             }
             self.puesto1 = self.user1
             self.puesto2 = self.user2
-            return self.puesto1 and self.puesto2
 
 
         else:
@@ -32,7 +31,6 @@ class rifaWindow:
             }
             self.puesto1 = self.user2
             self.puesto2 = self.user1
-            return self.puesto1 and self.puesto2
 
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
@@ -48,8 +46,8 @@ class rifaWindow:
                         if event.button == 1:
                             if self.ready_button.collidepoint(event.pos):
                                 print("se presionó")
-                                niveles_window = nivel1(self.puesto1, self.puesto2)
-                                niveles_window.run()
+                                #niveles_window = nivel1(self.pues1, 'GamerPro77')
+                                #niveles_window.run()
 
                                 #Aqui se llama la clase que lleve a lo que tenga que llevar
 
