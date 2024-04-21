@@ -6,7 +6,7 @@ import re
 import os
 import shutil
 
-import Niveles
+from Niveles import nivel1
 from Email import UsersEmail
 from RifaTurnoJugadores import rifaWindow
 
@@ -81,6 +81,7 @@ class WelcomeWindow:
 #*****************************************************************************************************************************************************
 class LoginWindow:
     def __init__(self, width, height):
+        self.username = None
         self.width = width
         self.height = height
         self.welcome_window = WelcomeWindow()
@@ -165,7 +166,9 @@ class LoginWindow:
         if username in self.user_data:
             if self.user_data[username] == password:
                 print("Loggeado")
-                # Aquí puedes continuar con la lógica para iniciar sesión
+                self.username = username  # Almacenar el nombre de usuario
+                self.nivel1 = nivel1(self.username)  # Crear una instancia de nivel1
+                self.nivel1.run()
             else:
                 print("Contraseña incorrecta")
         else:

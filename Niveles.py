@@ -1,4 +1,6 @@
 import os
+import random
+from Bonus import Bonus_de_nivel
 import pygame
 from pygame.locals import *
 from NaveJugador import Nave
@@ -23,9 +25,9 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir('C://Users//Usuario//Desktop//GalactaTec//Animación Fondo')):
+        for filename in sorted(os.listdir(r"C:\Users\killt\Documents\GitHub\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
-                imagen = pygame.image.load(os.path.join('C://Users//Usuario//Desktop//GalactaTec//Animación Fondo', filename))
+                imagen = pygame.image.load(os.path.join(r"C:\Users\killt\Documents\GitHub\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -37,6 +39,10 @@ class nivel1:
     def run(self):
         clock = pygame.time.Clock()
         running = True
+
+        bonus = Bonus_de_nivel(self.pantalla, self.nave)
+        bonus_timer = 0
+        bonus_interval = random.randint(5000,15000)  # Intervalo de tiempo aleatorio (entre 5 y 15 segundos) entre la aparición de bonus
 
         self.loadMusic() # Reproduce la musica de fondo escogida por el usuario
         while running:
@@ -55,6 +61,21 @@ class nivel1:
 
             # Muestra la imagen actual del GIF
             self.pantalla.blit(self.gif_images[self.current_image], (0, 0))
+
+            if pygame.time.get_ticks() - bonus_timer > bonus_interval:
+                # Generar un número aleatorio entre 0 y 1 para determinar la probabilidad de que aparezca un bono
+                if random.random() < 0.001:  # Umbral de probabilidad de 0.3 (ajustable según desees)
+                    bonus.active = True
+                    bonus_timer = pygame.time.get_ticks()
+                    # Establecer un nuevo intervalo de tiempo aleatorio para la próxima aparición de bono
+                    bonus_interval = random.randint(5000, 15000)  # Intervalo de tiempo aleatorio entre 5 y 15 segundos
+
+            if bonus.active:  # Si el bonus está activo, lo actualizamos y dibujamos en cada iteración
+                bonus.draw()
+                bonus.update()
+                bonus.check_collision()
+
+            bonus.draw_bonus_bar()
 
 
             # Avanza al siguiente fotograma del GIF cada 100 milisegundos
@@ -84,7 +105,7 @@ class nivel1:
 
     def loadPerfil (self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = 'C://Users//Usuario//Desktop//GalactaTec//User files'
+        ruta_directorio_carpetas = r"C:\Users\killt\Documents\GitHub\GalactaTec\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
 
@@ -113,7 +134,7 @@ class nivel1:
 
     def loadMusic(self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = 'C://Users//Usuario//Desktop//GalactaTec//User files'
+        ruta_directorio_carpetas = r"C:\Users\killt\Documents\GitHub\GalactaTec\User Files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         # Clasifica las carpetas por nombre
