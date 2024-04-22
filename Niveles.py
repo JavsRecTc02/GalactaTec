@@ -4,6 +4,8 @@ from Bonus import Bonus_de_nivel
 import pygame
 from pygame.locals import *
 from NaveJugador import Nave
+from Enemies import Enemigo
+
 
 class nivel1:
     def __init__(self, username):
@@ -25,9 +27,9 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\killt\Documents\GitHub\GalactaTec\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
-                imagen = pygame.image.load(os.path.join(r"C:\Users\killt\Documents\GitHub\GalactaTec\Animación Fondo", filename))
+                imagen = pygame.image.load(os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -45,6 +47,8 @@ class nivel1:
         bonus_interval = random.randint(5000,15000)  # Intervalo de tiempo aleatorio (entre 5 y 15 segundos) entre la aparición de bonus
 
         self.loadMusic() # Reproduce la musica de fondo escogida por el usuario
+
+        Enemigo.generar_enemigos(self.pantalla, 6)
         while running:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -53,7 +57,6 @@ class nivel1:
                     if self.volume_slider.collidepoint(event.pos):
                         volume = ((event.pos[0] - self.volume_slider.x)/self.volume_slider.width)
                         pygame.mixer.music.set_volume(volume) #Permite controlar el volumen con el rectangulo
-
                 self.nave.mover(event) #Cada vez que se tocque una tecla se realiza la acción una sola vez
 
 
@@ -77,6 +80,7 @@ class nivel1:
 
             bonus.draw_bonus_bar()
 
+            self.nave.dibujar_vidas()
 
             # Avanza al siguiente fotograma del GIF cada 100 milisegundos
             if pygame.time.get_ticks() % 80 == 0:
@@ -94,9 +98,10 @@ class nivel1:
 
             self.nave.dibujar_puntos()
 
-            self.nave.dibujar_vidas()
-
             pygame.draw.rect(self.pantalla, (255, 255, 255), self.volume_slider)
+
+            # Actualiza los enemigos en cada iteración del bucle
+            Enemigo.actualizar()
 
             pygame.display.flip()
             clock.tick(60)  # Limita el juego a 60 FPS
@@ -105,7 +110,7 @@ class nivel1:
 
     def loadPerfil (self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = r"C:\Users\killt\Documents\GitHub\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
 
@@ -134,7 +139,7 @@ class nivel1:
 
     def loadMusic(self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = r"C:\Users\killt\Documents\GitHub\GalactaTec\User Files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         # Clasifica las carpetas por nombre
@@ -153,10 +158,3 @@ class nivel1:
                 pygame.mixer.music.load(ruta_cancion)
                 pygame.mixer.music.set_volume(1.0)  # Ajusta el volumen
                 pygame.mixer.music.play(-1)  # El -1 hará que la canción se repita indefinidamente
-
-
-
-
-
-    
-
