@@ -13,59 +13,53 @@ class rifaWindow:
         self.user1 = username1
         self.user2 =  username2
 
-        self.puesto1 = None
-        self.puesto2 = None
-
         #Se realiza la rifa aleatoria de cual de los 2 jugadores tiene el primer turno
         if random.randint(1, 2) == 1:
-            self.input_data = {
-                "rifa_winner1": {"label": "El jugador " + self.user1 + " iniciará la partida", "pos": (300, 300), "text": ""}
-            }
-            self.puesto1 = self.user1
-            self.puesto2 = self.user2
-
-
+            self.winner = self.user1
+            self.loser = self.user2
         else:
-            self.input_data = {
-                "rifa_winner2": {"label": "El jugador " + self.user2 + " iniciará la partida", "pos": (300, 300), "text": ""}
-            }
-            self.puesto1 = self.user2
-            self.puesto2 = self.user1
+            self.winner = self.user2
+            self.loser = self.user1
+
+        self.label = "El jugador " + self.winner + " iniciará la partida"
+
+        self.red_label = "ACLARACION: Se esta tomando como usuario2 default una cuenta ya registrada"
 
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
         self.label_color = (0, 0, 0)
+        self.red_label_color = (255, 0, 0)  # Color rojo para el nuevo texto
 
     def run(self):
-            running = True
-            while running:
-                for event in pygame.event.get():
-                    if event.type == QUIT:
-                        running = False
-                    elif event.type == MOUSEBUTTONDOWN:
-                        if event.button == 1:
-                            if self.ready_button.collidepoint(event.pos):
-                                print("se presionó")
-                                #niveles_window = nivel1(self.pues1, 'GamerPro77')
-                                #niveles_window.run()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    running = False
+                elif event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if self.ready_button.collidepoint(event.pos):
+                            print("se presionó")
+                            niveles_window = nivel1(self.winner, self.loser)
+                            niveles_window.run()
 
-                                #Aqui se llama la clase que lleve a lo que tenga que llevar
+            self.pantalla.fill((255,255,255))
+            self.draw_text_inputs()
+            self.draw_ready_button()
+            self.draw_red_text()
+            pygame.display.flip()
 
-
-                self.pantalla.fill((255,255,255))
-                self.draw_text_inputs()
-                self.draw_ready_button()
-                pygame.display.flip()
-
-            pygame.quit()
+        pygame.quit()
     
     def draw_text_inputs(self):
-        for field_name, field_data in self.input_data.items():
-            # Renderizar las etiquetas
-            label_surface = self.font.render(field_data["label"], True, self.label_color)
-            self.pantalla.blit(label_surface, field_data["pos"])
-            # Renderizar el texto de entrada
-            font = pygame.font.Font(None, 36)
+        # Renderizar las etiquetas
+        label_surface = self.font.render(self.label, True, self.label_color)
+        self.pantalla.blit(label_surface, (250, 300))
+
+    def draw_red_text(self):
+        # Renderizar el nuevo texto
+        red_label_surface = self.font.render(self.red_label, True, self.red_label_color)
+        self.pantalla.blit(red_label_surface, (100, 100)) 
 
     def draw_ready_button(self):
         # Crea el botón en el centro de la ventana

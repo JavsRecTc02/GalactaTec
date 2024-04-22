@@ -8,19 +8,27 @@ from Enemies import Enemigo
 
 
 class nivel1:
-    def __init__(self, username):
+    def __init__(self, username1, username2):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0,0), pygame.RESIZABLE) #Hace que la ventana se ajuste a todo el tamaño de la pantalla  
         self.width, self.height = pygame.display.get_surface().get_size()
         pygame.mixer.init()
 
-        self.username = username
+        self.username = username1
+        self.username2 = username2
 
         self.nave = Nave(self.pantalla, self.username) #Inicializa la clase Nave
 
-        self.input_data = {
-            "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""}
-        }
+        if self.username2 != None:
+            self.input_data = {
+                "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""},
+                "rifa_winner2": {"label": "Jugador2: " + self.username2, "pos": (1090, 225), "text": ""}
+            }
+        
+        else:
+            self.input_data = {
+                "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""}
+            }
 
         self.font = pygame.font.Font(None, 25)
         self.label_color = (255, 255, 255)
@@ -86,14 +94,14 @@ class nivel1:
             if pygame.time.get_ticks() % 80 == 0:
                 self.current_image = (self.current_image + 1) % len(self.gif_images)
 
-            #Es una función que verifica que dentro de la clase si existe la foto de perfil
-            if hasattr(self, 'imagen_perfil'):
-                self.pantalla.blit(self.imagen_perfil, (8, 8))
-            
+ 
 
             self.nave.dibujarBalas() #Se dibuja la nave
 
-            self.loadPerfil() #Se dibuja la imagen de perfil
+            self.loadPerfil1() #Se dibuja la imagen de perfil
+            if self.username2 is not None:
+                self.loadPerfil2() #Se dibuja la imagen de perfil del jugador 2 solo si username2 no es None
+
             self.draw_text_inputs() #Se dibujan los datos que se imprimen en la ventana
 
             self.nave.dibujar_puntos()
@@ -108,7 +116,7 @@ class nivel1:
         pygame.quit()
 
 
-    def loadPerfil (self):
+    def loadPerfil1 (self):
         # Ruta al directorio para archivos del jugador
         ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         # Obtiene una lista de todas las carpetas en el directorio
@@ -125,9 +133,33 @@ class nivel1:
             archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
             for archivo in archivos_perfil:
                 # Carga la imagen
-                self.imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                self.imagen_perfil1 = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
                 # Redimensiona la imagen para que se ajuste a la ventana
-                self.imagen_perfil = pygame.transform.scale(self.imagen_perfil, (150, 200))
+                self.imagen_perfil1 = pygame.transform.scale(self.imagen_perfil1, (150, 200))
+
+            self.pantalla.blit(self.imagen_perfil1, (8,8))
+
+    def loadPerfil2 (self):
+        # Ruta al directorio para archivos del jugador
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        # Obtiene una lista de todas las carpetas en el directorio
+        carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
+
+        # Clasifica las carpetas por nombre
+        carpetas.sort()
+        if self.username2 in carpetas:
+            # Ruta a la carpeta del usuario
+            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username2)
+            # Obtiene una lista de todos los archivos en la carpeta del usuario
+            archivos = os.listdir(ruta_carpeta_usuario)
+            # Busca los archivos que se llamen "perfil"
+            archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
+            for archivo in archivos_perfil:
+                # Carga la imagen
+                self.imagen_perfil2 = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                # Redimensiona la imagen para que se ajuste a la ventana
+                self.imagen_perfil2 = pygame.transform.scale(self.imagen_perfil2, (150, 200))
+            self.pantalla.blit(self.imagen_perfil2, (1120, 8))
 
     def draw_text_inputs(self):
         for field_name, field_data in self.input_data.items():

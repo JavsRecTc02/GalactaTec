@@ -3,6 +3,7 @@ from pygame.locals import *
 import sys
 
 from Niveles import nivel1
+from RifaTurnoJugadores import rifaWindow
 
 class Menu:
     def __init__(self, username1):
@@ -39,10 +40,11 @@ class Menu:
                                 print("se presionó Config partida")
 
                             if self.Jugador2_Button.collidepoint(event.pos):
-                                print("se presionó Jugador 2")
+                                rifa = rifaWindow(self.user, 'GamerPro777')
+                                rifa.run()
 
                             if self.Partida1_button.collidepoint(event.pos):
-                                Nivel1_window = nivel1(self.user)
+                                Nivel1_window = nivel1(self.user, None)
                                 Nivel1_window.run()
 
                             if self.Exit_button.collidepoint(event.pos):
