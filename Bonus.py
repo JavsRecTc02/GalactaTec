@@ -73,13 +73,13 @@ class Bonus_de_nivel:
 
     def draw_bonus_bar(self):
         # Dibujar la barra de bonos en la pantalla
-        y = 0
+        y = self.screen.get_height()  # Iniciar en la parte inferior de la pantalla
         for bonus_type in self.bonus_types:
             # Obtener la imagen correspondiente al tipo de bono en blanco y negro
             image = pygame.transform.scale(self.bonus_images[bonus_type + "_bn"], (100, 100))
             # Dibujar la imagen en la pantalla
-            self.screen.blit(image, (self.screen.get_width() - image.get_width(), y))
-            y += image.get_height()
+            self.screen.blit(image, (self.screen.get_width() - image.get_width(), y - image.get_height()))
+            y -= image.get_height()  # Mover hacia arriba para el próximo bono
 
     def draw(self):
         # Dibujar el bonus en la pantalla si está activo
