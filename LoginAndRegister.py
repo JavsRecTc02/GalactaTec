@@ -6,9 +6,9 @@ import re
 import os
 import shutil
 
-from Niveles import nivel1
+
 from Email import UsersEmail
-from RifaTurnoJugadores import rifaWindow
+from MenuSeleccion import Menu
 
 #Ventana de Inicio
 class WelcomeWindow:
@@ -167,8 +167,8 @@ class LoginWindow:
             if self.user_data[username] == password:
                 print("Loggeado")
                 self.username = username  # Almacenar el nombre de usuario
-                self.nivel1 = nivel1(self.username)  # Crear una instancia de nivel1
-                self.nivel1.run()
+                self.menu = Menu(self.username)  # Crear una instancia de nivel1
+                self.menu.run()
             else:
                 print("Contraseña incorrecta")
         else:

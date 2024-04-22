@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-import os
 import random
 
 from Niveles import nivel1
@@ -10,6 +9,7 @@ class rifaWindow:
         self.width = 800
         self.height = 600
         self.pantalla = pygame.display.set_mode((self.width,self.height))
+        pygame.display.set_caption("Rifa de jugadores")
         self.user1 = username1
         self.user2 =  username2
 
