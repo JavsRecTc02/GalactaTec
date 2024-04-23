@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
+import webbrowser
 
 from Niveles import nivel1
 from RifaTurnoJugadores import rifaWindow
@@ -14,7 +15,7 @@ class Menu:
         self.user = username1
 
         self.input_data = {
-                "rifa_winner1": {'label':'¡Bienvenido al menú de GalacTEC!', "pos": (255, 40), "text": ""}
+                "rifa_winner1": {'label':'¡Bienvenido al menú de GalactaTEC!', "pos": (255, 40), "text": ""}
             }
         
 
@@ -51,6 +52,13 @@ class Menu:
                                 running = False
                                 sys.exit()
 
+                            if self.Help_button.collidepoint(event.pos):
+                                running = False
+                                print("se presionó Ayuda")
+                                #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                                webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                                Menu.run(self)
+
                 self.pantalla.fill((255,255,255))
                 self.draw_text_inputs()
                 self.draw_configUsuario_button()
@@ -59,6 +67,7 @@ class Menu:
                 self.draw_Jugador2_button()
                 self.draw_Partida1_button()
                 self.draw_Exit_button()
+                self.draw_Help_button()
                 
 
                 pygame.display.flip()
@@ -120,9 +129,18 @@ class Menu:
 
     def draw_Exit_button(self):
         # Crea el botón en el centro de la ventana
-        self.Exit_button = pygame.Rect(self.width // 2 - 125, self.height // 2 + 100, 250, 50)
+        self.Exit_button = pygame.Rect(self.width // 2 - 125, self.height // 2 + 160, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Exit_button)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Salir del juego', True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=self.Exit_button.center)
+        self.pantalla.blit(text_surface, text_rect)
+
+    def draw_Help_button(self):
+        # Crea el botón en el centro de la ventana
+        self.Help_button = pygame.Rect(self.width // 2 - 125, self.height // 2 + 100, 250, 50)
+        pygame.draw.rect(self.pantalla, (0, 0, 0), self.Help_button)
+        font = pygame.font.Font(None, 24)
+        text_surface = font.render('Ayuda', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.Help_button.center)
         self.pantalla.blit(text_surface, text_rect)
