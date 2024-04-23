@@ -300,7 +300,8 @@ class PasswordRecoveryWindow:
 
     def change_password(self):
         if not self.validate_changepassword():
-            print("Código inválido, por favor intente de nuevo.")
+            self.login_screen = LoginWindow(self.width, self.height)
+            self.login_screen.run()
         else:
             print("Se cambiará la contraseña.")
             pygame.display.update()  # Actualizar la ventana actual
@@ -463,7 +464,8 @@ class RegisterWindow:
                             elif not self.validate_password(self.input_data["user_password"]["text"]):
                                 print("Password incomplete")
                             elif not self.validate_email():
-                                print("Invalid Code, please try again")
+                                 self.backregis_screen = RegisterWindow(self.width, self.height)
+                                 self.backregis_screen.run()
                             else:
                                 # Guardar los datos en el archivo .txt
                                 self.save_user_data()
