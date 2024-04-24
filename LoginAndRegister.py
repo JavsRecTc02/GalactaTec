@@ -5,6 +5,7 @@ from tkinter import filedialog
 import re
 import os
 import shutil
+import webbrowser
 
 from Email import UsersEmail
 from MenuSeleccion import Menu
@@ -32,6 +33,12 @@ class WelcomeWindow:
         pygame.draw.rect(self.window, (0, 0, 0), register_button)
         text_surface = font.render('Register', True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=register_button.center)
+        self.window.blit(text_surface, text_rect)
+
+        help_button = pygame.Rect(0, 550, 120, 50)
+        pygame.draw.rect(self.window, (0, 0, 0), help_button)
+        text_surface = font.render('Help', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=help_button.center)
         self.window.blit(text_surface, text_rect)
 
         if self.back_button_visible:
@@ -68,6 +75,10 @@ class WelcomeWindow:
                             register_window = RegisterWindow(self.width, self.height)
                             pygame.display.set_caption("Register")
                             register_window.run()
+                        elif 0 <= x <= 120 and 550 <= y <= 600:
+                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                            webbrowser.open_new(r'file://C:\Users\gaguz\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            #Poner WelcomeWindow.run(self) en esta linea si en necesario
 
             self.window.fill(self.WHITE)
             self.draw_buttons()
