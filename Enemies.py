@@ -1,10 +1,11 @@
 import pygame
+import time
 
 class Enemigo:
     enemigos = []
     def __init__(self, pantalla, x, y, stop_y):
         self.pantalla = pantalla
-        self.velocidad_bala = 3
+        self.velocidad_bala = 1
         imagen_original = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Enemies\Enemie1.png")  # Carga la imagen de la bala
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))  # Ajusta el tamaño de la imagen
         self.rect = self.imagen.get_rect()
@@ -32,13 +33,13 @@ class Enemigo:
     @classmethod
     def generar_enemigos(cls, pantalla, lineas):
         distancia_x = 50
-        distancia_y = 30
+        distancia_y = 50
 
-        for i in range(lineas):
-            for j in range(lineas - i):  # Modifica esta línea para generar más enemigos en las primeras líneas
-                x = distancia_x * (2*j - (lineas - i - 1)) + pantalla.get_width() / 2
+        for i in range(lineas-1, -1, -1):  # Invierte el orden de generación
+            for j in range(i + 1):  # Modifica esta línea para invertir la formación de los enemigos
+                x = distancia_x * (2*j - i) + pantalla.get_width() / 2
                 y = -distancia_y * i  # Inicia las naves fuera de la ventana
-                stop_y = 100 + i * 30  # Cada fila de enemigos se detendrá 50 píxeles más abajo que la anterior
+                stop_y = 100 + (lineas - i - 1) * 30  # Cada fila de enemigos se detendrá 50 píxeles más abajo que la anterior
                 enemigo = cls(pantalla, x, y, stop_y)
                 cls.enemigos.append(enemigo)
 
