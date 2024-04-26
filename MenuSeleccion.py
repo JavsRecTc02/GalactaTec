@@ -5,6 +5,7 @@ import webbrowser
 
 from Niveles import nivel1
 from RifaTurnoJugadores import rifaWindow
+from ConfigPartida import ConfigPartida
 
 class Menu:
     def __init__(self, username1):
@@ -24,55 +25,57 @@ class Menu:
         self.label_color = (0, 0, 0)
 
     def run(self):
-            running = True
-            while running:
-                for event in pygame.event.get():
-                    if event.type == QUIT:
-                        running = False
-                    elif event.type == MOUSEBUTTONDOWN:
-                        if event.button == 1:
-                            if self.configUsuario_button.collidepoint(event.pos):
-                                print("se presionó ConfigUsuario")
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    running = False
+                elif event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if self.configUsuario_button.collidepoint(event.pos):
+                            print("se presionó ConfigUsuario")
 
-                            if self.fama_button.collidepoint(event.pos):
-                                print("se presionó Fama")
+                        if self.fama_button.collidepoint(event.pos):
+                            print("se presionó Fama")
 
-                            if self.ConfigPartida_button.collidepoint(event.pos):
-                                print("se presionó Config partida")
+                        if self.ConfigPartida_button.collidepoint(event.pos):
+                            ConfigPartida_Window = ConfigPartida(self.user)
+                            ConfigPartida_Window.run()
+                            print("se presionó Config partida")
 
-                            if self.Jugador2_Button.collidepoint(event.pos):
-                                rifa = rifaWindow(self.user, 'GamerPro777')
-                                rifa.run()
+                        if self.Jugador2_Button.collidepoint(event.pos):
+                            rifa = rifaWindow(self.user, 'GamerPro777')
+                            rifa.run()
 
-                            if self.Partida1_button.collidepoint(event.pos):
-                                Nivel1_window = nivel1(self.user, None)
-                                Nivel1_window.run()
+                        if self.Partida1_button.collidepoint(event.pos):
+                            Nivel1_window = nivel1(self.user, None)
+                            Nivel1_window.run()
 
-                            if self.Exit_button.collidepoint(event.pos):
-                                running = False
-                                sys.exit()
+                        if self.Exit_button.collidepoint(event.pos):
+                            running = False
+                            sys.exit()
 
-                            if self.Help_button.collidepoint(event.pos):
-                                running = False
-                                print("se presionó Ayuda")
-                                #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                                webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
-                                Menu.run(self)
+                        if self.Help_button.collidepoint(event.pos):
+                            running = False
+                            print("se presionó Ayuda")
+                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            Menu.run(self)
 
-                self.pantalla.fill((255,255,255))
-                self.draw_text_inputs()
-                self.draw_configUsuario_button()
-                self.draw_fama_button()
-                self.draw_ConfigPartida_button()
-                self.draw_Jugador2_button()
-                self.draw_Partida1_button()
-                self.draw_Exit_button()
-                self.draw_Help_button()
+            self.pantalla.fill((255,255,255))
+            self.draw_text_inputs()
+            self.draw_configUsuario_button()
+            self.draw_fama_button()
+            self.draw_ConfigPartida_button()
+            self.draw_Jugador2_button()
+            self.draw_Partida1_button()
+            self.draw_Exit_button()
+            self.draw_Help_button()
                 
 
-                pygame.display.flip()
+            pygame.display.flip()
 
-            pygame.quit()
+        pygame.quit()
     
     def draw_text_inputs(self):
         for field_name, field_data in self.input_data.items():

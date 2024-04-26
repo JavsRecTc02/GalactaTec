@@ -77,7 +77,7 @@ class WelcomeWindow:
                             register_window.run()
                         elif 0 <= x <= 120 and 550 <= y <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\gaguz\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             #Poner WelcomeWindow.run(self) en esta linea si en necesario
 
             self.window.fill(self.WHITE)
