@@ -5,10 +5,15 @@ from tkinter import filedialog
 import re
 import os
 import shutil
-import webbrowser
+import ctypes
 
+import Niveles
 from Email import UsersEmail
-from MenuSeleccion import Menu
+from RifaTurnoJugadores import rifaWindow
+
+#Funcion para las ventanas de Error
+def error_message(self,message):
+    ctypes.windll.user32.MessageBoxW(0,message,"Error",1)
 
 #Ventana de Inicio
 class WelcomeWindow:
@@ -33,12 +38,6 @@ class WelcomeWindow:
         pygame.draw.rect(self.window, (0, 0, 0), register_button)
         text_surface = font.render('Register', True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=register_button.center)
-        self.window.blit(text_surface, text_rect)
-
-        help_button = pygame.Rect(0, 550, 120, 50)
-        pygame.draw.rect(self.window, (0, 0, 0), help_button)
-        text_surface = font.render('Help', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=help_button.center)
         self.window.blit(text_surface, text_rect)
 
         if self.back_button_visible:
@@ -75,10 +74,6 @@ class WelcomeWindow:
                             register_window = RegisterWindow(self.width, self.height)
                             pygame.display.set_caption("Register")
                             register_window.run()
-                        elif 0 <= x <= 120 and 550 <= y <= 600:
-                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
-                            #Poner WelcomeWindow.run(self) en esta linea si en necesario
 
             self.window.fill(self.WHITE)
             self.draw_buttons()
@@ -91,7 +86,6 @@ class WelcomeWindow:
 #*****************************************************************************************************************************************************
 class LoginWindow:
     def __init__(self, width, height):
-        self.username = None
         self.width = width
         self.height = height
         self.welcome_window = WelcomeWindow()
@@ -109,6 +103,10 @@ class LoginWindow:
         # Botón "Olvidaste tu contraseña?"
         self.forgot_password_button_rect = pygame.Rect(215, 450, 200, 30)
         self.forgot_password_button_active = False
+
+    #Funcion para los msj de error
+    def error_message(self,message):
+        ctypes.windll.user32.MessageBoxW(0,message,"GalactaTec",1)
 
     # Función que carga los strings de info de cada usuario, para verificar 
     def load_user_data(self):
@@ -175,13 +173,14 @@ class LoginWindow:
         password = self.input_data["user_password"]["text"]
         if username in self.user_data:
             if self.user_data[username] == password:
+                self.error_message("Se ha iniciado sesión")
                 print("Loggeado")
-                self.username = username  # Almacenar el nombre de usuario
-                self.menu = Menu(self.username)  # Crear una instancia de nivel1
-                self.menu.run()
+                # Aquí puedes continuar con la lógica para iniciar sesión
             else:
+                self.error_message("Contraseña incorrecta")
                 print("Contraseña incorrecta")
         else:
+            self.error_message("El usuario no se encuentra registrado")
             print("El usuario no se encuentra registrado")
 
     def handle_forgot_password(self):
@@ -238,6 +237,10 @@ class PasswordRecoveryWindow:
         }
         self.font = pygame.font.Font(None, 25)
         self.label_color = (255, 255, 255)
+
+    #Funcion para los msj de error
+    def error_message(self,message):
+        ctypes.windll.user32.MessageBoxW(0,message,"GalactaTec",1)
 
     def is_email_registered(self, email):
         with open("users.txt", "r") as file:
@@ -305,15 +308,18 @@ class PasswordRecoveryWindow:
         email = self.input_data["user_email"]["text"]
         if self.is_email_registered(email):
             print("Correo encontrado en la base de datos. Enviando correo de recuperación...")
+            self.error_message("Correo encontrado en la base de datos. Enviando correo de recuperación...")
             self.email_to_change_password = email
             print("Email :", self.email_to_change_password)
             self.change_password()
         else:
+            self.error_message("Error: El correo electrónico no está registrado en la base de datos.")
             print("El correo electrónico no está registrado en la base de datos.")
 
     def change_password(self):
         if not self.validate_changepassword():
-            print("Código inválido, por favor intente de nuevo.")
+            self.login_screen = LoginWindow(self.width, self.height)
+            self.login_screen.run()
         else:
             print("Se cambiará la contraseña.")
             pygame.display.update()  # Actualizar la ventana actual
@@ -389,7 +395,8 @@ class PasswordRecoveryWindow:
             print("La contraseña es válida. Se procederá con el cambio de contraseña.")
             self.update_password(self.email_to_change_password,password)
         else:
-            print("La contraseña no cumple con los requisitos necesarios.")
+            self.error_message("Error: No cumple con los caracteres necesarios, al menos 7 caracters, una mayúscula, un símbolo especial, un número y una minúscula ")
+            print("La contraseña no cumple con los requisitos necesarios, .")
 
     def update_password(self, email, new_password):
     # Leer el archivo "users.txt" y almacenar las líneas en una lista
@@ -407,6 +414,7 @@ class PasswordRecoveryWindow:
                 break
         else:
             print("No se encontró ningún usuario con el correo electrónico proporcionado:", email)
+            self.error_message("Error: No se encontró ningún usuario con el correo electrónico proporcionado:", email)
             #return  # Salir de la función si no se encuentra el usuario
     # Escribir las líneas actualizadas de vuelta al archivo
         with open("users.txt", "w") as file:
@@ -448,6 +456,9 @@ class RegisterWindow:
         self.profile_image_button_active = False
         self.user_song_button_active = False
 
+    def error_message(self,message):
+            ctypes.windll.user32.MessageBoxW(0,message,"GalactaTec",1)
+
     #Bucle de la ventana de register
     def run(self):
         running = True
@@ -472,17 +483,22 @@ class RegisterWindow:
                             for field in self.input_data.values():
                                 print(field["label"], field["text"])
                             if not self.user_already_exists():
-                                print("Invalid User or Email, plis try again :)")
+                                print("Error: El usuario ya se encuentra registrado en la base de datos")
                             elif not self.validate_password(self.input_data["user_password"]["text"]):
                                 print("Password incomplete")
+                            elif not self.files_selected():
+                                self.error_message("Error: Por favor seleccione todos los archivos necesarios")
+                                print("Please select all required files.")
                             elif not self.validate_email():
-                                print("Invalid Code, please try again")
+                                 self.backregis_screen = RegisterWindow(self.width, self.height)
+                                 self.backregis_screen.run()
                             else:
                                 # Guardar los datos en el archivo .txt
                                 self.save_user_data()
                                 # Crear carpetas para el usuario y guardar imágenes y canciones
                                 self.create_user_folder()
                                 self.save_images_and_song()
+                                self.error_message("Usuario registrado exitosamente en la base de datos")
                                 print("User registered successfully.")
 
                         # Verificar si se hizo clic en el botón "Spaceship Image"
@@ -567,16 +583,16 @@ class RegisterWindow:
         user_correo = self.input_data["user_correo"]["text"]   
 
         if not user_correo.endswith("@gmail.com"):
+            self.error_message("Error : Correo electrónico inválido,asegurese que sea una dirección de Gmail")
             print("Invalid email address. Must be use a Gmail address")
             return False 
             
         # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
-        # Supongamos que tenemos una lista de usuarios existentes en un archivo de texto llamado "users.txt"
         with open("users.txt", "r") as file:
             for line in file:
                 data = line.strip().split(",")
                 if data[0] == user_name or data[2] == user_correo:
-                    print("User or email already exists.")
+                    self.error_message("Error: El usuario o correo electrónico ya se encuentra registrado en la base de datos")
                     return False
 
         return True
@@ -600,11 +616,13 @@ class RegisterWindow:
 
         # Verificar longitud mínima de 7 caracteres
         if len(password) < 7:
+            self.error_message("Error: Contraseña demasiado corta, longitud mínima de 7 caracteres")
             print("Contraseña demasiado corta, longitud mínima de 7 caracteres")
             return False
         
         # Verificar al menos una mayúscula, un símbolo especial, un número y una minúscula
         elif not regex.match(password):
+            self.error_message("Error: La contraseña no cumple con los caracteres necesarios, al menos una mayúscula, un símbolo especial, un número y una minúscula")
             print("No cumple con los caracteres necesarios, al menos una mayúscula, un símbolo especial, un número y una minúscula ")
             return False
         else:
@@ -634,6 +652,10 @@ class RegisterWindow:
                 self.profile_image_path = file_path
             elif file_type == "user_song":
                 self.user_song_path = file_path
+
+    def files_selected(self):
+    # Verificar si se han seleccionado los tres archivos requeridos
+        return hasattr(self, 'spaceship_image_path') and hasattr(self, 'profile_image_path') and hasattr(self, 'user_song_path')
 
     #Funcion que crea las carpetas con el nombre de usuario en /User file/username
     def create_user_folder(self):
@@ -666,6 +688,7 @@ class RegisterWindow:
             pygame.display.set_caption("Welcome")
             welcome_window.run()
         else:
+            self.error_message("Error: Porfavor ingrese todos los datos necesarios, incluidos los archivos correspondientes")
             print("Please select all images and the song before submitting.")
 
 
