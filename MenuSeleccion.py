@@ -44,8 +44,10 @@ class Menu:
                             print("se presionó Config partida")
 
                         if self.Jugador2_Button.collidepoint(event.pos):
-                            rifa = rifaWindow(self.user, 'GamerPro777')
-                            rifa.run()
+                            from LoginPlayer2 import LoginPlayer2  
+                            LoginPLayer2_window = LoginPlayer2(800,600, self.user)
+                            LoginPLayer2_window.run()
+
 
                         if self.Partida1_button.collidepoint(event.pos):
                             Nivel1_window = nivel1(self.user, None)

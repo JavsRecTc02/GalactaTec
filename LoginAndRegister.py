@@ -10,6 +10,7 @@ import ctypes
 import Niveles
 from Email import UsersEmail
 from RifaTurnoJugadores import rifaWindow
+from MenuSeleccion import Menu
 
 #Funcion para las ventanas de Error
 def error_message(self,message):
@@ -166,6 +167,7 @@ class LoginWindow:
 
         pygame.quit()
         return ""
+    
     #Funcion que verifica si los datos ingresados por el usuario coinciden en el .txt
     def handle_login(self):
         # Verificar si el usuario y la contraseña coinciden
@@ -173,7 +175,9 @@ class LoginWindow:
         password = self.input_data["user_password"]["text"]
         if username in self.user_data:
             if self.user_data[username] == password:
-                self.error_message("Se ha iniciado sesión")
+                self.username = username  # Almacenar el nombre de usuario
+                self.menu = Menu(self.username)  # Crear una instancia de nivel1
+                self.menu.run()
                 print("Loggeado")
                 # Aquí puedes continuar con la lógica para iniciar sesión
             else:
