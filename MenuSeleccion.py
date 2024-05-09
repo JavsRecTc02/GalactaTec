@@ -1,7 +1,13 @@
 import pygame
 from pygame.locals import *
 import sys
+import os
+import csv
 import webbrowser
+from pygame import USEREVENT
+import tkinter as tk
+from tkinter import filedialog
+import shutil
 
 from Niveles import nivel1
 from RifaTurnoJugadores import rifaWindow
@@ -34,9 +40,14 @@ class Menu:
                     if event.button == 1:
                         if self.configUsuario_button.collidepoint(event.pos):
                             print("se presionó ConfigUsuario")
+                            config = UsersConfig(self.user)
+                            config.run()
 
                         if self.fama_button.collidepoint(event.pos):
                             print("se presionó Fama")
+                            scores = ScoreWindow(self.user)
+                            scores.run()
+
 
                         if self.ConfigPartida_button.collidepoint(event.pos):
                             ConfigPartida_Window = ConfigPartida(self.user)
@@ -61,7 +72,7 @@ class Menu:
                             running = False
                             print("se presionó Ayuda")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             Menu.run(self)
 
             self.pantalla.fill((255,255,255))
@@ -149,3 +160,487 @@ class Menu:
         text_surface = font.render('Ayuda', True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=self.Help_button.center)
         self.pantalla.blit(text_surface, text_rect)
+
+
+#VENTANA DE SCORES
+
+class Scores:
+    def __init__(self, file_path, username):
+        self.player1 = username # este user lo mandamos a la user config
+        print(self.player1)
+        self.file_path = file_path
+        self.scores = self.read_scores()
+
+    def read_scores(self):
+        scores = []
+        with open(self.file_path, 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                scores.append({'username': row[0], 'score': int(row[1])})
+        return scores
+
+    def get_top_scores(self):
+        sorted_scores = sorted(self.scores, key=lambda x: x['score'], reverse=True)
+        top_scores = sorted_scores[:5]
+        if len(top_scores) < 5:
+            for i in range(5 - len(top_scores)):
+                top_scores.append({'username': 'Disponible', 'score': '-'})
+        return top_scores
+
+    def get_profile_image(self, username):
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
+        carpetas.sort()
+        if username in carpetas:
+            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, username)
+            archivos = os.listdir(ruta_carpeta_usuario)
+            archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
+            for archivo in archivos_perfil:
+                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                return pygame.transform.scale(imagen_perfil, (50, 50))
+        return None
+
+
+class ScoreWindow:
+    def __init__(self,username):
+        self.player = username
+        pygame.init()
+        self.screen = pygame.display.set_mode((800, 600))
+        pygame.display.set_caption('Top Scores')
+        self.clock = pygame.time.Clock()
+        self.scores = Scores('scores.txt', self.player)
+        self.background = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
+
+        # Definir las coordenadas y dimensiones del botón
+        self.button_rect = pygame.Rect(700, 500, 80, 40)  # Posición y tamaño del botón
+
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Verificar si se hizo clic en el botón "Back"
+                    if self.button_rect.collidepoint(event.pos):
+                        back_menu = Menu(self.player)
+                        back_menu.run()
+
+            # Dibuja el fondo
+            self.screen.blit(self.background, (0, 0))
+
+            # Dibuja el botón "Back"
+            pygame.draw.rect(self.screen, (100, 100, 100), self.button_rect)  # Dibuja el botón en un color gris
+            font = pygame.font.Font(None, 24)
+            text_surface = font.render('Back', True, (255, 255, 255))  # Renderiza el texto "Back"
+            text_rect = text_surface.get_rect(center=self.button_rect.center)  # Centra el texto en el botón
+            self.screen.blit(text_surface, text_rect)  # Dibuja el texto en el botón
+
+            # Muestra los puntajes
+            self.display_scores(self.scores.get_top_scores())
+
+            pygame.display.flip()
+            self.clock.tick(60)
+
+    def display_scores(self, top_scores):
+        font = pygame.font.Font(None, 36)
+        y = 50
+        for i, score in enumerate(top_scores):
+            text = f"{i + 1}. {score['username']}: {score['score']}"
+            rendered_text = font.render(text, True, (255, 255, 255))
+            self.screen.blit(rendered_text, (30, (y+45)))
+
+            profile_image = self.scores.get_profile_image(score['username'])
+            if profile_image:
+                self.screen.blit(profile_image, (300, (y+45)))  # Ajusta las coordenadas según tu diseño
+
+            y += 80
+
+
+#VENTANA DE CONFIGURACION DEL USUARIO
+
+class UsersConfig:
+    def __init__(self, username):
+        pygame.init()
+        self.width = 800
+        self.height = 600
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_caption('Configuración de Usuario')
+        self.clock = pygame.time.Clock()
+        self.username = username
+        self.font = pygame.font.Font(None, 30)
+        self.data = self.load_user_data()
+        self.editing_arch = False
+        self.editing = None  # Variable para rastrear qué dato se está editando
+        self.new_value = None  # Variable para almacenar el nuevo valor ingresado por el usuario
+        self.profile_image = self.get_profile_image(self.username)
+        self.ship_image = self.get_ship_image(self.username)
+        self.profile_image_path = None
+        self.spaceship_image_path = None
+        self.user_song_path = None
+
+        # Rectángulos para botones de editar y confirmar/cancelar
+        self.username_edit_rect = pygame.Rect(100, 120, 60, 30)
+        self.nombre_edit_rect = pygame.Rect(100, 170, 60, 30)
+        self.correo_edit_rect = pygame.Rect(100, 220, 60, 30)
+        self.perfil_edit_rect = pygame.Rect(100, 220, 60, 30)
+        self.spaceship_edit_rect = pygame.Rect(100, 220, 60, 30)
+        self.song_edit_rect = pygame.Rect(100, 220, 60, 30)
+        self.song_play_rect = pygame.Rect(100, 220, 60, 30)
+        self.song_stop_rect = pygame.Rect(100, 220, 60, 30)
+        self.confirm_button_rect = pygame.Rect(50, 500, 100, 50)
+        self.cancel_button_rect = pygame.Rect(200, 500, 100, 50)
+        self.confirm_arch_button_rect = pygame.Rect(50, 500, 100, 50)
+        self.cancel_arch_button_rect = pygame.Rect(200, 500, 100, 50)
+
+        # Configurar posiciones de los botones
+        self.set_button_positions()
+
+    def load_user_data(self):
+    # Cargar los datos del usuario desde el archivo users.txt
+        user_data = {}
+        with open('users.txt', 'r') as file:
+            for line in file:
+                parts = line.strip().split(',')
+                if len(parts) >= 4:
+                    username, nombre, correo, password = parts[:4]
+                    user_data[username] = {'username': username, 'nombre': nombre, 'correo': correo, 'password': password}
+        return user_data
+
+    def set_button_positions(self):
+        # Establecer posiciones de los botones según las necesidades
+        self.username_edit_rect.topleft = (100, 70)
+        self.nombre_edit_rect.topleft = (100, 170)
+        self.correo_edit_rect.topleft = (100, 270)
+        self.perfil_edit_rect.topleft = (510, 70)
+        self.spaceship_edit_rect.topleft = (510, 170)
+        self.song_edit_rect.topleft = (510, 270)
+        self.song_play_rect.topleft = (510, 320)
+        self.song_stop_rect.topleft = (580, 320)
+        self.confirm_button_rect.topleft = (100, 400)
+        self.cancel_button_rect.topleft = (200, 400)
+        self.confirm_arch_button_rect.topleft = (510, 400)
+        self.cancel_arch_button_rect.topleft = (620, 400)
+        self.button_rect = pygame.Rect(700, 500, 80, 40)
+
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.editing is not None:        #Si se esta editando un .txt
+                        if self.confirm_button_rect.collidepoint(event.pos):
+                            self.confirm_edit()
+                        elif self.cancel_button_rect.collidepoint(event.pos):
+                            self.cancel_edit()
+
+                    elif self.editing_arch is not False: #Si se esta editando un archivo
+                        if self.confirm_arch_button_rect.collidepoint(event.pos):
+                            self.confirm_arch_edit()
+                        elif self.cancel_arch_button_rect.collidepoint(event.pos):
+                            self.cancel_edit()
+
+                    elif self.username_edit_rect.collidepoint(event.pos):
+                        self.start_editing('username')
+                    elif self.nombre_edit_rect.collidepoint(event.pos):
+                        self.start_editing('nombre')
+                    elif self.correo_edit_rect.collidepoint(event.pos):
+                        self.start_editing('correo')
+
+                    elif self.perfil_edit_rect.collidepoint(event.pos):
+                        #logica para subir una nueva  imagen de perfil
+                        self.editing_arch = True
+                        self.edit_select_file("profile_image")
+                        print("editar perfil")
+
+                    elif self.song_edit_rect.collidepoint(event.pos):
+                        #logica para subir una nueva cancion
+                        self.editing_arch = True
+                        self.edit_select_file("user_song")
+                        print ("editar musica")
+
+                    elif self.song_play_rect.collidepoint(event.pos):
+                        self.get_song_player()
+
+                    elif self.song_stop_rect.collidepoint(event.pos):
+                        self.stop_song()
+
+                    elif self.spaceship_edit_rect.collidepoint(event.pos):
+                        #logica para subir una nueva imagen de nave
+                        self.editing_arch = True
+                        self.edit_select_file("spaceship_image")
+                        print("editar nave")
+
+                    elif self.button_rect.collidepoint(event.pos):
+                        print("Nombre de usuario :", self.username)
+                        self.stop_song()
+                        back_menu = Menu(self.username)
+                        back_menu.run()
+
+                elif event.type == pygame.KEYDOWN:
+                    if self.editing is not None:
+                        if event.key == pygame.K_RETURN:
+                            self.confirm_edit()
+                        elif event.key == pygame.K_ESCAPE:
+                            self.cancel_edit()
+                        else:
+                            # Agregar caracteres a la nueva entrada de texto
+                            if event.key == pygame.K_BACKSPACE:
+                                self.new_value = self.new_value[:-1]
+                            else:
+                                self.new_value += event.unicode
+
+            self.screen.fill((255, 255, 255))
+            self.draw_user_data()
+            pygame.display.flip()
+            self.clock.tick(60)
+
+    def get_profile_image(self, username):
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
+        carpetas.sort()
+        if username in carpetas:
+            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, username)
+            archivos = os.listdir(ruta_carpeta_usuario)
+            archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
+            for archivo in archivos_perfil:
+                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                return pygame.transform.scale(imagen_perfil, (80, 80))
+        return None
+    
+    def get_ship_image(self, username):
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
+        carpetas.sort()
+        if username in carpetas:
+            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, username)
+            archivos = os.listdir(ruta_carpeta_usuario)
+            archivos_perfil = [archivo for archivo in archivos if archivo.startswith('nave_espacial')]
+            for archivo in archivos_perfil:
+                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                return pygame.transform.scale(imagen_perfil, (80, 80))
+        return None
+    
+    def get_song_player(self):
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
+        carpetas.sort()
+        if self.username in carpetas:
+            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username)
+            archivos = os.listdir(ruta_carpeta_usuario)
+            archivos_cancion = [archivo for archivo in archivos if archivo.startswith('cancion')]
+            for archivo in archivos_cancion:
+                ruta_cancion = os.path.join(ruta_carpeta_usuario, archivo)
+                pygame.mixer.init()  # Inicializa el mixer
+                pygame.mixer.music.load(ruta_cancion)
+                pygame.mixer.music.set_volume(1.0)  # Ajusta el volumen
+                pygame.mixer.music.play(-1)  # El -1 hará que la canción se repita indefinidamente
+
+    #Funcion para detener la musica
+    def stop_song(self):
+        pygame.mixer.quit()
+
+    def edit_select_file(self,file_type):
+        root = tk.Tk()
+        root.withdraw()  # Oculta la ventana principal de tkinter
+
+        file_path = filedialog.askopenfilename()  # Abre un cuadro de diálogo para seleccionar un archivo
+        if file_path:  # Verifica si se seleccionó un archivo
+            if file_type == "spaceship_image":
+                self.spaceship_image_path = file_path
+            elif file_type == "profile_image":
+                self.profile_image_path = file_path
+            elif file_type == "user_song":
+                self.user_song_path = file_path
+
+    def save_images_and_song(self):
+    # Obtener el nombre de usuario
+        user_name = self.username
+        # Ruta donde se guardará la carpeta del usuario
+        user_folder = os.path.join(os.getcwd(), "User files", user_name)
+        # Guardar los nuevos archivos
+        if self.spaceship_image_path:
+            shutil.copy(self.spaceship_image_path, os.path.join(user_folder, 'nave_espacial.png'))
+        if self.profile_image_path:
+            shutil.copy(self.profile_image_path, os.path.join(user_folder, 'perfil.png'))
+        if self.user_song_path:
+            shutil.copy(self.user_song_path, os.path.join(user_folder, 'cancion.mp3'))
+
+        self.profile_image = self.get_profile_image(user_name)
+        self.ship_image = self.get_ship_image(user_name)
+        
+
+
+    def draw_user_data(self):
+        if self.username in self.data:
+
+            jugador_label = self.font.render('Jugador', True, (0, 0, 0))
+            self.screen.blit(jugador_label, (510, 50))  # Ajusta las coordenadas según tu diseño
+
+            nave_label = self.font.render('Nave', True, (0, 0, 0))
+            self.screen.blit(nave_label, (510, 150))  # Ajusta las coordenadas según tu diseño
+
+            musica_label = self.font.render('Música', True, (0, 0, 0))
+            self.screen.blit(musica_label, (510, 250)) 
+
+            user_info = self.data[self.username]
+            # Mostrar los datos del usuario en la ventana
+            username_text = f'Usuario: {self.username}'
+            username_rendered = self.font.render(username_text, True, (0, 0, 0))
+            username_rect = username_rendered.get_rect(topleft=(100, 50))
+            self.screen.blit(username_rendered, username_rect)
+
+            nombre_text = f'Nombre: {user_info["nombre"]}'
+            nombre_rendered = self.font.render(nombre_text, True, (0, 0, 0))
+            nombre_rect = nombre_rendered.get_rect(topleft=(100, 150))
+            self.screen.blit(nombre_rendered, nombre_rect)
+
+            correo_text = f'Correo: {user_info["correo"]}'
+            correo_rendered = self.font.render(correo_text, True, (0, 0, 0))
+            correo_rect = correo_rendered.get_rect(topleft=(100, 250))
+            self.screen.blit(correo_rendered, correo_rect)
+
+            # Dibujar botón de editar para nombre, correo y usuario
+            pygame.draw.rect(self.screen, (0, 0, 0), self.username_edit_rect)
+            font = pygame.font.Font(None, 20)
+            edit_username_text = font.render("Editar", True, (255, 255, 255))
+            edit_username_rect = edit_username_text.get_rect(center=self.username_edit_rect.center)
+            self.screen.blit(edit_username_text, edit_username_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.nombre_edit_rect)
+            edit_nombre_text = font.render("Editar", True, (255, 255, 255))
+            edit_nombre_rect = edit_nombre_text.get_rect(center=self.nombre_edit_rect.center)
+            self.screen.blit(edit_nombre_text, edit_nombre_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.correo_edit_rect)
+            edit_correo_text = font.render("Editar", True, (255, 255, 255))
+            edit_correo_rect = edit_correo_text.get_rect(center=self.correo_edit_rect.center)
+            self.screen.blit(edit_correo_text, edit_correo_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.perfil_edit_rect)
+            edit_perfil_image = font.render("Editar", True, (255, 255, 255))
+            edit_perfil_rect = edit_perfil_image.get_rect(center=self.perfil_edit_rect.center)
+            self.screen.blit(edit_perfil_image, edit_perfil_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.song_edit_rect)
+            edit_song_image = font.render("Editar", True, (255, 255, 255))
+            edit_song_rect = edit_song_image.get_rect(center=self.song_edit_rect.center)
+            self.screen.blit(edit_song_image, edit_song_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.song_play_rect)
+            edit_song_play = font.render("Play", True, (255, 255, 255))
+            play_song_rect = edit_song_play.get_rect(center=self.song_play_rect.center)
+            self.screen.blit(edit_song_play, play_song_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.song_stop_rect)
+            edit_song_stop = font.render("Stop", True, (255, 255, 255))
+            stop_song_rect = edit_song_stop.get_rect(center=self.song_stop_rect.center)
+            self.screen.blit(edit_song_stop, stop_song_rect)
+
+            pygame.draw.rect(self.screen, (0, 0, 0), self.spaceship_edit_rect)
+            edit_spaceship_image = font.render("Editar", True, (255, 255, 255))
+            edit_spaceship_image_rect = edit_spaceship_image.get_rect(center=self.spaceship_edit_rect.center)
+            self.screen.blit(edit_spaceship_image, edit_spaceship_image_rect)
+
+            pygame.draw.rect(self.screen, (100, 100, 100), self.button_rect)  # Dibuja el botón en un color gris
+            font = pygame.font.Font(None, 24)
+            text_surface = font.render('Back', True, (255, 255, 255))  # Renderiza el texto "Back"
+            text_rect = text_surface.get_rect(center=self.button_rect.center)  # Centra el texto en el botón
+            self.screen.blit(text_surface, text_rect)  # Dibuja el texto en el botón
+
+            # Dibujar imagen de perfil si está disponible
+            if self.profile_image:
+                self.screen.blit(self.profile_image, (610, 50))  # Ajusta las coordenadas según tu diseño
+
+            if self.ship_image:
+                self.screen.blit(self.ship_image, (610,150))
+
+            # Dibujar botones de confirmar/cancelar si se está editando los ARCHIVOS
+            if self.editing_arch is not False:
+                pygame.draw.rect(self.screen, (0, 255, 0), self.confirm_arch_button_rect)
+                confirm_arch_text = self.font.render('Confirmar', True, (255, 255, 255))
+                confirm_arch_rect = confirm_arch_text.get_rect(center=self.confirm_arch_button_rect.center)
+                self.screen.blit(confirm_arch_text, confirm_arch_rect)
+
+                pygame.draw.rect(self.screen, (255, 0, 0), self.cancel_arch_button_rect)
+                cancel_arch_text = self.font.render('Cancelar', True, (255, 255, 255))
+                cancel_arch_rect = cancel_arch_text.get_rect(center=self.cancel_arch_button_rect.center)
+                self.screen.blit(cancel_arch_text, cancel_arch_rect)
+
+
+            # Dibujar botones de confirmar/cancelar si se está editando los .TXT
+            if self.editing is not None:
+                pygame.draw.rect(self.screen, (0, 255, 0), self.confirm_button_rect)
+                confirm_text = self.font.render('Confirmar', True, (255, 255, 255))
+                confirm_rect = confirm_text.get_rect(center=self.confirm_button_rect.center)
+                self.screen.blit(confirm_text, confirm_rect)
+
+                pygame.draw.rect(self.screen, (255, 0, 0), self.cancel_button_rect)
+                cancel_text = self.font.render('Cancelar', True, (255, 255, 255))
+                cancel_rect = cancel_text.get_rect(center=self.cancel_button_rect.center)
+                self.screen.blit(cancel_text, cancel_rect)
+
+                 # Mostrar la nueva entrada de texto
+                if self.editing == 'username':
+                    new_text = self.font.render(self.new_value, True, (0, 0, 0))
+                    new_rect = new_text.get_rect(topleft=(self.username_edit_rect.left + 70, self.username_edit_rect.top + 5))
+                    self.screen.blit(new_text, new_rect)
+                elif self.editing == 'nombre':
+                    new_text = self.font.render(self.new_value, True, (0, 0, 0))
+                    new_rect = new_text.get_rect(topleft=(self.nombre_edit_rect.left + 70, self.nombre_edit_rect.top + 5))
+                    self.screen.blit(new_text, new_rect)
+                elif self.editing == 'correo':
+                    new_text = self.font.render(self.new_value, True, (0, 0, 0))
+                    new_rect = new_text.get_rect(topleft=(self.correo_edit_rect.left + 70, self.correo_edit_rect.top + 5))
+                    self.screen.blit(new_text, new_rect)
+
+        else:
+            # Si el usuario no existe en los datos, mostrar un mensaje de error
+            error_text = 'Usuario no encontrado'
+            rendered_text = self.font.render(error_text, True, (255, 0, 0))
+            text_rect = rendered_text.get_rect(center=(self.width // 2, self.height // 2))
+            self.screen.blit(rendered_text, text_rect)
+
+    def start_editing(self, field):
+        self.editing = field
+        self.new_value = self.data[self.username][field]
+        
+    def confirm_edit(self):
+        new_username = None  # Inicializamos con None
+        if self.editing is not None and self.new_value is not None:
+            # Actualizar el valor en los datos del usuario
+            if self.editing == 'username':
+                old_username = self.username
+                self.data[self.new_value] = self.data.pop(old_username)
+                self.username = self.new_value
+                new_username = self.new_value  # Almacenar el nuevo nombre de usuario
+
+                # Renombrar la carpeta asociada al nombre de usuario
+                old_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", old_username)
+                new_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", self.new_value)
+                os.rename(old_folder_path, new_folder_path)
+            else:
+                self.data[self.username][self.editing] = self.new_value
+            # Guardar los cambios en el archivo users.txt
+            with open('users.txt', 'w') as file:
+                for username, info in self.data.items():
+                    line = ','.join([username, info['nombre'], info['correo'], info['password']])
+                    file.write(line + '\n')
+
+        self.editing = None
+        self.new_value = None
+        print (new_username)  # Devolver el nuevo nombre de usuario
+
+    def confirm_arch_edit(self):
+        self.save_images_and_song()
+        self.editing_arch = False
+
+    def cancel_edit(self):
+        self.editing_arch = False
+        self.editing = None
+        self.new_value = None
+
+
+
