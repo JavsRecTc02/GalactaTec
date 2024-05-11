@@ -80,7 +80,7 @@ class ConfigPartida:
                             print("nivel 1 tiene el patron:" , Patrones.GetPatron(self))    
                             print("nivel 2 tiene el patron:" , Patrones.GetPatron(self))
                             print("nivel 3 tiene el patron:" , Patrones.GetPatron(self))  
-                            webbrowser.open_new(r'file://C:\Users\gaguz\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             ConfigPartida.run(self)
 
                 
