@@ -2,6 +2,7 @@ import pygame
 from pygame import *
 import os
 from PlayerBullets import BasicBullet
+from Bonus import Bonus_de_nivel
 
 class Nave:
     def __init__(self, pantalla, username):

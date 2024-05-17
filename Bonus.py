@@ -44,6 +44,10 @@ class Bonus_de_nivel:
         # Índice de la imagen actual de la animación del bonus
         self.current_animation_image = 0
 
+        #Indice del bono seleccionando en la barra de bonos
+        self.selected_bonus_index = 0
+
+
     def load_bonus_images(self, bonus_type):
         # Carga y escala las imágenes de bonos y su versión en blanco y negro
         image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus", bonus_type + ".png")
@@ -74,12 +78,30 @@ class Bonus_de_nivel:
     def draw_bonus_bar(self):
         # Dibujar la barra de bonos en la pantalla
         y = self.screen.get_height()  # Iniciar en la parte inferior de la pantalla
-        for bonus_type in self.bonus_types:
+        for i, bonus_type in enumerate(self.bonus_types):
             # Obtener la imagen correspondiente al tipo de bono en blanco y negro
             image = pygame.transform.scale(self.bonus_images[bonus_type + "_bn"], (100, 100))
+            # Si el bono está seleccionado, dibujar un rectángulo alrededor
+            if i == self.selected_bonus_index:
+                pygame.draw.rect(self.screen, (255, 255, 255), (self.screen.get_width() - image.get_width(), y - image.get_height(), image.get_width(), image.get_height()), 2)
             # Dibujar la imagen en la pantalla
             self.screen.blit(image, (self.screen.get_width() - image.get_width(), y - image.get_height()))
             y -= image.get_height()  # Mover hacia arriba para el próximo bono
+
+    def move_selection_up(self):
+        # Mover la selección hacia arriba en la barra de bonos
+        self.selected_bonus_index = (self.selected_bonus_index + 1) % len(self.bonus_types)
+
+    def move_selection_down(self):
+        # Mover la selección hacia abajo en la barra de bonos
+        self.selected_bonus_index = (self.selected_bonus_index - 1) % len(self.bonus_types)
+
+    def select_bonus(self):
+        # Seleccionar el bonus en el que está colocado el cuadrado de la barra de bonus
+        selected_bonus_type = self.bonus_types[self.selected_bonus_index]
+        print(selected_bonus_type)
+
+        
 
     def draw(self):
         # Dibujar el bonus en la pantalla si está activo
@@ -127,12 +149,15 @@ class Bonus_de_nivel:
 
                     # Actualizar la imagen correspondiente en la barra de bonos para que se muestre en color
                     bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
-                                                 self.current_bonus + "_bn.png")
+                                                self.current_bonus + "_bn.png")
                     color_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
                                                     self.current_bonus + ".png")
                     bn_image = pygame.image.load(bn_image_path)
                     color_image = pygame.image.load(color_image_path)
                     self.bonus_images[self.current_bonus + "_bn"] = pygame.transform.scale(color_image, (100, 100))
+        else:
+            self.active = False  # Detiene la aparición de bonos si ya se han obtenido todos
+
 
     def deactivate(self):
         # Desactivar el bonus y reiniciar su posición
@@ -144,4 +169,3 @@ class Bonus_de_nivel:
         sonido = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus\sonido_bonus.mp3")
         sonido.set_volume(1.0)  # Ajusta el volumen al máximo
         sonido.play()
-

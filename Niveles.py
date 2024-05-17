@@ -3,6 +3,7 @@ import random
 from Bonus import Bonus_de_nivel
 import pygame
 from pygame.locals import *
+from pygame import *
 from NaveJugador import Nave
 from Enemies import Enemigo
 
@@ -54,6 +55,9 @@ class nivel1:
         bonus_timer = 0
         bonus_interval = random.randint(5000,15000)  # Intervalo de tiempo aleatorio (entre 5 y 15 segundos) entre la aparición de bonus
 
+        # Contador de bonus generados
+        bonus_count = 0
+
         self.loadMusic() # Reproduce la musica de fondo escogida por el usuario
 
         Enemigo.generar_enemigos(self.pantalla, 6)
@@ -65,7 +69,15 @@ class nivel1:
                     if self.volume_slider.collidepoint(event.pos):
                         volume = ((event.pos[0] - self.volume_slider.x)/self.volume_slider.width)
                         pygame.mixer.music.set_volume(volume) #Permite controlar el volumen con el rectangulo
+                elif event.type == pygame.KEYDOWN:  # Verificar si se presionó alguna tecla
+                    if event.key == pygame.K_a:  # Verificar si la tecla presionada fue 'a'
+                        bonus.move_selection_up()
+                    if event.key == pygame.K_z:
+                        bonus.move_selection_down()
+                    if event.key == pygame.K_x:
+                        bonus.select_bonus()
                 self.nave.mover(event) #Cada vez que se tocque una tecla se realiza la acción una sola vez
+
 
 
             pygame.mixer.init()
@@ -75,18 +87,21 @@ class nivel1:
 
             if pygame.time.get_ticks() - bonus_timer > bonus_interval:
                 # Generar un número aleatorio entre 0 y 1 para determinar la probabilidad de que aparezca un bono
-                if random.random() < 0.001:  # Umbral de probabilidad de 0.3 (ajustable según desees)
+                # Solo generar un bono si no se han generado 5 bonus ya
+                if random.random() < 0.001 and bonus_count < 5:  # Umbral de probabilidad de 0.3 
                     bonus.active = True
                     bonus_timer = pygame.time.get_ticks()
                     # Establecer un nuevo intervalo de tiempo aleatorio para la próxima aparición de bono
                     bonus_interval = random.randint(5000, 15000)  # Intervalo de tiempo aleatorio entre 5 y 15 segundos
+                    bonus_count += 1  # Incrementar el contador de bonus
 
             if bonus.active:  # Si el bonus está activo, lo actualizamos y dibujamos en cada iteración
                 bonus.draw()
                 bonus.update()
                 bonus.check_collision()
-
             bonus.draw_bonus_bar()
+
+            self.nave.dibujar_vidas()
 
             self.nave.dibujar_vidas()
 
