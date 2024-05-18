@@ -74,8 +74,12 @@ class nivel1:
                         bonus.move_selection_up()
                     if event.key == pygame.K_z:
                         bonus.move_selection_down()
+
+                    #Selección de bonus llamando a sus clases/funciones como tal 
                     if event.key == pygame.K_x:
-                        bonus.select_bonus()
+                        if bonus.select_bonus()=='vida':
+                            self.nave.ganarVidas(1)
+                            
                 self.nave.mover(event) #Cada vez que se tocque una tecla se realiza la acción una sola vez
 
 

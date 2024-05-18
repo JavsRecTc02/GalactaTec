@@ -47,6 +47,8 @@ class Bonus_de_nivel:
         #Indice del bono seleccionando en la barra de bonos
         self.selected_bonus_index = 0
 
+        # Diccionario para almacenar el estado de cada bono
+        self.bonus_status = {bonus_type: False for bonus_type in self.bonus_types}
 
     def load_bonus_images(self, bonus_type):
         # Carga y escala las imágenes de bonos y su versión en blanco y negro
@@ -99,9 +101,54 @@ class Bonus_de_nivel:
     def select_bonus(self):
         # Seleccionar el bonus en el que está colocado el cuadrado de la barra de bonus
         selected_bonus_type = self.bonus_types[self.selected_bonus_index]
-        print(selected_bonus_type)
 
-        
+        # Verificar si el bono seleccionado está activo
+        if self.bonus_status[selected_bonus_type]:
+            if selected_bonus_type == "expansive_shot":
+                print ('El bonus ' + selected_bonus_type + ' ACTIVO')
+                self.bonus_status[selected_bonus_type] = False  # Desactivar el bono después de usarlo
+                bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
+                                            selected_bonus_type + "_bn.png")
+                bn_image = pygame.image.load(bn_image_path)
+                self.bonus_images[selected_bonus_type + "_bn"] = pygame.transform.scale(bn_image, (100, 100))
+
+            elif selected_bonus_type == "pursuer_shot":
+                print ('El bonus ' + selected_bonus_type + ' ACTIVO')
+                self.bonus_status[selected_bonus_type] = False  # Desactivar el bono después de usarlo
+                bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
+                                            selected_bonus_type + "_bn.png")
+                bn_image = pygame.image.load(bn_image_path)
+                self.bonus_images[selected_bonus_type + "_bn"] = pygame.transform.scale(bn_image, (100, 100))
+            
+            elif selected_bonus_type == "double_points":
+                print ('El bonus ' + selected_bonus_type + ' ACTIVO')
+                self.bonus_status[selected_bonus_type] = False  # Desactivar el bono después de usarlo
+                bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
+                                            selected_bonus_type + "_bn.png")
+                bn_image = pygame.image.load(bn_image_path)
+                self.bonus_images[selected_bonus_type + "_bn"] = pygame.transform.scale(bn_image, (100, 100))
+
+            elif selected_bonus_type == "shield":
+                print ('El bonus ' + selected_bonus_type + ' ACTIVO')
+                self.bonus_status[selected_bonus_type] = False  # Desactivar el bono después de usarlo
+                bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
+                                            selected_bonus_type + "_bn.png")
+                bn_image = pygame.image.load(bn_image_path)
+                self.bonus_images[selected_bonus_type + "_bn"] = pygame.transform.scale(bn_image, (100, 100))
+
+            elif selected_bonus_type == "extra_life":
+                print ('El bonus ' + selected_bonus_type + ' ACTIVO')
+                self.bonus_status[selected_bonus_type] = False  # Desactivar el bono después de usarlo
+                bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
+                                            selected_bonus_type + "_bn.png")
+                bn_image = pygame.image.load(bn_image_path)
+                self.bonus_images[selected_bonus_type + "_bn"] = pygame.transform.scale(bn_image, (100, 100))
+                return 'vida'
+
+        else:
+            print('El bonus ' + selected_bonus_type + ' NO ESTA ACTIVO')
+
+
 
     def draw(self):
         # Dibujar el bonus en la pantalla si está activo
@@ -147,6 +194,9 @@ class Bonus_de_nivel:
                     elif self.current_bonus == "extra_life":
                         self.player.extra_life = True
 
+                    # Actualizar el estado del bono en el diccionario
+                    self.bonus_status[self.current_bonus] = True
+
                     # Actualizar la imagen correspondiente en la barra de bonos para que se muestre en color
                     bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
                                                 self.current_bonus + "_bn.png")
@@ -156,8 +206,7 @@ class Bonus_de_nivel:
                     color_image = pygame.image.load(color_image_path)
                     self.bonus_images[self.current_bonus + "_bn"] = pygame.transform.scale(color_image, (100, 100))
         else:
-            self.active = False  # Detiene la aparición de bonos si ya se han obtenido todos
-
+            self.active = False  # Detiene la aparición de bonos si ya se han obtenido todos    
 
     def deactivate(self):
         # Desactivar el bonus y reiniciar su posición
