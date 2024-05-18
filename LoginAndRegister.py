@@ -6,6 +6,7 @@ import re
 import os
 import shutil
 import ctypes
+import webbrowser
 
 import Niveles
 from Email import UsersEmail
@@ -26,7 +27,8 @@ class WelcomeWindow:
 
         self.WHITE = (255, 255, 255)
         self.back_button_visible = False
-    #Dibujar los botones de login y register
+        self.help_button_visible = False
+    #Dibujar los botones de login, register y help
     def draw_buttons(self):
         login_button = pygame.Rect(215, 450, 180, 100)
         pygame.draw.rect(self.window, (0, 0, 0), login_button)
@@ -41,6 +43,12 @@ class WelcomeWindow:
         text_rect = text_surface.get_rect(center=register_button.center)
         self.window.blit(text_surface, text_rect)
 
+        help_button = pygame.Rect(0, 550, 120, 50)
+        pygame.draw.rect(self.window, (0, 0, 0), help_button)
+        text_surface = font.render('Help', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=help_button.center)
+        self.window.blit(text_surface, text_rect)
+
         if self.back_button_visible:
             self.draw_back_button()
 
@@ -52,11 +60,26 @@ class WelcomeWindow:
         text_rect = text_surface.get_rect(center=back_button.center)
         self.window.blit(text_surface, text_rect)
 
+    def draw_help_button(self):
+        help_button = pygame.Rect(0, 550, 120, 50)
+        pygame.draw.rect(self.window, (150, 150, 150), help_button)
+        font = pygame.font.Font(None, 24)
+        text_surface = font.render('Help', True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=help_button.center)
+        self.window.blit(text_surface, text_rect)
+
+
     def show_back_button(self):
         self.back_button_visible = True
 
     def hide_back_button(self):
         self.back_button_visible = False
+        
+    def show_help_button(self):
+        self.help_button_visible = True
+    
+    def hide_help_button(self):
+        self.help_button_visible = False
 
     def run(self):  #Eventos de click
         running = True
@@ -76,6 +99,10 @@ class WelcomeWindow:
                             pygame.display.set_caption("Register")
                             register_window.run()
 
+                        elif 0 <= x <= 120 and 550 <= y <= 600:
+                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+
             self.window.fill(self.WHITE)
             self.draw_buttons()
             pygame.display.flip()
@@ -91,6 +118,7 @@ class LoginWindow:
         self.height = height
         self.welcome_window = WelcomeWindow()
         self.welcome_window.show_back_button()
+        self.welcome_window.show_help_button()
         self.user_data = self.load_user_data()
         # Define las coordenadas y rectángulos para los campos de entrada
         self.input_data = {
@@ -145,7 +173,11 @@ class LoginWindow:
                             self.welcome_window.hide_back_button()
                             pygame.display.set_caption("Welcome")
                             self.welcome_window.run()
-                        
+
+                        elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
+                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+
                         # Verificar si se hizo clic en el botón "Entry"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
                             self.handle_login()
@@ -160,6 +192,7 @@ class LoginWindow:
 
             self.welcome_window.window.fill((0, 0, 255))
             self.welcome_window.draw_back_button()
+            self.welcome_window.draw_help_button()
             self.draw_entry_button()
             self.draw_text_inputs()
             self.draw_forgot_password_button()
@@ -272,6 +305,10 @@ class PasswordRecoveryWindow:
                     if 520 <= event.pos[0] <= 595 and 520 <= event.pos[1] <= 580:
                             self.login_screen = LoginWindow(self.width, self.height)
                             self.login_screen.run()
+                    #Boton help
+                    elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
+                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                 elif event.type == pygame.KEYDOWN:
                     for field_data in self.input_data.values():
                         if field_data["active"]:
@@ -282,6 +319,7 @@ class PasswordRecoveryWindow:
 
             self.draw_interface()
             self.welcome_window.draw_back_button()
+            self.welcome_window.draw_help_button()
             pygame.display.flip()
             self.clock.tick(60)
 
@@ -482,6 +520,10 @@ class RegisterWindow:
                             self.welcome_window.hide_back_button()
                             pygame.display.set_caption("Welcome")
                             self.welcome_window.run()
+                        #Verificar si hizo clic en el botón "Help"
+                        elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
+                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                         # Verificar si se hizo clic en el botón "Submit"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
                             for field in self.input_data.values():
@@ -527,6 +569,7 @@ class RegisterWindow:
 
             self.welcome_window.window.fill((255, 0, 0))
             self.welcome_window.draw_back_button()
+            self.welcome_window.draw_help_button()
             self.draw_submit_button()
             self.draw_text_register_inputs()
             self.draw_upload_buttons()
