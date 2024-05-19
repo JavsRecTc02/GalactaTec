@@ -19,7 +19,7 @@ class Nave:
         pygame.mixer.init()
         self.puntos = 0
 
-        self.imagen_vida = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Vidas\Vida1.png")
+        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
         self.vidas = 3
 
 
@@ -53,13 +53,14 @@ class Nave:
             bala.mover()
 
     def dibujar_vidas(self):
-        self.imagen_vida = pygame.transform.scale(self.imagen_vida, (100, 100))
+        self.imagen_vida = self.imagenes_vidas[self.vidas]  # Selecciona la imagen basada en la cantidad de vidas
+        self.imagen_vida = pygame.transform.scale(self.imagen_vida, (225, 100))
         # Dibuja la imagen en la parte inferior izquierda de la pantalla con un margen de 10 píxeles
         self.pantalla.blit(self.imagen_vida, (10, self.pantalla.get_height() - self.imagen_vida.get_height() - 10))
 
         fuente = pygame.font.Font(None, 20)  # Crea una fuente
         texto = fuente.render('Vidas totales: '+str(self.vidas), True, (255, 255, 255))  # Crea un objeto de texto
-        self.pantalla.blit(texto, (100, self.pantalla.get_height() - self.imagen_vida.get_height() + 26))  # Dibuja el texto en la pantalla
+        self.pantalla.blit(texto, (80, self.pantalla.get_height() - self.imagen_vida.get_height() + 26))  # Dibuja el texto en la pantalla
 
     def perdidaVidas(self, cantidad):
         self.vidas -= cantidad  #Metodo para bajar la cantidad de vidas de los jugadores
@@ -68,6 +69,7 @@ class Nave:
         self.vidas += cantidad #Metodo para subir la cantidad de vidas de los jugadores
         if self.vidas == 5:
             self.vidas 
+        print(self.vidas)
 
     def loadNave(self):
         # Ruta al directorio para archivos del jugador

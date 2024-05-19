@@ -23,12 +23,16 @@ class nivel1:
         if self.username2 != None:
             self.input_data = {
                 "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""},
-                "rifa_winner2": {"label": "Jugador2: " + self.username2, "pos": (1090, 225), "text": ""}
+                "rifa_winner2": {"label": "Jugador2: " + self.username2, "pos": (1090, 225), "text": ""},
+                "subir": {"label": "+", "pos": (90, 640), "text": ""},
+                "bajar": {"label": "-", "pos": (32, 640), "text": ""}
             }
         
         else:
             self.input_data = {
-                "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""}
+                "rifa_winner1": {"label": "Jugador: " + self.username, "pos": (8, 225), "text": ""},
+                "subir": {"label": "+", "pos": (90, 640), "text": ""},
+                "bajar": {"label": "-", "pos": (32, 640), "text": ""}
             }
 
         self.font = pygame.font.Font(None, 25)
@@ -44,7 +48,8 @@ class nivel1:
                 self.gif_images.append(imagen_escalada)
         self.current_image = 0
 
-        self.volume_slider = pygame.Rect(20, 620, 200, 50)  # Rectangulo para controlar el volumen
+        self.volume_up_button = pygame.Rect(70, 625, 50, 50)  # Botón para aumentar el volumen
+        self.volume_down_button = pygame.Rect(10, 625, 50, 50)  # Botón para disminuir el volumen
 
 
     def run(self):
@@ -66,9 +71,12 @@ class nivel1:
                 if event.type == QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.volume_slider.collidepoint(event.pos):
-                        volume = ((event.pos[0] - self.volume_slider.x)/self.volume_slider.width)
-                        pygame.mixer.music.set_volume(volume) #Permite controlar el volumen con el rectangulo
+                    if self.volume_up_button.collidepoint(event.pos):  # Verifica si el clic del mouse está dentro del botón de subir volumen
+                        volume = min(pygame.mixer.music.get_volume() + 0.1, 1)  # Aumenta el volumen en 0.1, hasta un máximo de 1
+                        pygame.mixer.music.set_volume(volume)
+                    elif self.volume_down_button.collidepoint(event.pos):  # Verifica si el clic del mouse está dentro del botón de bajar volumen
+                        volume = max(pygame.mixer.music.get_volume() - 0.1, 0)  # Disminuye el volumen en 0.1, hasta un mínimo de 0
+                        pygame.mixer.music.set_volume(volume)
                 elif event.type == pygame.KEYDOWN:  # Verificar si se presionó alguna tecla
                     if event.key == pygame.K_a:  # Verificar si la tecla presionada fue 'a'
                         bonus.move_selection_up()
@@ -107,7 +115,6 @@ class nivel1:
 
             self.nave.dibujar_vidas()
 
-            self.nave.dibujar_vidas()
 
             # Avanza al siguiente fotograma del GIF cada 100 milisegundos
             if pygame.time.get_ticks() % 80 == 0:
@@ -121,11 +128,14 @@ class nivel1:
             if self.username2 is not None:
                 self.loadPerfil2() #Se dibuja la imagen de perfil del jugador 2 solo si username2 no es None
 
-            self.draw_text_inputs() #Se dibujan los datos que se imprimen en la ventana
 
             self.nave.dibujar_puntos()
 
-            pygame.draw.rect(self.pantalla, (255, 255, 255), self.volume_slider)
+            # Resto del código...
+            pygame.draw.rect(self.pantalla, (0, 0, 0), self.volume_up_button)  # Dibuja el botón de subir volumen en verde
+            pygame.draw.rect(self.pantalla, (0, 0, 0), self.volume_down_button)  # Dibuja el botón de bajar volumen en rojo
+
+            self.draw_text_inputs() #Se dibujan los datos que se imprimen en la ventana
 
             # Actualiza los enemigos en cada iteración del bucle
             Enemigo.actualizar()
