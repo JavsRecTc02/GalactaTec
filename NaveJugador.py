@@ -13,13 +13,13 @@ class Nave:
         self.rect = self.imagen.get_rect()
         self.rect.center = (self.pantalla.get_width() / 2, self.pantalla.get_height() - self.rect.height / 2)  # Posiciona la nave en el centro de la pantalla
         self.balas = []  # Lista para almacenar las balas disparadas
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\SonidoBasico.mp3")  # Carga el sonido del disparo basico
-        self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\MovimientoNave.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\killt\Desktop\proyecto_principios\Bullets\SonidoBasico.mp3")  # Carga el sonido del disparo basico
+        self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\killt\Desktop\proyecto_principios\Bullets\MovimientoNave.mp3")
         self.sonido_movimiento.set_volume(0.3)
         pygame.mixer.init()
         self.puntos = 0
 
-        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
+        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\killt\Desktop\proyecto_principios\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
         self.vidas = 3
 
 
@@ -42,7 +42,7 @@ class Nave:
                 bassic_bullet.rect.center = self.rect.center  # Posiciona la bala en el centro de la nave
                 self.balas.append(bassic_bullet)
                 self.sonido_disparo_basico.play()  # Reproduce el sonido del disparo
-                
+
                 self.incrementar_puntos(200)
 
     def dibujarBalas(self):
@@ -68,12 +68,12 @@ class Nave:
     def ganarVidas(self, cantidad):
         self.vidas += cantidad #Metodo para subir la cantidad de vidas de los jugadores
         if self.vidas == 5:
-            self.vidas 
+            self.vidas
         print(self.vidas)
 
     def loadNave(self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\killt\Desktop\proyecto_principios\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
 
@@ -92,7 +92,7 @@ class Nave:
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_nave = pygame.transform.scale(imagen_nave, (100, 100))
                 return imagen_nave  # Devuelve la imagen cargada
-        
+
     def incrementar_puntos(self, cantidad):
         self.puntos += cantidad  # Incrementa los puntos
 
