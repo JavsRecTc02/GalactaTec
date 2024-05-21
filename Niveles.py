@@ -58,54 +58,39 @@ class nivel1:
 
         bonus = Bonus_de_nivel(self.pantalla, self.nave)
         bonus_timer = 0
-        bonus_interval = random.randint(5000,
-                                        15000)  # Intervalo de tiempo aleatorio (entre 5 y 15 segundos) entre la aparición de bonus
+        bonus_interval = random.randint(5000, 15000)
 
-        # Contador de bonus generados
         bonus_count = 0
 
-        self.loadMusic()  # Reproduce la musica de fondo escogida por el usuario
+        self.loadMusic()
 
         Enemigo.generar_enemigos(self.pantalla, 6)
 
         patrones = PatronesEnemigos()
         while running:
 
-            # Llama al nuevo patrón de movimiento de descenso
-            patrones.patron_descenso(Enemigo.enemigos)
-            #patrones.patron2(Enemigo.enemigos)
-            #patrones.patron1(Enemigo.enemigos)
-
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.volume_up_button.collidepoint(
-                            event.pos):  # Verifica si el clic del mouse está dentro del botón de subir volumen
-                        volume = min(pygame.mixer.music.get_volume() + 0.1,
-                                     1)  # Aumenta el volumen en 0.1, hasta un máximo de 1
+                    if self.volume_up_button.collidepoint(event.pos):
+                        volume = min(pygame.mixer.music.get_volume() + 0.1, 1)
                         pygame.mixer.music.set_volume(volume)
-                    elif self.volume_down_button.collidepoint(
-                            event.pos):  # Verifica si el clic del mouse está dentro del botón de bajar volumen
-                        volume = max(pygame.mixer.music.get_volume() - 0.1,
-                                     0)  # Disminuye el volumen en 0.1, hasta un mínimo de 0
+                    elif self.volume_down_button.collidepoint(event.pos):
+                        volume = max(pygame.mixer.music.get_volume() - 0.1, 0)
                         pygame.mixer.music.set_volume(volume)
-                elif event.type == pygame.KEYDOWN:  # Verificar si se presionó alguna tecla
-                    if event.key == pygame.K_a:  # Verificar si la tecla presionada fue 'a'
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_a:
                         bonus.move_selection_up()
                     if event.key == pygame.K_z:
                         bonus.move_selection_down()
-
-                    # Selección de bonus llamando a sus clases/funciones como tal
                     if event.key == pygame.K_x:
                         if bonus.select_bonus() == 'vida':
                             self.nave.ganarVidas(1)
-
-                self.nave.mover(event)  # Cada vez que se tocque una tecla se realiza la acción una sola vez
+                self.nave.mover(event)
 
             pygame.mixer.init()
 
-            # Muestra la imagen actual del GIF
             self.pantalla.blit(self.gif_images[self.current_image], (0, 0))
 
             if pygame.time.get_ticks() - bonus_timer > bonus_interval:
@@ -140,6 +125,11 @@ class nivel1:
             self.draw_text_inputs()
 
             Enemigo.actualizar()
+
+            if Enemigo.todos_movimientos_presentacion_terminados():
+                #patrones.patron_descenso(Enemigo.enemigos)
+                #patrones.patron3(Enemigo.enemigos)
+                patrones.patron4(Enemigo.enemigos)
 
             pygame.display.flip()
             clock.tick(60)
