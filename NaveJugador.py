@@ -4,6 +4,7 @@ import os
 from PlayerBullets import BasicBullet
 from Bonus import Bonus_de_nivel
 
+
 class Nave:
     def __init__(self, pantalla, username):
         self.pantalla = pantalla
@@ -13,13 +14,13 @@ class Nave:
         self.rect = self.imagen.get_rect()
         self.rect.center = (self.pantalla.get_width() / 2, self.pantalla.get_height() - self.rect.height / 2)  # Posiciona la nave en el centro de la pantalla
         self.balas = []  # Lista para almacenar las balas disparadas
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\killt\Desktop\proyecto_principios\Bullets\SonidoBasico.mp3")  # Carga el sonido del disparo basico
-        self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\killt\Desktop\proyecto_principios\Bullets\MovimientoNave.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\SonidoBasico.mp3")  # Carga el sonido del disparo basico
+        self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\MovimientoNave.mp3")
         self.sonido_movimiento.set_volume(0.3)
         pygame.mixer.init()
         self.puntos = 0
 
-        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\killt\Desktop\proyecto_principios\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
+        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
         self.vidas = 3
 
 
@@ -43,7 +44,7 @@ class Nave:
                 self.balas.append(bassic_bullet)
                 self.sonido_disparo_basico.play()  # Reproduce el sonido del disparo
 
-                self.incrementar_puntos(200)
+                #self.incrementar_puntos(200)
 
     def dibujarBalas(self):
         self.pantalla.blit(self.imagen, self.rect)
@@ -64,6 +65,9 @@ class Nave:
 
     def perdidaVidas(self, cantidad):
         self.vidas -= cantidad  #Metodo para bajar la cantidad de vidas de los jugadores
+        if self.vidas <= 0:
+            #Aqui se pone la logica para que empiece el Jugador 2
+            print("turno del Jugador 2")
 
     def ganarVidas(self, cantidad):
         self.vidas += cantidad #Metodo para subir la cantidad de vidas de los jugadores
@@ -73,7 +77,7 @@ class Nave:
 
     def loadNave(self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = r"C:\Users\killt\Desktop\proyecto_principios\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
 
@@ -100,5 +104,7 @@ class Nave:
         fuente = pygame.font.Font(None, 36)  # Crea una fuente
         texto = fuente.render('Puntos: ' + str(self.puntos), True, (255, 0, 0))  # Crea un objeto de texto
         self.pantalla.blit(texto, (10, 240))  # Dibuja el texto en la pantalla
+
+
 
 

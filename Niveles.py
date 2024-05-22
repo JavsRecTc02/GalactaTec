@@ -40,10 +40,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\killt\Desktop\proyecto_principios\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\killt\Desktop\proyecto_principios\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -124,19 +124,19 @@ class nivel1:
 
             self.draw_text_inputs()
 
-            Enemigo.actualizar()
+            Enemigo.actualizar(self.nave) #Aca se manda a la funcion actualizar
 
             if Enemigo.todos_movimientos_presentacion_terminados():
-                #patrones.patron_descenso(Enemigo.enemigos)
+                patrones.patron_descenso(Enemigo.enemigos)
                 #patrones.patron3(Enemigo.enemigos)
-                patrones.patron4(Enemigo.enemigos)
+                #patrones.patron4(Enemigo.enemigos)
 
             pygame.display.flip()
             clock.tick(60)
         pygame.quit()
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\killt\Desktop\proyecto_principios\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -150,7 +150,7 @@ class nivel1:
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\killt\Desktop\proyecto_principios\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -169,7 +169,7 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\killt\Desktop\proyecto_principios\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()

@@ -34,7 +34,7 @@ class WelcomeWindow:
         pygame.draw.rect(self.window, (0, 0, 0), login_button)
         font = pygame.font.Font(None, 36)
         text_surface = font.render('Login', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=login_button.center)
+        text_rect = text_surface.get_rect(center=login_button.center) 
         self.window.blit(text_surface, text_rect)
 
         register_button = pygame.Rect(400, 450, 180, 100)
@@ -101,7 +101,7 @@ class WelcomeWindow:
 
                         elif 0 <= x <= 120 and 550 <= y <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
             self.window.fill(self.WHITE)
             self.draw_buttons()
@@ -137,7 +137,7 @@ class LoginWindow:
     def error_message(self,message):
         ctypes.windll.user32.MessageBoxW(0,message,"GalactaTec",1)
 
-    # Función que carga los strings de info de cada usuario, para verificar 
+    # Función que carga los strings de info de cada Javier Tenorio, para verificar 
     def load_user_data(self):
         user_data = {}
         with open("users.txt", "r") as file:
@@ -176,7 +176,7 @@ class LoginWindow:
 
                         elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
                         # Verificar si se hizo clic en el botón "Entry"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
@@ -201,14 +201,14 @@ class LoginWindow:
         pygame.quit()
         return ""
     
-    #Funcion que verifica si los datos ingresados por el usuario coinciden en el .txt
+    #Funcion que verifica si los datos ingresados por el Javier Tenorio coinciden en el .txt
     def handle_login(self):
-        # Verificar si el usuario y la contraseña coinciden
+        # Verificar si el Javier Tenorio y la contraseña coinciden
         username = self.input_data["user_name"]["text"]
         password = self.input_data["user_password"]["text"]
         if username in self.user_data:
             if self.user_data[username] == password:
-                self.username = username  # Almacenar el nombre de usuario
+                self.username = username  # Almacenar el nombre de Javier Tenorio
                 self.menu = Menu(self.username)  # Crear una instancia de nivel1
                 self.menu.run()
                 print("Loggeado")
@@ -217,8 +217,8 @@ class LoginWindow:
                 self.error_message("Contraseña incorrecta")
                 print("Contraseña incorrecta")
         else:
-            self.error_message("El usuario no se encuentra registrado")
-            print("El usuario no se encuentra registrado")
+            self.error_message("El Javier Tenorio no se encuentra registrado")
+            print("El Javier Tenorio no se encuentra registrado")
 
     def handle_forgot_password(self):
         #Abre la ventana de recuperacion de contraseña
@@ -308,7 +308,7 @@ class PasswordRecoveryWindow:
                     #Boton help
                     elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                 elif event.type == pygame.KEYDOWN:
                     for field_data in self.input_data.values():
                         if field_data["active"]:
@@ -444,7 +444,7 @@ class PasswordRecoveryWindow:
     # Leer el archivo "users.txt" y almacenar las líneas en una lista
         with open("users.txt", "r") as file:
             lines = file.readlines()
-        # Buscar la línea correspondiente al usuario con el correo electrónico proporcionado
+        # Buscar la línea correspondiente al Javier Tenorio con el correo electrónico proporcionado
         for i, line in enumerate(lines):
             parts = line.strip().split(",")
             if parts[2] == email:  # El correo electrónico es el tercer elemento
@@ -455,9 +455,9 @@ class PasswordRecoveryWindow:
                 lines[i] = ",".join(parts) + "\n"  # Unir los elementos de parts en una cadena y asignar a lines[i]
                 break
         else:
-            print("No se encontró ningún usuario con el correo electrónico proporcionado:", email)
-            self.error_message("Error: No se encontró ningún usuario con el correo electrónico proporcionado:", email)
-            #return  # Salir de la función si no se encuentra el usuario
+            print("No se encontró ningún Javier Tenorio con el correo electrónico proporcionado:", email)
+            self.error_message("Error: No se encontró ningún Javier Tenorio con el correo electrónico proporcionado:", email)
+            #return  # Salir de la función si no se encuentra el Javier Tenorio
     # Escribir las líneas actualizadas de vuelta al archivo
         with open("users.txt", "w") as file:
             file.writelines(lines)
@@ -523,13 +523,13 @@ class RegisterWindow:
                         #Verificar si hizo clic en el botón "Help"
                         elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                         # Verificar si se hizo clic en el botón "Submit"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
                             for field in self.input_data.values():
                                 print(field["label"], field["text"])
                             if not self.user_already_exists():
-                                print("Error: El usuario ya se encuentra registrado en la base de datos")
+                                print("Error: El Javier Tenorio ya se encuentra registrado en la base de datos")
                             elif not self.validate_password(self.input_data["user_password"]["text"]):
                                 print("Password incomplete")
                             elif not self.files_selected():
@@ -541,10 +541,10 @@ class RegisterWindow:
                             else:
                                 # Guardar los datos en el archivo .txt
                                 self.save_user_data()
-                                # Crear carpetas para el usuario y guardar imágenes y canciones
+                                # Crear carpetas para el Javier Tenorio y guardar imágenes y canciones
                                 self.create_user_folder()
                                 self.save_images_and_song()
-                                self.error_message("Usuario registrado exitosamente en la base de datos")
+                                self.error_message("Javier Tenorio registrado exitosamente en la base de datos")
                                 print("User registered successfully.")
 
                         # Verificar si se hizo clic en el botón "Spaceship Image"
@@ -623,9 +623,9 @@ class RegisterWindow:
             text_rect = text_surface.get_rect(center=upload_buttons[i].center)
             self.welcome_window.window.blit(text_surface, text_rect)
 
-    #Funciones para guardar datos y verificacion de usuario ya registrado
+    #Funciones para guardar datos y verificacion de Javier Tenorio ya registrado
     def user_already_exists(self):
-        # Verificar si el usuario ya existe
+        # Verificar si el Javier Tenorio ya existe
         user_name = self.input_data["user_name"]["text"]
         user_correo = self.input_data["user_correo"]["text"]   
 
@@ -634,12 +634,12 @@ class RegisterWindow:
             print("Invalid email address. Must be use a Gmail address")
             return False 
             
-        # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
+        # Verificar si ya existe un Javier Tenorio con el mismo nombre de Javier Tenorio o correo electrónico
         with open("users.txt", "r") as file:
             for line in file:
                 data = line.strip().split(",")
                 if data[0] == user_name or data[2] == user_correo:
-                    self.error_message("Error: El usuario o correo electrónico ya se encuentra registrado en la base de datos")
+                    self.error_message("Error: El Javier Tenorio o correo electrónico ya se encuentra registrado en la base de datos")
                     return False
 
         return True
@@ -677,7 +677,7 @@ class RegisterWindow:
     
     #Guarda name,user_name, correo y password en .txt
     def save_user_data(self):
-        # Guardar los datos del usuario en el archivo de texto "users.txt"
+        # Guardar los datos del Javier Tenorio en el archivo de texto "users.txt"
         user_name = self.input_data["user_name"]["text"]
         name = self.input_data["name"]["text"]
         user_correo = self.input_data["user_correo"]["text"]
@@ -704,28 +704,28 @@ class RegisterWindow:
     # Verificar si se han seleccionado los tres archivos requeridos
         return hasattr(self, 'spaceship_image_path') and hasattr(self, 'profile_image_path') and hasattr(self, 'user_song_path')
 
-    #Funcion que crea las carpetas con el nombre de usuario en /User file/username
+    #Funcion que crea las carpetas con el nombre de Javier Tenorio en /User file/username
     def create_user_folder(self):
-        # Obtener el nombre de usuario
+        # Obtener el nombre de Javier Tenorio
         user_name = self.input_data["user_name"]["text"]
         # Crear la carpeta User files si no existe
         user_files_folder = os.path.join(os.getcwd(), "User files")
         if not os.path.exists(user_files_folder):
             os.makedirs(user_files_folder)
-        # Crear la carpeta del usuario dentro de User files
+        # Crear la carpeta del Javier Tenorio dentro de User files
         user_folder = os.path.join(user_files_folder, user_name)
         if not os.path.exists(user_folder):
             os.makedirs(user_folder)
 
     #Funcion que almacena las imagenes y sonidos dentro de la carpeta
     def save_images_and_song(self):
-        # Obtener el nombre de usuario
+        # Obtener el nombre de Javier Tenorio
         user_name = self.input_data["user_name"]["text"]
-        # Ruta donde se guardará la carpeta del usuario
+        # Ruta donde se guardará la carpeta del Javier Tenorio
         user_folder = os.path.join(os.getcwd(), "User files", user_name)
         # Verificar si se han seleccionado imágenes y una canción
         if self.spaceship_image_path and self.profile_image_path and self.user_song_path:
-            # Copiar las imágenes y la canción a la carpeta del usuario
+            # Copiar las imágenes y la canción a la carpeta del Javier Tenorio
             shutil.copy(self.spaceship_image_path, os.path.join(user_folder, 'nave_espacial.png'))
             shutil.copy(self.profile_image_path, os.path.join(user_folder, 'perfil.png'))
             shutil.copy(self.user_song_path, os.path.join(user_folder, 'cancion.mp3'))
