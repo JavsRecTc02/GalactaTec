@@ -212,7 +212,7 @@ class LoginWindow:
                 self.menu = Menu(self.username)  # Crear una instancia de nivel1
                 self.menu.run()
                 print("Loggeado")
-                # Aquí puedes continuar con la lógica para iniciar sesión
+                 # Aquí puedes continuar con la lógica para iniciar sesión
             else:
                 self.error_message("Contraseña incorrecta")
                 print("Contraseña incorrecta")
