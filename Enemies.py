@@ -10,9 +10,9 @@ class Bala:
         self.pantalla = pantalla
         self.fuerte = fuerte
         if fuerte:
-            imagen_path = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\PowerBullet.png"
+            imagen_path = r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\PowerBullet.png"
         else:
-            imagen_path = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\EnemyBullet1.png"
+            imagen_path = r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\EnemyBullet1.png"
         imagen_original = pygame.image.load(imagen_path)
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect(center=(x, y))
@@ -40,7 +40,7 @@ class Enemigo:
     def __init__(self, pantalla, x, y, stop_y):
         self.pantalla = pantalla
         self.velocidad_bala = 8
-        imagen_original = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Enemies\Enemie1.png")
+        imagen_original = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec-1\Enemies\Enemie1.png")
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect()
         self.rect.centerx = x
@@ -53,8 +53,8 @@ class Enemigo:
         self.uso_fuerte = False
 
         # Cargar los sonidos
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\SonidoFuerte.mp3")
-        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\EnemiesBasicBullet.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\SonidoFuerte.mp3")
+        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\EnemiesBasicBullet.mp3")
 
     def movimientoPresentacion(self):
         if self.moving:
@@ -99,8 +99,8 @@ class Enemigo:
         cls.indice_actual_disparo = 0
 
     @classmethod
-    def actualizar(cls, nave_jugador, escudo):
-        explosion_nave = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\ExplosionNave.mp3")
+    def actualizar(cls, nave_jugador, escudo, double_point):
+        explosion_nave = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\ExplosionNave.mp3")
         for enemigo in cls.enemigos[:]:
             enemigo.movimientoPresentacion()
             enemigo.dibujarEnemigos()
@@ -171,7 +171,7 @@ class Enemigo:
 
     # Comprobar colisiones entre balas del jugador y los enemigos
         for bala_jugador in nave_jugador.balas[:]:
-            cantidad = 200 #Aca se podria poner cuando debe cambiar la cantidad y asi 
+            cantidad = 400 if double_point.active else 200
             for enemigo in cls.enemigos[:]:  # Iterar sobre una copia de la lista de enemigos
                 if bala_jugador.rect.colliderect(enemigo.rect):
                     # Eliminar el enemigo y la bala del jugador

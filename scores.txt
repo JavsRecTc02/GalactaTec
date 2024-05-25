@@ -8,3 +8,6 @@ blasfEma,200
 blasfEma,2800
 blasfEma,1400
 blasfEma,1000
+blasfEma,2400
+blasfEma,5400
+TheEmanuel,2200

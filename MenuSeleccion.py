@@ -302,7 +302,7 @@ class UsersConfig:
             self.clock.tick(60)
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -315,7 +315,7 @@ class UsersConfig:
         return None
     
     def get_ship_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -328,7 +328,7 @@ class UsersConfig:
         return None
     
     def get_song_player(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username in carpetas:
@@ -522,8 +522,8 @@ class UsersConfig:
                 new_username = self.new_value  # Almacenar el nuevo nombre de usuario
 
                 # Renombrar la carpeta asociada al nombre de usuario
-                old_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", old_username)
-                new_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", self.new_value)
+                old_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\User files", old_username)
+                new_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\User files", self.new_value)
                 os.rename(old_folder_path, new_folder_path)
             else:
                 self.data[self.username][self.editing] = self.new_value

@@ -8,6 +8,7 @@ from PatronesEnemigos import PatronesEnemigos
 from Bonus import Bonus_de_nivel
 from Escudo import Escudo
 from FinalizarJuego import FinalizarJuego 
+from DoublePoints import DoublePoint
 
 class nivel1:
     def __init__(self, username1, username2):
@@ -43,10 +44,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec-1\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -56,6 +57,7 @@ class nivel1:
         self.volume_down_button = pygame.Rect(10, 625, 50, 50)  # Botón para disminuir el volumen
 
         self.escudo = Escudo(self.pantalla, self.nave, 3)
+        self.puntos_dobles = DoublePoint(self.pantalla, self.nave)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -73,6 +75,7 @@ class nivel1:
         Enemigo.generar_enemigos(self.pantalla, 6)
 
         self.escudo_dibujado = False  # Añade esta línea en la inicialización de tu clase
+        self.aura =  False
 
         patrones = PatronesEnemigos()
         while self.running and not self.game_over:
@@ -99,6 +102,9 @@ class nivel1:
                         if selected_bonus == 'shield':
                             print('TOME PAPI')
                             self.escudo_dibujado = True
+                        if selected_bonus ==  'double_points':
+                            print('AAAAAA')
+                            self.aura = True   
                 self.nave.mover(event)
 
             pygame.mixer.init()
@@ -145,7 +151,7 @@ class nivel1:
 
             self.draw_text_inputs()
 
-            Enemigo.actualizar(self.nave, self.escudo) #Aca se manda a la funcion actualizar
+            Enemigo.actualizar(self.nave, self.escudo, self.puntos_dobles) #Aca se manda a la funcion actualizar
 
             if Enemigo.todos_movimientos_presentacion_terminados():
                 #patrones.patron_descenso(Enemigo.enemigos)
@@ -154,6 +160,9 @@ class nivel1:
 
             if self.escudo_dibujado:
                 self.escudo.draw()
+
+            if self.aura:
+                self.puntos_dobles.draw()
 
             pygame.display.flip()
             clock.tick(60)
@@ -167,7 +176,7 @@ class nivel1:
 
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -181,7 +190,7 @@ class nivel1:
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -200,7 +209,7 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()

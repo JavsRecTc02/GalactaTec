@@ -44,7 +44,7 @@ class FinalizarJuego:
         ctypes.windll.user32.MessageBoxW(0, message, "Nuevo Record", 1)
 
     def verificar_nuevo_mejor_puntaje(self):
-        with open(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\scores.txt", 'r') as file:
+        with open(r"C:\Users\Usuario\Desktop\GalactaTec-1\scores.txt", 'r') as file:
             scores = [line.strip().split(',') for line in file]
             scores = [(name, int(score)) for name, score in scores]
 
@@ -52,7 +52,7 @@ class FinalizarJuego:
         return self.puntaje > top_scores[-1][1] if len(top_scores) > 0 else True  # Si no hay puntajes, es un nuevo mejor puntaje
 
     def guardar_puntaje(self):
-        with open(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\scores.txt", 'a') as file:
+        with open(r"C:\Users\Usuario\Desktop\GalactaTec-1\scores.txt", 'a') as file:
             file.write(f"{self.username},{self.puntaje}\n")
 
         if self.nuevo_mejor_puntaje:
@@ -140,7 +140,7 @@ class FinalizarJuego:
         self.pantalla.blit(texto_boton, (rect.x + (rect.width - texto_boton.get_width()) // 2, rect.y + (rect.height - texto_boton.get_height()) // 2))
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:

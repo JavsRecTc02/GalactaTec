@@ -14,13 +14,13 @@ class Nave:
         self.rect = self.imagen.get_rect()
         self.rect.center = (self.pantalla.get_width() / 2, self.pantalla.get_height() - self.rect.height / 2)  # Posiciona la nave en el centro de la pantalla
         self.balas = []  # Lista para almacenar las balas disparadas
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\SonidoBasico.mp3")  # Carga el sonido del disparo basico
-        self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\MovimientoNave.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\SonidoBasico.mp3")  # Carga el sonido del disparo basico
+        self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\MovimientoNave.mp3")
         self.sonido_movimiento.set_volume(0.3)
         pygame.mixer.init()
         self.puntos = 0
 
-        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
+        self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec-1\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
         self.vidas = 3
 
 
@@ -77,7 +77,7 @@ class Nave:
 
     def loadNave(self):
         # Ruta al directorio para archivos del jugador
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         # Obtiene una lista de todas las carpetas en el directorio
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
 
