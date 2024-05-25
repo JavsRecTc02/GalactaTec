@@ -10,9 +10,9 @@ class Bala:
         self.pantalla = pantalla
         self.fuerte = fuerte
         if fuerte:
-            imagen_path = r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\PowerBullet.png"
+            imagen_path = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\PowerBullet.png"
         else:
-            imagen_path = r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemyBullet1.png"
+            imagen_path = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\EnemyBullet1.png"
         imagen_original = pygame.image.load(imagen_path)
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect(center=(x, y))
@@ -40,7 +40,7 @@ class Enemigo:
     def __init__(self, pantalla, x, y, stop_y):
         self.pantalla = pantalla
         self.velocidad_bala = 8
-        imagen_original = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Enemies\Enemie1.png")
+        imagen_original = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Enemies\Enemie1.png")
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect()
         self.rect.centerx = x
@@ -53,8 +53,8 @@ class Enemigo:
         self.uso_fuerte = False
 
         # Cargar los sonidos
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\SonidoFuerte.mp3")
-        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemiesBasicBullet.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\SonidoFuerte.mp3")
+        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\EnemiesBasicBullet.mp3")
 
     def movimientoPresentacion(self):
         if self.moving:
@@ -67,7 +67,7 @@ class Enemigo:
 
     def disparar(self):
         if not self.uso_fuerte:
-            fuerte = random.random() < 0.90  # Aqui se cambia la probabilidad de que sea proyectil fuerte
+            fuerte = random.random() < 0.05  # Aqui se cambia la probabilidad de que sea proyectil fuerte
             if fuerte:
                 self.uso_fuerte = True
                 Enemigo.balas_fuertes_usadas.add(self)
@@ -100,7 +100,7 @@ class Enemigo:
 
     @classmethod
     def actualizar(cls, nave_jugador, escudo):
-        explosion_nave = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\ExplosionNave.mp3")
+        explosion_nave = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\ExplosionNave.mp3")
         for enemigo in cls.enemigos[:]:
             enemigo.movimientoPresentacion()
             enemigo.dibujarEnemigos()
@@ -186,3 +186,10 @@ class Enemigo:
     @classmethod
     def todos_movimientos_presentacion_terminados(cls):
         return all(not enemigo.moving for enemigo in cls.enemigos)
+    
+    #Metodo que define en que condiciones se termina el juego (enemigos = 0, vidas = 0)
+    @classmethod
+    def juego_terminado(cls, nave_jugador):
+        if not cls.enemigos or nave_jugador.vidas <= 0:
+            return True
+        return False

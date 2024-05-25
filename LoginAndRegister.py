@@ -8,7 +8,6 @@ import shutil
 import ctypes
 import webbrowser
 
-import Niveles
 from Email import UsersEmail
 from RifaTurnoJugadores import rifaWindow
 from MenuSeleccion import Menu
@@ -217,8 +216,8 @@ class LoginWindow:
                 self.error_message("Contraseña incorrecta")
                 print("Contraseña incorrecta")
         else:
-            self.error_message("El Javier Tenorio no se encuentra registrado")
-            print("El Javier Tenorio no se encuentra registrado")
+            self.error_message("El usuario no se encuentra registrado")
+            print("El usuario no se encuentra registrado")
 
     def handle_forgot_password(self):
         #Abre la ventana de recuperacion de contraseña
@@ -455,9 +454,9 @@ class PasswordRecoveryWindow:
                 lines[i] = ",".join(parts) + "\n"  # Unir los elementos de parts en una cadena y asignar a lines[i]
                 break
         else:
-            print("No se encontró ningún Javier Tenorio con el correo electrónico proporcionado:", email)
-            self.error_message("Error: No se encontró ningún Javier Tenorio con el correo electrónico proporcionado:", email)
-            #return  # Salir de la función si no se encuentra el Javier Tenorio
+            print("No se encontró ningún usuario con el correo electrónico proporcionado:", email)
+            self.error_message("Error: No se encontró ningún usuario con el correo electrónico proporcionado:", email)
+            #return  # Salir de la función si no se encuentra el usuario
     # Escribir las líneas actualizadas de vuelta al archivo
         with open("users.txt", "w") as file:
             file.writelines(lines)
@@ -529,7 +528,7 @@ class RegisterWindow:
                             for field in self.input_data.values():
                                 print(field["label"], field["text"])
                             if not self.user_already_exists():
-                                print("Error: El Javier Tenorio ya se encuentra registrado en la base de datos")
+                                print("Error: El usuario ya se encuentra registrado en la base de datos")
                             elif not self.validate_password(self.input_data["user_password"]["text"]):
                                 print("Password incomplete")
                             elif not self.files_selected():
@@ -541,10 +540,10 @@ class RegisterWindow:
                             else:
                                 # Guardar los datos en el archivo .txt
                                 self.save_user_data()
-                                # Crear carpetas para el Javier Tenorio y guardar imágenes y canciones
+                                # Crear carpetas para el usuario y guardar imágenes y canciones
                                 self.create_user_folder()
                                 self.save_images_and_song()
-                                self.error_message("Javier Tenorio registrado exitosamente en la base de datos")
+                                self.error_message("usuario registrado exitosamente en la base de datos")
                                 print("User registered successfully.")
 
                         # Verificar si se hizo clic en el botón "Spaceship Image"
@@ -639,7 +638,7 @@ class RegisterWindow:
             for line in file:
                 data = line.strip().split(",")
                 if data[0] == user_name or data[2] == user_correo:
-                    self.error_message("Error: El Javier Tenorio o correo electrónico ya se encuentra registrado en la base de datos")
+                    self.error_message("Error: El usuario o correo electrónico ya se encuentra registrado en la base de datos")
                     return False
 
         return True
@@ -677,7 +676,7 @@ class RegisterWindow:
     
     #Guarda name,user_name, correo y password en .txt
     def save_user_data(self):
-        # Guardar los datos del Javier Tenorio en el archivo de texto "users.txt"
+        # Guardar los datos del usuario en el archivo de texto "users.txt"
         user_name = self.input_data["user_name"]["text"]
         name = self.input_data["name"]["text"]
         user_correo = self.input_data["user_correo"]["text"]

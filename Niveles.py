@@ -7,6 +7,7 @@ from Enemies import Enemigo
 from PatronesEnemigos import PatronesEnemigos
 from Bonus import Bonus_de_nivel
 from Escudo import Escudo
+from FinalizarJuego import FinalizarJuego 
 
 class nivel1:
     def __init__(self, username1, username2):
@@ -18,6 +19,7 @@ class nivel1:
 
         self.username = username1
         self.username2 = username2
+        
 
         self.nave = Nave(self.pantalla, self.username)  # Inicializa la clase Nave
 
@@ -41,10 +43,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -57,7 +59,8 @@ class nivel1:
 
     def run(self):
         clock = pygame.time.Clock()
-        running = True
+        self.running = True
+        self.game_over = False
 
         bonus = Bonus_de_nivel(self.pantalla, self.nave)
         bonus_timer = 0
@@ -72,11 +75,11 @@ class nivel1:
         self.escudo_dibujado = False  # Añade esta línea en la inicialización de tu clase
 
         patrones = PatronesEnemigos()
-        while running:
+        while self.running and not self.game_over:
             
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    running = False
+                    self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.volume_up_button.collidepoint(event.pos):
                         volume = min(pygame.mixer.music.get_volume() + 0.1, 1)
@@ -101,6 +104,15 @@ class nivel1:
             pygame.mixer.init()
 
             self.pantalla.blit(self.gif_images[self.current_image], (0, 0))
+
+            if Enemigo.juego_terminado(self.nave):
+                puntuacion = self.nave.puntos
+                self.game_over = True
+                pygame.mixer.quit()
+                juego_terminado = FinalizarJuego(self.username, puntuacion)
+                juego_terminado.run()
+                continue
+                
 
             if pygame.time.get_ticks() - bonus_timer > bonus_interval:
                 if random.random() < 1 and bonus_count < 5:
@@ -145,12 +157,17 @@ class nivel1:
 
             pygame.display.flip()
             clock.tick(60)
-        pygame.quit()
+
+        if self.game_over:  # Salir del bucle principal si el juego ha finalizado
+            print("si se llega aca xd")
+            pygame.quit()
+            self.running = False
+            return  # Salir del método run()
 
 
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -164,7 +181,7 @@ class nivel1:
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -183,7 +200,7 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -193,7 +210,7 @@ class nivel1:
             archivos_cancion = [archivo for archivo in archivos if archivo.startswith('cancion')]
             for archivo in archivos_cancion:
                 ruta_cancion = os.path.join(ruta_carpeta_usuario, archivo)
-                pygame.mixer.init()
+                #pygame.mixer.init()
                 pygame.mixer.music.load(ruta_cancion)
                 pygame.mixer.music.set_volume(1.0)
                 pygame.mixer.music.play(-1)
