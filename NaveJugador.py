@@ -6,7 +6,7 @@ from Bonus import Bonus_de_nivel
 
 
 class Nave:
-    def __init__(self, pantalla, username):
+    def __init__(self, pantalla, username, vidas, puntos):
         self.pantalla = pantalla
         self.username = username
         self.velocidad = 50  # Define la velocidad de la nave
@@ -18,10 +18,10 @@ class Nave:
         self.sonido_movimiento = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\Bullets\MovimientoNave.mp3")
         self.sonido_movimiento.set_volume(0.3)
         pygame.mixer.init()
-        self.puntos = 0
+        self.puntos = puntos
 
         self.imagenes_vidas = {i/2: pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec-1\Vidas\Vida{}.png".format(i/2)) for i in range(0, 11)}
-        self.vidas = 3
+        self.vidas = vidas
 
 
     def mover(self, event):
@@ -52,6 +52,8 @@ class Nave:
         for bala in self.balas:
             bala.dibujar()
             bala.mover()
+            if not bala.disparada:  # Si la bala ya no está disparada, eliminarla de la lista
+                self.balas.remove(bala)
 
     def dibujar_vidas(self):
         self.imagen_vida = self.imagenes_vidas[self.vidas]  # Selecciona la imagen basada en la cantidad de vidas

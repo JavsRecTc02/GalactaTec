@@ -61,7 +61,7 @@ class Menu:
 
 
                         if self.Partida1_button.collidepoint(event.pos):
-                            Nivel1_window = nivel1(self.user, None)
+                            Nivel1_window = nivel1(self.user, None, 3, 0, None, None)
                             Nivel1_window.run()
 
                         if self.Exit_button.collidepoint(event.pos):

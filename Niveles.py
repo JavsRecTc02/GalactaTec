@@ -9,9 +9,11 @@ from Bonus import Bonus_de_nivel
 from Escudo import Escudo
 from FinalizarJuego import FinalizarJuego 
 from DoublePoints import DoublePoint
+from TransicionesTurnos import windowLost1player
+from TransicionesTurnos import windowLost2players
 
 class nivel1:
-    def __init__(self, username1, username2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -20,9 +22,16 @@ class nivel1:
 
         self.username = username1
         self.username2 = username2
-        
 
-        self.nave = Nave(self.pantalla, self.username)  # Inicializa la clase Nave
+        self.vidas_player1 = vidas_player1
+        self.puntos_player1 = puntos_player1
+
+        self.vidas_player2 = vidas_player2
+        self.puntos_player2 = puntos_player2
+
+        print([self.username,self.username2,self.vidas_player1,self.puntos_player1, self.vidas_player2,self.puntos_player2])
+        
+        self.nave = Nave(self.pantalla, self.username, self.vidas_player1, self.puntos_player1)  # Inicializa la clase Nave
 
         if self.username2 != None:
             self.input_data = {
@@ -98,30 +107,23 @@ class nivel1:
                     if event.key == pygame.K_x:
                         selected_bonus = bonus.select_bonus()
                         if selected_bonus == 'extra_life':
-                            self.nave.ganarVidas(1)
+                            if self.nave.vidas >= 4.5:
+                                self.nave.ganarVidas(0)
+                            else:
+                                self.nave.ganarVidas(1)
                         if selected_bonus == 'shield':
-                            print('TOME PAPI')
                             self.escudo_dibujado = True
                         if selected_bonus ==  'double_points':
-                            print('AAAAAA')
                             self.aura = True   
                 self.nave.mover(event)
 
             pygame.mixer.init()
 
             self.pantalla.blit(self.gif_images[self.current_image], (0, 0))
-
-            if Enemigo.juego_terminado(self.nave):
-                puntuacion = self.nave.puntos
-                self.game_over = True
-                pygame.mixer.quit()
-                juego_terminado = FinalizarJuego(self.username, puntuacion)
-                juego_terminado.run()
-                continue
                 
 
             if pygame.time.get_ticks() - bonus_timer > bonus_interval:
-                if random.random() < 1 and bonus_count < 5:
+                if random.random() < 0.01 and bonus_count < 5:
                     bonus.active = True
                     bonus_timer = pygame.time.get_ticks()
                     bonus_interval = random.randint(5000, 15000)
@@ -157,6 +159,31 @@ class nivel1:
                 #patrones.patron_descenso(Enemigo.enemigos)
                 patrones.patron3(Enemigo.enemigos)
                 #patrones.patron4(Enemigo.enemigos)
+            
+            if Enemigo.cambio_turno(self.nave):
+                if self.username2 != None:
+                    pygame.mixer.quit()
+                    Enemigo.reiniciar()
+                    Enemigo.eliminar_todos_enemigos()
+                    ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2)
+                    ventana.run()
+                else:
+                    pygame.mixer.quit()
+                    Enemigo.reiniciar()
+                    Enemigo.eliminar_todos_enemigos()
+                    ventana=windowLost1player(self.username, self.username2, self.nave.vidas, self.nave.puntos)
+                    ventana.run()
+                continue
+                
+
+            if Enemigo.juego_terminado(self.nave):
+                print(self.nave.vidas)
+                puntuacion = self.nave.puntos
+                self.game_over = True
+                pygame.mixer.quit()
+                juego_terminado = FinalizarJuego(self.username, puntuacion)
+                juego_terminado.run()
+                continue
 
             if self.escudo_dibujado:
                 self.escudo.draw()

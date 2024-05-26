@@ -36,6 +36,7 @@ class Enemigo:
     altura_maxima_disparo = 0  # Se calculará al generar enemigos
     orden_disparo = []
     indice_actual_disparo = 0
+    vidas_anteriores = None
 
     def __init__(self, pantalla, x, y, stop_y):
         self.pantalla = pantalla
@@ -67,7 +68,7 @@ class Enemigo:
 
     def disparar(self):
         if not self.uso_fuerte:
-            fuerte = random.random() < 0.05  # Aqui se cambia la probabilidad de que sea proyectil fuerte
+            fuerte = random.random() < 0.1  # Aqui se cambia la probabilidad de que sea proyectil fuerte
             if fuerte:
                 self.uso_fuerte = True
                 Enemigo.balas_fuertes_usadas.add(self)
@@ -97,6 +98,10 @@ class Enemigo:
         cls.orden_disparo = list(range(len(cls.enemigos)))
         random.shuffle(cls.orden_disparo)
         cls.indice_actual_disparo = 0
+
+    @classmethod
+    def eliminar_todos_enemigos(cls):
+        cls.enemigos.clear()
 
     @classmethod
     def actualizar(cls, nave_jugador, escudo, double_point):
@@ -193,3 +198,22 @@ class Enemigo:
         if not cls.enemigos or nave_jugador.vidas <= 0:
             return True
         return False
+    
+    @classmethod
+    def cambio_turno(cls, nave_jugador):
+        if cls.vidas_anteriores is None:
+            cls.vidas_anteriores = nave_jugador.vidas
+            return False
+
+        # Compara las vidas actuales y anteriores
+        if nave_jugador.vidas - cls.vidas_anteriores <= -1:
+            cls.vidas_anteriores = nave_jugador.vidas
+            return True
+
+        return False
+
+    @classmethod
+    def reiniciar(cls):
+        cls.vidas_anteriores = None
+
+

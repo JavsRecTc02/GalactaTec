@@ -38,7 +38,7 @@ class rifaWindow:
                     if event.button == 1:
                         if self.ready_button.collidepoint(event.pos):
                             print("se presionó")
-                            niveles_window = nivel1(self.winner, self.loser)
+                            niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0)
                             niveles_window.run()
 
             self.pantalla.fill((255,255,255))
@@ -51,7 +51,7 @@ class rifaWindow:
     def draw_text_inputs(self):
         # Renderizar las etiquetas
         label_surface = self.font.render(self.label, True, self.label_color)
-        self.pantalla.blit(label_surface, (250, 300))
+        self.pantalla.blit(label_surface, (200, 300))
 
     def draw_ready_button(self):
         # Crea el botón en el centro de la ventana
