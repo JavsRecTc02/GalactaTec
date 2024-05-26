@@ -24,7 +24,7 @@ class UsersEmail:
     def validate_code(self, verification_window):
         user_input = verification_window.entry_text
         if user_input == self.code_verify:
-            self.email_message("Error : Codigo de verificacion exitoso.")
+            self.email_message("Codigo de verificacion exitoso.")
             print("El código es correcto.")
             self.verified_email = True
             verification_window.close()
