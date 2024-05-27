@@ -7,6 +7,8 @@ import webbrowser
 from Niveles import nivel1
 from RifaTurnoJugadores import AceptarPartidaMultiplayer
 from ConfigPartida import ConfigPartida
+from Scores import ScoreWindow
+from MenuSeleccion import UsersConfig
 
 
 class menu2players(Menu):
@@ -21,6 +23,8 @@ class menu2players(Menu):
                 "rifa_winner1": {'label':'¡Bienvenido ' + self.player1 +' al menú de GalactaTEC!', "pos": (50, 40), "text": ""},
                 "rifa_winner2": {'label':'¡Bienvenido ' + self.player2 + ' al menú de GalactaTEC!', "pos": (550, 40), "text": ""}
             }
+        self.scores_window = ScoreWindow(self.player1, self.player2)
+        self.scores_window.previous_instance = self #Unica instancia para Scores
 
     def run(self):
         running = True
@@ -31,16 +35,21 @@ class menu2players(Menu):
                 elif event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         ##Para el jugador 1
-                        if self.configUsuario_button_player1.collidepoint(event.pos):
-                            print("se presionó ConfigUsuario de Player1")
+                        if self.configuser_button_player1.collidepoint(event.pos):
+                            print("se presionó Configuser de Player1")
+                            config_window = UsersConfig(self.player1, self.player2)
+                            config_window.previous_instance = self
+                            config_window.run()
 
                         if self.fama_button_player1.collidepoint(event.pos):
                             print("se presionó Fama de player1")
+                            self.scores_window.run()
 
                         if self.ConfigPartida_button_player1.collidepoint(event.pos):
-                            #ConfigPartida_Window = ConfigPartida(self.user)
-                            #ConfigPartida_Window.run()
-                            print("se presionó Config partida de player1")
+                            config_partida = ConfigPartida(self.player1,self.player2)
+                            config_partida.previous_instance = self
+                            config_partida.run()
+                            print("Se presiono Config Partida")
 
                         if self.Iniciar_button_player1.collidepoint(event.pos):
                             pantalla_aceptar = AceptarPartidaMultiplayer(self.player1, self.player2, True)
@@ -54,19 +63,24 @@ class menu2players(Menu):
                             running = False
                             print("se presionó Ayuda del player1")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             menu2players.run(self)
 
                         ##Para el jugador 2
-                        if self.configUsuario_button_player2.collidepoint(event.pos):
-                            print("se presionó ConfigUsuario de Player2")
+                        if self.configuser_button_player2.collidepoint(event.pos):
+                            print("se presionó Configuser de Player2")
+                            config_window = UsersConfig(self.player2, self.player1)
+                            config_window.previous_instance = self
+                            config_window.run()
 
                         if self.fama_button_player2.collidepoint(event.pos):
                             print("se presionó Fama de player2")
+                            self.scores_window.run()
 
                         if self.ConfigPartida_button_player2.collidepoint(event.pos):
-                            #ConfigPartida_Window = ConfigPartida(self.user)
-                            #ConfigPartida_Window.run()
+                            config_partida = ConfigPartida(self.player2,self.player1)
+                            config_partida.previous_instance = self
+                            config_partida.run()
                             print("se presionó Config partida de player2")
 
                         if self.Iniciar_button_player2.collidepoint(event.pos):
@@ -81,12 +95,12 @@ class menu2players(Menu):
                             running = False
                             print("se presionó Ayuda del player2")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             menu2players.run(self)
 
             self.pantalla.fill((255,255,255))
             self.draw_text_inputs()
-            self.draw_configUsuario_button_Player1()
+            self.draw_configuser_button_Player1()
             self.draw_fama_button_Player1()
             self.draw_ConfigPartida_button_Player1()
             self.draw_Inciar_button_Player1()
@@ -94,7 +108,7 @@ class menu2players(Menu):
             self.draw_Help_button_Player1()
 
             ##Btones para el segundo jugador
-            self.draw_configUsuario_button_Player2()
+            self.draw_configuser_button_Player2()
             self.draw_fama_button_Player2()
             self.draw_ConfigPartida_button_Player2()
             self.draw_Inciar_button_Player2()
@@ -108,13 +122,13 @@ class menu2players(Menu):
             pygame.display.flip()
         pygame.quit()
 
-    def draw_configUsuario_button_Player1(self):
+    def draw_configuser_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.configUsuario_button_player1 = pygame.Rect(self.width // 2 - 375 , self.height // 2 - 200, 250, 50)
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.configUsuario_button_player1)
+        self.configuser_button_player1 = pygame.Rect(self.width // 2 - 375 , self.height // 2 - 200, 250, 50)
+        pygame.draw.rect(self.pantalla, (0, 0, 0), self.configuser_button_player1)
         font = pygame.font.Font(None, 24)
-        text_surface = font.render('Configuración de usuario', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.configUsuario_button_player1.center)
+        text_surface = font.render('Configuración de user', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.configuser_button_player1.center)
         self.pantalla.blit(text_surface, text_rect)
 
     def draw_fama_button_Player1(self):
@@ -166,13 +180,13 @@ class menu2players(Menu):
 #######################################################################
 ##Botones para el segundo jugador
 ########################################################################
-    def draw_configUsuario_button_Player2(self):
+    def draw_configuser_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.configUsuario_button_player2 = pygame.Rect(self.width // 2 + 125 , self.height // 2 - 200, 250, 50)
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.configUsuario_button_player2)
+        self.configuser_button_player2 = pygame.Rect(self.width // 2 + 125 , self.height // 2 - 200, 250, 50)
+        pygame.draw.rect(self.pantalla, (0, 0, 0), self.configuser_button_player2)
         font = pygame.font.Font(None, 24)
-        text_surface = font.render('Configuración de usuario', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.configUsuario_button_player2.center)
+        text_surface = font.render('Configuración de user', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.configuser_button_player2.center)
         self.pantalla.blit(text_surface, text_rect)
 
     def draw_fama_button_Player2(self):

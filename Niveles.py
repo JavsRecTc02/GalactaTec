@@ -53,10 +53,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec-1\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -177,12 +177,18 @@ class nivel1:
                 
 
             if Enemigo.juego_terminado(self.nave):
-                print(self.nave.vidas)
-                puntuacion = self.nave.puntos
-                self.game_over = True
-                pygame.mixer.quit()
-                juego_terminado = FinalizarJuego(self.username, puntuacion)
-                juego_terminado.run()
+                if self.username2 != None:
+                    print("Dos Jugadores")
+                    self.game_over = True
+                    pygame.mixer.quit()
+                    juego_terminado = FinalizarJuego(self.username, self.username2, self.nave.puntos, self.puntos_player2)
+                    juego_terminado.run()
+                else:
+                    print("Un jugador")
+                    self.game_over = True
+                    pygame.mixer.quit()
+                    juego_terminado = FinalizarJuego(self.username, None, self.nave.puntos, None)
+                    juego_terminado.run()
                 continue
 
             if self.escudo_dibujado:
@@ -195,7 +201,7 @@ class nivel1:
             clock.tick(60)
 
         if self.game_over:  # Salir del bucle principal si el juego ha finalizado
-            print("si se llega aca xd")
+            print("Juego Finalizado")
             pygame.quit()
             self.running = False
             return  # Salir del método run()
@@ -203,30 +209,30 @@ class nivel1:
 
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_user = os.path.join(ruta_directorio_carpetas, self.username)
+            archivos = os.listdir(ruta_carpeta_user)
             archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
             for archivo in archivos_perfil:
-                self.imagen_perfil1 = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                self.imagen_perfil1 = pygame.image.load(os.path.join(ruta_carpeta_user, archivo))
                 self.imagen_perfil1 = pygame.transform.scale(self.imagen_perfil1, (150, 200))
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username2 in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username2)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_user = os.path.join(ruta_directorio_carpetas, self.username2)
+            archivos = os.listdir(ruta_carpeta_user)
             archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
             for archivo in archivos_perfil:
-                self.imagen_perfil2 = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                self.imagen_perfil2 = pygame.image.load(os.path.join(ruta_carpeta_user, archivo))
                 self.imagen_perfil2 = pygame.transform.scale(self.imagen_perfil2, (150, 200))
             self.pantalla.blit(self.imagen_perfil2, (1120, 8))
 
@@ -236,16 +242,16 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_user = os.path.join(ruta_directorio_carpetas, self.username)
+            archivos = os.listdir(ruta_carpeta_user)
             archivos_cancion = [archivo for archivo in archivos if archivo.startswith('cancion')]
             for archivo in archivos_cancion:
-                ruta_cancion = os.path.join(ruta_carpeta_usuario, archivo)
+                ruta_cancion = os.path.join(ruta_carpeta_user, archivo)
                 #pygame.mixer.init()
                 pygame.mixer.music.load(ruta_cancion)
                 pygame.mixer.music.set_volume(1.0)

@@ -38,21 +38,22 @@ class Menu:
                     running = False
                 elif event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        if self.configUsuario_button.collidepoint(event.pos):
-                            print("se presionó ConfigUsuario")
+                        if self.configuser_button.collidepoint(event.pos):
+                            print("se presionó Configuser")
                             config = UsersConfig(self.user)
+                            config.previous_instance = self
                             config.run()
 
                         if self.fama_button.collidepoint(event.pos):
-                            menu_window = Menu(self.user)
-                            scores = ScoreWindow(self.user,menu_window)
-                            scores.run()
+                            scores_window = ScoreWindow(self.user)
+                            scores_window.previous_instance = self
+                            scores_window.run()
 
 
                         if self.ConfigPartida_button.collidepoint(event.pos):
-                            ConfigPartida_Window = ConfigPartida(self.user)
-                            ConfigPartida_Window.run()
-                            print("se presionó Config partida")
+                            config_partida = ConfigPartida(self.user)
+                            config_partida.previous_instance = self
+                            config_partida.run()
 
                         if self.Jugador2_Button.collidepoint(event.pos):
                             from LoginPlayer2 import LoginPlayer2  
@@ -77,7 +78,7 @@ class Menu:
 
             self.pantalla.fill((255,255,255))
             self.draw_text_inputs()
-            self.draw_configUsuario_button()
+            self.draw_configuser_button()
             self.draw_fama_button()
             self.draw_ConfigPartida_button()
             self.draw_Jugador2_button()
@@ -98,13 +99,13 @@ class Menu:
             # Renderizar el texto de entrada
             font = pygame.font.Font(None, 36)
 
-    def draw_configUsuario_button(self):
+    def draw_configuser_button(self):
         # Crea el botón en el centro de la ventana
-        self.configUsuario_button = pygame.Rect(self.width // 2 - 125, self.height // 2 - 200, 250, 50)
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.configUsuario_button)
+        self.configuser_button = pygame.Rect(self.width // 2 - 125, self.height // 2 - 200, 250, 50)
+        pygame.draw.rect(self.pantalla, (0, 0, 0), self.configuser_button)
         font = pygame.font.Font(None, 24)
-        text_surface = font.render('Configuración de usuario', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.configUsuario_button.center)
+        text_surface = font.render('Configuración de user', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=self.configuser_button.center)
         self.pantalla.blit(text_surface, text_rect)
 
     def draw_fama_button(self):
@@ -162,21 +163,23 @@ class Menu:
         self.pantalla.blit(text_surface, text_rect)
 
 
-#VENTANA DE CONFIGURACION DEL USUARIO
+#VENTANA DE CONFIGURACION DEL user
 class UsersConfig:
-    def __init__(self, username):
+    def __init__(self, username,previous_instance=None):
+        self.previous_instance = previous_instance
+        #,previous_instance=None
         pygame.init()
-        self.width = 800
+        self.width = 1000
         self.height = 600
         self.screen = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption('Configuración de Usuario')
+        pygame.display.set_caption('Configuración de user')
         self.clock = pygame.time.Clock()
         self.username = username
         self.font = pygame.font.Font(None, 30)
         self.data = self.load_user_data()
         self.editing_arch = False
         self.editing = None  # Variable para rastrear qué dato se está editando
-        self.new_value = None  # Variable para almacenar el nuevo valor ingresado por el usuario
+        self.new_value = None  # Variable para almacenar el nuevo valor ingresado por el user
         self.profile_image = self.get_profile_image(self.username)
         self.ship_image = self.get_ship_image(self.username)
         self.profile_image_path = None
@@ -201,7 +204,7 @@ class UsersConfig:
         self.set_button_positions()
 
     def load_user_data(self):
-    # Cargar los datos del usuario desde el archivo users.txt
+    # Cargar los datos del user desde el archivo users.txt
         user_data = {}
         with open('users.txt', 'r') as file:
             for line in file:
@@ -277,11 +280,12 @@ class UsersConfig:
                         self.edit_select_file("spaceship_image")
                         print("editar nave")
 
-                    elif self.button_rect.collidepoint(event.pos):
-                        print("Nombre de usuario :", self.username)
-                        self.stop_song()
-                        back_menu = Menu(self.username)
-                        back_menu.run()
+                    elif self.button_rect.collidepoint(event.pos): #BOTON PARA VOLVER ATRAS
+                        if self.previous_instance is not None:
+                                self.previous_instance.run()  # Llama al método run() de la instancia anterior
+                        else:
+                            pygame.quit()
+                            return
 
                 elif event.type == pygame.KEYDOWN:
                     if self.editing is not None:
@@ -302,41 +306,41 @@ class UsersConfig:
             self.clock.tick(60)
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, username)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_user = os.path.join(ruta_directorio_carpetas, username)
+            archivos = os.listdir(ruta_carpeta_user)
             archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
             for archivo in archivos_perfil:
-                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_user, archivo))
                 return pygame.transform.scale(imagen_perfil, (80, 80))
         return None
     
     def get_ship_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, username)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_user = os.path.join(ruta_directorio_carpetas, username)
+            archivos = os.listdir(ruta_carpeta_user)
             archivos_perfil = [archivo for archivo in archivos if archivo.startswith('nave_espacial')]
             for archivo in archivos_perfil:
-                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_user, archivo))
                 return pygame.transform.scale(imagen_perfil, (80, 80))
         return None
     
     def get_song_player(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, self.username)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_user = os.path.join(ruta_directorio_carpetas, self.username)
+            archivos = os.listdir(ruta_carpeta_user)
             archivos_cancion = [archivo for archivo in archivos if archivo.startswith('cancion')]
             for archivo in archivos_cancion:
-                ruta_cancion = os.path.join(ruta_carpeta_usuario, archivo)
+                ruta_cancion = os.path.join(ruta_carpeta_user, archivo)
                 pygame.mixer.init()  # Inicializa el mixer
                 pygame.mixer.music.load(ruta_cancion)
                 pygame.mixer.music.set_volume(1.0)  # Ajusta el volumen
@@ -360,9 +364,9 @@ class UsersConfig:
                 self.user_song_path = file_path
 
     def save_images_and_song(self):
-    # Obtener el nombre de usuario
+    # Obtener el nombre de user
         user_name = self.username
-        # Ruta donde se guardará la carpeta del usuario
+        # Ruta donde se guardará la carpeta del user
         user_folder = os.path.join(os.getcwd(), "User files", user_name)
         # Guardar los nuevos archivos
         if self.spaceship_image_path:
@@ -390,8 +394,8 @@ class UsersConfig:
             self.screen.blit(musica_label, (510, 250)) 
 
             user_info = self.data[self.username]
-            # Mostrar los datos del usuario en la ventana
-            username_text = f'Usuario: {self.username}'
+            # Mostrar los datos del user en la ventana
+            username_text = f'user: {self.username}'
             username_rendered = self.font.render(username_text, True, (0, 0, 0))
             username_rect = username_rendered.get_rect(topleft=(100, 50))
             self.screen.blit(username_rendered, username_rect)
@@ -406,7 +410,7 @@ class UsersConfig:
             correo_rect = correo_rendered.get_rect(topleft=(100, 250))
             self.screen.blit(correo_rendered, correo_rect)
 
-            # Dibujar botón de editar para nombre, correo y usuario
+            # Dibujar botón de editar para nombre, correo y user
             pygame.draw.rect(self.screen, (0, 0, 0), self.username_edit_rect)
             font = pygame.font.Font(None, 20)
             edit_username_text = font.render("Editar", True, (255, 255, 255))
@@ -501,8 +505,8 @@ class UsersConfig:
                     self.screen.blit(new_text, new_rect)
 
         else:
-            # Si el usuario no existe en los datos, mostrar un mensaje de error
-            error_text = 'Usuario no encontrado'
+            # Si el user no existe en los datos, mostrar un mensaje de error
+            error_text = 'user no encontrado'
             rendered_text = self.font.render(error_text, True, (255, 0, 0))
             text_rect = rendered_text.get_rect(center=(self.width // 2, self.height // 2))
             self.screen.blit(rendered_text, text_rect)
@@ -514,16 +518,16 @@ class UsersConfig:
     def confirm_edit(self):
         new_username = None  # Inicializamos con None
         if self.editing is not None and self.new_value is not None:
-            # Actualizar el valor en los datos del usuario
+            # Actualizar el valor en los datos del user
             if self.editing == 'username':
                 old_username = self.username
                 self.data[self.new_value] = self.data.pop(old_username)
                 self.username = self.new_value
-                new_username = self.new_value  # Almacenar el nuevo nombre de usuario
+                new_username = self.new_value  # Almacenar el nuevo nombre de user
 
-                # Renombrar la carpeta asociada al nombre de usuario
-                old_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\User files", old_username)
-                new_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\User files", self.new_value)
+                # Renombrar la carpeta asociada al nombre de user
+                old_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", old_username)
+                new_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", self.new_value)
                 os.rename(old_folder_path, new_folder_path)
             else:
                 self.data[self.username][self.editing] = self.new_value
@@ -535,7 +539,7 @@ class UsersConfig:
 
         self.editing = None
         self.new_value = None
-        print (new_username)  # Devolver el nuevo nombre de usuario
+        print (new_username)  # Devolver el nuevo nombre de user
 
     def confirm_arch_edit(self):
         self.save_images_and_song()

@@ -2,12 +2,13 @@ import pygame
 from pygame.locals import *
 import sys
 import webbrowser
-import MenuSeleccion as Menu
+#import MenuSeleccion as Menu
 
 
 class ConfigPartida:
-    def __init__(self, username1):
-        self.width = 800
+    def __init__(self, username1,previous_instance=None):
+        self.previous_instance = previous_instance
+        self.width = 1000
         self.height = 600
         self.pantalla = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption("ConfigPartida de selección")
@@ -67,12 +68,14 @@ class ConfigPartida:
                             self.lvlselect = 3
                             print("se seleccionó Nivel 3")
 
-                        if self.Back_button.collidepoint(event.pos):
+                        if self.Back_button.collidepoint(event.pos): #Aca se crea la instancia anterior
                             running = False
-                            back_menu = Menu.Menu(self.user)
-                            back_menu.run()
+                            if self.previous_instance is not None:
+                                    self.previous_instance.run()  # Llama al método run() de la instancia anterior
+                            else:
+                                pygame.quit()
+                                return
                             
-
                         if self.Help_button.collidepoint(event.pos):
                             running = False
                             print("se presionó Ayuda")
@@ -80,7 +83,7 @@ class ConfigPartida:
                             print("nivel 1 tiene el patron:" , Patrones.GetPatron(self))    
                             print("nivel 2 tiene el patron:" , Patrones.GetPatron(self))
                             print("nivel 3 tiene el patron:" , Patrones.GetPatron(self))  
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             ConfigPartida.run(self)
 
                 
