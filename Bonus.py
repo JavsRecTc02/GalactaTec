@@ -22,7 +22,7 @@ class Bonus_de_nivel:
         self.bonus_animation = self.load_bonus_animation()
 
         # Cargar y escalar la imagen del bonus principal
-        self.image_path = r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus\diamante.png"
+        self.image_path = r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus\diamante.png"
         self.image = pygame.image.load(self.image_path)
         self.image = pygame.transform.scale(self.image, (100, 100))
 
@@ -52,8 +52,8 @@ class Bonus_de_nivel:
 
     def load_bonus_images(self, bonus_type):
         # Carga y escala las imágenes de bonos y su versión en blanco y negro
-        image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus", bonus_type + ".png")
-        bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus", bonus_type + "_bn.png")
+        image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus", bonus_type + ".png")
+        bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus", bonus_type + "_bn.png")
 
         image = pygame.image.load(image_path)
         bn_image = pygame.image.load(bn_image_path)
@@ -64,9 +64,9 @@ class Bonus_de_nivel:
     def load_bonus_animation(self):
         # Carga y escala las imágenes de la animación del bonus
         bonus_animation = []
-        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus")):
             if filename.endswith('.png'):
-                image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus", filename)
+                image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus", filename)
                 image = pygame.image.load(image_path)
                 image_escalada = pygame.transform.scale(image, (100, 100))
                 bonus_animation.append(image_escalada)
@@ -105,7 +105,7 @@ class Bonus_de_nivel:
         # Verificar si el bono seleccionado está activo
         if self.bonus_status[selected_bonus_type]:
             self.bonus_status[selected_bonus_type] = False  # Desactivar el bono después de usarlo
-            bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus",
+            bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
                                         selected_bonus_type + "_bn.png")
             bn_image = pygame.image.load(bn_image_path)
             self.bonus_images[selected_bonus_type + "_bn"] = pygame.transform.scale(bn_image, (100, 100))
@@ -162,9 +162,9 @@ class Bonus_de_nivel:
                     self.bonus_status[self.current_bonus] = True
 
                     # Actualizar la imagen correspondiente en la barra de bonos para que se muestre en color
-                    bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus",
+                    bn_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
                                                 self.current_bonus + "_bn.png")
-                    color_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus",
+                    color_image_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus",
                                                     self.current_bonus + ".png")
                     bn_image = pygame.image.load(bn_image_path)
                     color_image = pygame.image.load(color_image_path)
@@ -179,6 +179,6 @@ class Bonus_de_nivel:
         self.rect.x = random.randint(0, self.screen.get_width() - self.rect.width)
 
     def play_sound(self):
-        sonido = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus\sonido_bonus.mp3")
+        sonido = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus\sonido_bonus.mp3")
         sonido.set_volume(1.0)  # Ajusta el volumen al máximo
         sonido.play()

@@ -4,7 +4,7 @@ class DoublePoint:
     def __init__(self, screen, player):
         self.screen = screen
         self.player = player
-        self.imagenes_auras = [pygame.Surface((90, 90), pygame.SRCALPHA), pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec-1\imagenes_bonus\aura.png'), (110, 110))]
+        self.imagenes_auras = [pygame.Surface((90, 90), pygame.SRCALPHA), pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\imagenes_bonus\aura.png'), (110, 110))]
         self.font = pygame.font.Font(None, 30)  # Define la fuente para el contador
         self.start_ticks = None  # Inicializa el contador en None
         self.active = False

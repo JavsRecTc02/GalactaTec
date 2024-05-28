@@ -12,6 +12,9 @@ from Email import UsersEmail
 from RifaTurnoJugadores import rifaWindow
 from MenuSeleccion import Menu
 
+import threading
+from control import joystick_check  # Importa la función joystick_check de joystick.py
+
 #Funcion para las ventanas de Error
 def error_message(self,message):
     ctypes.windll.user32.MessageBoxW(0,message,"Error",1)
@@ -738,7 +741,18 @@ class RegisterWindow:
             print("Please select all images and the song before submitting.")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     pygame.font.init()
     welcome_window = WelcomeWindow()
+    
+    # Crea un hilo para la función joystick_check
+    joystick_thread = threading.Thread(target=joystick_check)
+    
+    # Inicia el hilo
+    joystick_thread.start()
+    
+    # Ejecuta el juego principal
     welcome_window.run()
+    
+    # Espera a que termine el hilo del joystick antes de terminar el programa
+    joystick_thread.join()

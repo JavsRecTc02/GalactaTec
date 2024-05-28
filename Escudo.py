@@ -5,9 +5,9 @@ class Escudo:
         self.screen = screen
         self.player = player
         self.imagenes_escudos = [pygame.Surface((100, 100), pygame.SRCALPHA),
-                                 pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec-1\Escudo\Escudo1.png'), (100, 100)),
-                                 pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec-1\Escudo\Escudo2.png'), (100, 100)),
-                                 pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec-1\Escudo\Escudo3.png'), (100, 100))]  # Añade una imagen vacía
+                                 pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\Escudo\Escudo1.png'), (100, 100)),
+                                 pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\Escudo\Escudo2.png'), (100, 100)),
+                                 pygame.transform.scale(pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\Escudo\Escudo3.png'), (100, 100))]  # Añade una imagen vacía
         self.estado = estado  # Ajusta el estado inicial
         self.rect = self.imagenes_escudos[self.estado].get_rect()  # Añade un atributo 'rect' a la clase 'Escudo'
         self.hits_fuerte = 0  # Añade un contador para los golpes de balas fuertes

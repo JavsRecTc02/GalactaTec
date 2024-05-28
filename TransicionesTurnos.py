@@ -21,7 +21,7 @@ class windowLost1player:
         self.red_label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -37,6 +37,11 @@ class windowLost1player:
                             from Niveles import nivel1
                             juego=nivel1(self.player1, self.player2, self.vidas, self.puntos, None, None)
                             juego.run()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        from Niveles import nivel1
+                        juego=nivel1(self.player1, self.player2, self.vidas, self.puntos, None, None)
+                        juego.run()
 
             # Dibuja la imagen de fondo
             self.pantalla.blit(self.fondo, (0, 0))
@@ -86,7 +91,7 @@ class windowLost2players:
         self.label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -104,6 +109,11 @@ class windowLost2players:
                             juego=nivel1(self.player2,self.player1,self.vidas_player2,self.puntos_player2, self.vidas_player1, self.puntos_player1)
                             juego.run()
                             print("se presionó ready")
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        from Niveles import nivel1
+                        juego=nivel1(self.player2,self.player1,self.vidas_player2,self.puntos_player2, self.vidas_player1, self.puntos_player1)
+                        juego.run()
 
             self.pantalla.blit(self.fondo, (0,0))
             self.draw_text_inputs1()

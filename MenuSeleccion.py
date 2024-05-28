@@ -13,6 +13,7 @@ from Niveles import nivel1
 from RifaTurnoJugadores import rifaWindow
 from ConfigPartida import ConfigPartida
 
+
 class Menu:
     def __init__(self, username1):
         self.width = 800
@@ -75,6 +76,11 @@ class Menu:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
                             webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             Menu.run(self)
+                            
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        Nivel1_window = nivel1(self.user, None, 3, 0, None, None)
+                        Nivel1_window.run()
 
             self.pantalla.fill((255,255,255))
             self.draw_text_inputs()

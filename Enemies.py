@@ -4,15 +4,16 @@ import random
 
 from NaveJugador import Nave
 from PlayerBullets import BasicBullet
+from control import set_vibration
 
 class Bala:
     def __init__(self, pantalla, x, y, fuerte=False):
         self.pantalla = pantalla
         self.fuerte = fuerte
         if fuerte:
-            imagen_path = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\PowerBullet.png"
+            imagen_path = r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\PowerBullet.png"
         else:
-            imagen_path = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\EnemyBullet1.png"
+            imagen_path = r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemyBullet1.png"
         imagen_original = pygame.image.load(imagen_path)
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect(center=(x, y))
@@ -41,7 +42,7 @@ class Enemigo:
     def __init__(self, pantalla, x, y, stop_y):
         self.pantalla = pantalla
         self.velocidad_bala = 8
-        imagen_original = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Enemies\Enemie1.png")
+        imagen_original = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Enemies\Enemie1.png")
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect()
         self.rect.centerx = x
@@ -54,8 +55,8 @@ class Enemigo:
         self.uso_fuerte = False
 
         # Cargar los sonidos
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\SonidoFuerte.mp3")
-        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\EnemiesBasicBullet.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\SonidoFuerte.mp3")
+        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemiesBasicBullet.mp3")
 
     def movimientoPresentacion(self):
         if self.moving:
@@ -106,7 +107,7 @@ class Enemigo:
 
     @classmethod
     def actualizar(cls, nave_jugador, escudo, double_point):
-        explosion_nave = pygame.mixer.Sound(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Bullets\ExplosionNave.mp3")
+        explosion_nave = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\ExplosionNave.mp3")
         for enemigo in cls.enemigos[:]:
             enemigo.movimientoPresentacion()
             enemigo.dibujarEnemigos()
@@ -120,6 +121,12 @@ class Enemigo:
                 explosion_nave.play()
                 cls.orden_disparo = list(range(len(cls.enemigos)))
                 random.shuffle(cls.orden_disparo)
+                # Verifica si hay mandos conectados
+                if pygame.joystick.get_count() != 0:
+                    set_vibration(0.5, 0.5, 500)  # Vibra por 1000 milisegundos (5 segundos)
+                else:
+                    pass
+                    
 
         # Verificar si todos los movimientos de presentación han terminado
         if cls.todos_movimientos_presentacion_terminados():
@@ -157,8 +164,18 @@ class Enemigo:
             if bala.rect.colliderect(nave_jugador.rect):
                 if bala.fuerte:
                     nave_jugador.perdidaVidas(1)  # Resta todas las vidas
+                    # Verifica si hay mandos conectados
+                    if pygame.joystick.get_count() != 0:
+                        set_vibration(0.5, 0.5, 250)  # Vibra por 1000 milisegundos (5 segundos)
+                    else:
+                        pass
                 else:
                     nave_jugador.perdidaVidas(0.5)
+                    # Verifica si hay mandos conectados
+                    if pygame.joystick.get_count() != 0:
+                        set_vibration(0.5, 0.5,250)  # Vibra por 1000 milisegundos (5 segundos)
+                    else:
+                        pass
                 # Eliminar la bala después de la colisión
                 cls.balas.remove(bala)
         

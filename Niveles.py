@@ -53,10 +53,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -72,6 +72,7 @@ class nivel1:
         clock = pygame.time.Clock()
         self.running = True
         self.game_over = False
+        self.paused = False  # Cambio aquí: inicializa la variable de pausa
 
         bonus = Bonus_de_nivel(self.pantalla, self.nave)
         bonus_timer = 0
@@ -88,7 +89,6 @@ class nivel1:
 
         patrones = PatronesEnemigos()
         while self.running and not self.game_over:
-            
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.running = False
@@ -114,8 +114,15 @@ class nivel1:
                         if selected_bonus == 'shield':
                             self.escudo_dibujado = True
                         if selected_bonus ==  'double_points':
-                            self.aura = True   
+                            self.aura = True
+                    if event.key == pygame.K_ESCAPE:  # Cambio aquí: agrega el manejo del evento KEYDOWN para la tecla Escape
+                        self.paused = not self.paused  # Cambia el estado de pausa
+                      
                 self.nave.mover(event)
+                
+            if self.paused:  # Cambio aquí: si el juego está en pausa, salta el resto del bucle
+                continue
+
 
             pygame.mixer.init()
 
@@ -209,7 +216,7 @@ class nivel1:
 
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -223,7 +230,7 @@ class nivel1:
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -242,7 +249,7 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()

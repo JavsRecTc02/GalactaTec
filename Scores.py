@@ -31,7 +31,7 @@ class Scores:
         return top_scores
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -53,7 +53,7 @@ class ScoreWindow:
         pygame.display.set_caption('Top Scores')
         self.clock = pygame.time.Clock()
         self.scores = Scores('scores.txt', self.player)
-        self.background = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
+        self.background = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
 
         # Definir las coordenadas y dimensiones del botón
         self.button_rect = pygame.Rect(700, 500, 80, 40)  # Posición y tamaño del botón

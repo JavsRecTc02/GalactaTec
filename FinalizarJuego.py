@@ -49,7 +49,7 @@ class FinalizarJuego:
         if score is None:
             return False
         try:
-            with open(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\scores.txt", 'r') as file:
+            with open(r"C:\Users\Usuario\Desktop\GalactaTec\scores.txt", 'r') as file:
                 scores = [line.strip().split(',') for line in file]
                 scores = [(name, int(score)) for name, score in scores]
         except FileNotFoundError:
@@ -60,7 +60,7 @@ class FinalizarJuego:
 
     def guardar_puntaje(self, user, score):
         if user and score is not None:
-            with open(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\scores.txt", 'a') as file:
+            with open(r"C:\Users\Usuario\Desktop\GalactaTec\scores.txt", 'a') as file:
                 file.write(f"{user},{score}\n")
 
         if user == self.player1 and self.nuevo_mejor_puntaje1:
