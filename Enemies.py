@@ -224,9 +224,13 @@ class Enemigo:
             return False
 
         # Compara las vidas actuales y anteriores
-        if nave_jugador.vidas - cls.vidas_anteriores <= -1:
+        if cls.vidas_anteriores - nave_jugador.vidas >= 1:
             cls.vidas_anteriores = nave_jugador.vidas
             return True
+
+        # Si el jugador gana una vida, actualizamos las vidas anteriores
+        elif nave_jugador.vidas > cls.vidas_anteriores:
+            cls.vidas_anteriores = nave_jugador.vidas
 
         return False
 
