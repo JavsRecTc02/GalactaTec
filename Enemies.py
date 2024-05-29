@@ -18,7 +18,6 @@ class Bala:
         self.imagen = pygame.transform.scale(imagen_original, (50, 50))
         self.rect = self.imagen.get_rect(center=(x, y))
         self.velocidad = 8
-    
     def mover(self):
         self.rect.y += self.velocidad
 
@@ -55,8 +54,8 @@ class Enemigo:
         self.uso_fuerte = False
 
         # Cargar los sonidos
-        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\SonidoFuerte.mp3")
-        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemiesBasicBullet.mp3")
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemieBasicBullet_1.mp3")
+        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemiesHardBullet_1.mp3")
 
     def movimientoPresentacion(self):
         if self.moving:
@@ -108,6 +107,7 @@ class Enemigo:
     @classmethod
     def actualizar(cls, nave_jugador, escudo, double_point):
         explosion_nave = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\ExplosionNave.mp3")
+
         for enemigo in cls.enemigos[:]:
             enemigo.movimientoPresentacion()
             enemigo.dibujarEnemigos()
@@ -213,10 +213,16 @@ class Enemigo:
     #Metodo que define en que condiciones se termina el juego (enemigos = 0, vidas = 0)
     @classmethod
     def juego_terminado(cls, nave_jugador):
-        if not cls.enemigos or nave_jugador.vidas <= 0:
+        if nave_jugador.vidas <= 0:  # El juego termina cuando el jugador tiene 0 vidas
             return True
         return False
-    
+
+    @classmethod
+    def cambio_nivel(cls):
+        if not cls.enemigos:  # El cambio de nivel ocurre cuando no hay más enemigos
+            return True
+        return False
+        
     @classmethod
     def cambio_turno(cls, nave_jugador):
         if cls.vidas_anteriores is None:
@@ -239,3 +245,101 @@ class Enemigo:
         cls.vidas_anteriores = None
 
 
+###########################################################################################################################
+###########################################################################################################################
+class Enemigo_LVL2(Enemigo):
+    enemigos = []
+    balas = []
+    balas_fuertes_usadas = set()
+    ultimo_disparo = pygame.time.get_ticks()
+    tiempo_entre_disparos = 1000  # Milisegundos entre cada disparo
+    tiempo_final_presentacion = 0
+    espera_para_disparar = 2000  # 2000 milisegundos = 2 segundos
+    altura_maxima_disparo = 0  # Se calculará al generar enemigos
+    orden_disparo = []
+    indice_actual_disparo = 0
+    vidas_anteriores = None
+
+    def __init__(self, pantalla, x, y, stop_y):
+        self.pantalla = pantalla
+        self.velocidad_bala = 8
+        imagen_original = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Enemies\Enemie2.png")
+        self.imagen = pygame.transform.scale(imagen_original, (50, 50))
+        self.rect = self.imagen.get_rect()
+        self.rect.centerx = x
+        self.rect.y = y
+        self.moving = True
+        self.stop_y = stop_y
+        self.inicial_x = x
+        self.inicial_y = y
+        self.offset = (self.rect.x + self.rect.y) % (2 * math.pi)
+        self.uso_fuerte = False
+
+        # Cargar los sonidos
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemieBasicBullet_2.mp3")
+        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemiesHardBullet_2.mp3")
+
+    def disparar(self):
+        if not self.uso_fuerte:
+            fuerte = random.random() < 0.1  # Aqui se cambia la probabilidad de que sea proyectil fuerte
+            if fuerte:
+                self.uso_fuerte = True
+                Enemigo_LVL2.balas_fuertes_usadas.add(self)
+                self.sonido_disparo_fuerte.play()  # Reproduce el sonido fuerte
+            else:
+                self.sonido_disparo_basico.play()  # Reproduce el sonido básico
+            bala = Bala(self.pantalla, self.rect.centerx, self.rect.bottom, fuerte=fuerte)
+        else:
+            bala = Bala(self.pantalla, self.rect.centerx, self.rect.bottom)
+            self.sonido_disparo_basico.play()  # Reproduce el sonido básico si ya se usó el fuerte
+        Enemigo_LVL2.balas.append(bala)
+
+
+###########################################################################################################################
+###########################################################################################################################
+class Enemigo_LVL3(Enemigo):
+    enemigos = []
+    balas = []
+    balas_fuertes_usadas = set()
+    ultimo_disparo = pygame.time.get_ticks()
+    tiempo_entre_disparos = 1000  # Milisegundos entre cada disparo
+    tiempo_final_presentacion = 0
+    espera_para_disparar = 2000  # 2000 milisegundos = 2 segundos
+    altura_maxima_disparo = 0  # Se calculará al generar enemigos
+    orden_disparo = []
+    indice_actual_disparo = 0
+    vidas_anteriores = None
+
+    def __init__(self, pantalla, x, y, stop_y):
+        self.pantalla = pantalla
+        self.velocidad_bala = 8
+        imagen_original = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\Enemies\Enemie3.png")
+        self.imagen = pygame.transform.scale(imagen_original, (50, 50))
+        self.rect = self.imagen.get_rect()
+        self.rect.centerx = x
+        self.rect.y = y
+        self.moving = True
+        self.stop_y = stop_y
+        self.inicial_x = x
+        self.inicial_y = y
+        self.offset = (self.rect.x + self.rect.y) % (2 * math.pi)
+        self.uso_fuerte = False
+
+        # Cargar los sonidos
+        self.sonido_disparo_basico = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemieBasicBullet_3.mp3")
+        self.sonido_disparo_fuerte = pygame.mixer.Sound(r"C:\Users\Usuario\Desktop\GalactaTec\Bullets\EnemiesHardBullet_3.mp3")
+
+    def disparar(self):
+        if not self.uso_fuerte:
+            fuerte = random.random() < 0.1  # Aqui se cambia la probabilidad de que sea proyectil fuerte
+            if fuerte:
+                self.uso_fuerte = True
+                Enemigo_LVL3.balas_fuertes_usadas.add(self)
+                self.sonido_disparo_fuerte.play()  # Reproduce el sonido fuerte
+            else:
+                self.sonido_disparo_basico.play()  # Reproduce el sonido básico
+            bala = Bala(self.pantalla, self.rect.centerx, self.rect.bottom, fuerte=fuerte)
+        else:
+            bala = Bala(self.pantalla, self.rect.centerx, self.rect.bottom)
+            self.sonido_disparo_basico.play()  # Reproduce el sonido básico si ya se usó el fuerte
+        Enemigo_LVL3.balas.append(bala)
