@@ -31,15 +31,15 @@ class Scores:
         return top_scores
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
-            ruta_carpeta_usuario = os.path.join(ruta_directorio_carpetas, username)
-            archivos = os.listdir(ruta_carpeta_usuario)
+            ruta_carpeta_usuari = os.path.join(ruta_directorio_carpetas, username)
+            archivos = os.listdir(ruta_carpeta_usuari)
             archivos_perfil = [archivo for archivo in archivos if archivo.startswith('perfil')]
             for archivo in archivos_perfil:
-                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuario, archivo))
+                imagen_perfil = pygame.image.load(os.path.join(ruta_carpeta_usuari, archivo))
                 return pygame.transform.scale(imagen_perfil, (50, 50))
         return None
 
@@ -53,7 +53,7 @@ class ScoreWindow:
         pygame.display.set_caption('Top Scores')
         self.clock = pygame.time.Clock()
         self.scores = Scores('scores.txt', self.player)
-        self.background = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
+        self.background = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
 
         # Definir las coordenadas y dimensiones del botón
         self.button_rect = pygame.Rect(700, 500, 80, 40)  # Posición y tamaño del botón
