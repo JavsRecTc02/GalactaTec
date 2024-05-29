@@ -15,13 +15,16 @@ from TransicionesTurnos import windowLost1player_LVL2
 from TransicionesTurnos import windowLost1player_LVL3
 
 from TransicionesTurnos import windowLost2players
+from TransicionesTurnos import windowLost2players_LVL2
+from TransicionesTurnos import windowLost2players_LVL3
 
 from Enemies import Enemigo
 from Enemies import Enemigo_LVL2
 from Enemies import Enemigo_LVL3
 
+
 class nivel1:
-    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -36,6 +39,9 @@ class nivel1:
 
         self.vidas_player2 = vidas_player2
         self.puntos_player2 = puntos_player2
+
+        self.nivel_actual_player1 = Nivel_player1
+        self.nivel_actual_player2 = Nivel_player2
 
         print([self.username,self.username2,self.vidas_player1,self.puntos_player1, self.vidas_player2,self.puntos_player2])
         
@@ -61,10 +67,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -178,11 +184,24 @@ class nivel1:
             
             if Enemigo.cambio_turno(self.nave):
                 if self.username2 != None:
-                    pygame.mixer.quit()
-                    Enemigo.reiniciar()
-                    Enemigo.eliminar_todos_enemigos()
-                    ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2)
-                    ventana.run()
+                    if self.nivel_actual_player2 == 1:
+                        pygame.mixer.quit()
+                        Enemigo.reiniciar()
+                        Enemigo.eliminar_todos_enemigos()
+                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+                    elif self.nivel_actual_player2 == 2:
+                        pygame.mixer.quit()
+                        Enemigo.reiniciar()
+                        Enemigo.eliminar_todos_enemigos()
+                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+                    elif self.nivel_actual_player2 == 3:
+                        pygame.mixer.quit()
+                        Enemigo.reiniciar()
+                        Enemigo.eliminar_todos_enemigos()
+                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo.reiniciar()
@@ -209,12 +228,17 @@ class nivel1:
 
             if Enemigo.cambio_nivel():
                 if self.username2 != None:
-                    pass
+                    self.nivel_actual_player1 = 2
+                    pygame.mixer.quit()
+                    Enemigo.reiniciar()
+                    Enemigo.eliminar_todos_enemigos()
+                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                    ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo.reiniciar()
                     Enemigo.eliminar_todos_enemigos()
-                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2)
+                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, None, None)
                     ventana.run()
 
             if self.escudo_dibujado:
@@ -234,7 +258,7 @@ class nivel1:
 
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -248,7 +272,7 @@ class nivel1:
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -267,7 +291,7 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -285,7 +309,7 @@ class nivel1:
 ###########################################################################################################################
 ###########################################################################################################################
 class nivel2(nivel1):
-    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -300,6 +324,9 @@ class nivel2(nivel1):
 
         self.vidas_player2 = vidas_player2
         self.puntos_player2 = puntos_player2
+
+        self.nivel_actual_player1 = Nivel_player1
+        self.nivel_actual_player2 = Nivel_player2
 
         print([self.username,self.username2,self.vidas_player1,self.puntos_player1, self.vidas_player2,self.puntos_player2])
         
@@ -325,10 +352,10 @@ class nivel2(nivel1):
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL2")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL2")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL2", filename))
+                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL2", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -352,7 +379,7 @@ class nivel2(nivel1):
 
         bonus_count = 0
 
-        self.loadMusic(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL2\LVL2.mp3')
+        self.loadMusic(r'C:\Users\Usuario\Desktop\GalactaTec\Animación LVL2\LVL2.mp3')
 
         Enemigo_LVL2.generar_enemigos(self.pantalla, 6)
 
@@ -442,11 +469,25 @@ class nivel2(nivel1):
             
             if Enemigo_LVL2.cambio_turno(self.nave):
                 if self.username2 != None:
-                    pygame.mixer.quit()
-                    Enemigo_LVL2.reiniciar()
-                    Enemigo_LVL2.eliminar_todos_enemigos()
-                    ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2)
-                    ventana.run()
+                    if self.nivel_actual_player2 == 1:
+                        pygame.mixer.quit()
+                        Enemigo_LVL2.reiniciar()
+                        Enemigo_LVL2.eliminar_todos_enemigos()
+                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+                    elif self.nivel_actual_player2 == 2:
+                        pygame.mixer.quit()
+                        Enemigo_LVL2.reiniciar()
+                        Enemigo_LVL2.eliminar_todos_enemigos()
+                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+                    elif self.nivel_actual_player2 == 3:
+                        pygame.mixer.quit()
+                        Enemigo_LVL2.reiniciar()
+                        Enemigo_LVL2.eliminar_todos_enemigos()
+                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+
                 else:
                     pygame.mixer.quit()
                     Enemigo_LVL2.reiniciar()
@@ -474,7 +515,12 @@ class nivel2(nivel1):
 
             if Enemigo_LVL2.cambio_nivel():
                 if self.username2 != None:
-                    pass
+                    self.nivel_actual_player1 = 3
+                    pygame.mixer.quit()
+                    Enemigo_LVL2.reiniciar()
+                    Enemigo_LVL2.eliminar_todos_enemigos()
+                    ventana=nivel3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                    ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo_LVL2.reiniciar()
@@ -508,7 +554,7 @@ class nivel2(nivel1):
 ###########################################################################################################################
 ###########################################################################################################################
 class nivel3(nivel1):
-    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -523,6 +569,9 @@ class nivel3(nivel1):
 
         self.vidas_player2 = vidas_player2
         self.puntos_player2 = puntos_player2
+
+        self.nivel_actual_player1 = Nivel_player1
+        self.nivel_actual_player2 = Nivel_player2
 
         print([self.username,self.username2,self.vidas_player1,self.puntos_player1, self.vidas_player2,self.puntos_player2])
         
@@ -548,10 +597,10 @@ class nivel3(nivel1):
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL3")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL3")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL3", filename))
+                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL3", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -575,7 +624,7 @@ class nivel3(nivel1):
 
         bonus_count = 0
 
-        self.loadMusic(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL3\LVL3.mp3')
+        self.loadMusic(r'C:\Users\Usuario\Desktop\GalactaTec\Animación LVL3\LVL3.mp3')
 
         Enemigo_LVL3.generar_enemigos(self.pantalla, 6)
 
@@ -666,11 +715,24 @@ class nivel3(nivel1):
             
             if Enemigo_LVL3.cambio_turno(self.nave):
                 if self.username2 != None:
-                    pygame.mixer.quit()
-                    Enemigo_LVL3.reiniciar()
-                    Enemigo_LVL3.eliminar_todos_enemigos()
-                    ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2)
-                    ventana.run()
+                    if self.nivel_actual_player2 == 1:
+                        pygame.mixer.quit()
+                        Enemigo_LVL3.reiniciar()
+                        Enemigo_LVL3.eliminar_todos_enemigos()
+                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+                    elif self.nivel_actual_player2 == 2:
+                        pygame.mixer.quit()
+                        Enemigo_LVL3.reiniciar()
+                        Enemigo_LVL3.eliminar_todos_enemigos()
+                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
+                    elif self.nivel_actual_player2 == 3:
+                        pygame.mixer.quit()
+                        Enemigo_LVL3.reiniciar()
+                        Enemigo_LVL3.eliminar_todos_enemigos()
+                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo_LVL3.reiniciar()

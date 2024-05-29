@@ -30,3 +30,5 @@ TheEmanuel,600
 TheEmanuel,1400
 blasfEma,600
 blasfEma,600
+blasfEma,600
+blasfEma,600

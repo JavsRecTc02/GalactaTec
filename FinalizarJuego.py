@@ -13,7 +13,7 @@ class FinalizarJuego:
         self.puntaje2 = score2
         self.Timer = False
         pygame.mixer.init()
-        self.loadMusic()
+        #self.loadMusic()
         
         self.pantalla = pygame.display.set_mode((1000, 600))
         pygame.display.set_caption('Partida Finalizada')
@@ -26,10 +26,10 @@ class FinalizarJuego:
         self.fuente_text = pygame.font.Font(None, 30)
 
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animacion final_juego")):
+        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec-1\Animacion final_juego")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animacion final_juego", filename))
+                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec-1\Animacion final_juego", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (1000, 600))
                 self.gif_images.append(imagen_escalada)
@@ -57,13 +57,13 @@ class FinalizarJuego:
             self.guardar_puntaje(self.player2, self.puntaje2)
 
     def user_message(self, message):
-        ctypes.windll.user32.MessageBoxW(0, message, "GalactaTec", 0)
+        ctypes.windll.user32.MessageBoxW(0, message, "GalactaTec-1", 0)
 
     def verificar_nuevo_mejor_puntaje(self, score):
         if score is None:
             return False
         try:
-            with open(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\scores.txt", 'r') as file:
+            with open(r"C:\Users\Usuario\Desktop\GalactaTec-1\scores.txt", 'r') as file:
                 scores = [line.strip().split(',') for line in file]
                 scores = [(name, int(score)) for name, score in scores]
         except FileNotFoundError:
@@ -74,7 +74,7 @@ class FinalizarJuego:
 
     def guardar_puntaje(self, user, score):
         if user and score is not None:
-            with open(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\scores.txt", 'a') as file:
+            with open(r"C:\Users\Usuario\Desktop\GalactaTec-1\scores.txt", 'a') as file:
                 file.write(f"{user},{score}\n")
 
         if user == self.player1 and self.nuevo_mejor_puntaje1:
@@ -156,7 +156,7 @@ class FinalizarJuego:
                 self.current_image = (self.current_image + 1) % len(self.gif_images)
                 
     def loadMusic(self):
-        ruta_cancion = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\record_song.mp3"
+        ruta_cancion = r"C:\Users\Usuario\Desktop\GalactaTec-1\backgrounds\record_song.mp3"
         pygame.mixer.music.load(ruta_cancion)
         pygame.mixer.music.set_volume(1.0)
         pygame.mixer.music.play(-1)
@@ -213,7 +213,7 @@ class FinalizarJuego:
     def get_profile_image(self, player):
         if not player:
             return None
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec-1\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if player in carpetas:

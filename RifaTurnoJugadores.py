@@ -38,11 +38,11 @@ class rifaWindow:
                     if event.button == 1:
                         if self.ready_button.collidepoint(event.pos):
                             print("se presionó")
-                            niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0)
+                            niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1)
                             niveles_window.run()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
-                        niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0)
+                        niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1)
                         niveles_window.run()
 
             self.pantalla.fill((255,255,255))
