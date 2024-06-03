@@ -49,7 +49,7 @@ class ScoreWindow:
         self.previous_instance = previous_instance
         self.player = username
         pygame.init()
-        self.screen = pygame.display.set_mode((1000, 600))
+        self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption('Top Scores')
         self.clock = pygame.time.Clock()
         self.scores = Scores('scores.txt', self.player)

@@ -5,7 +5,7 @@ import random
 from Niveles import nivel1
 
 class rifaWindow:
-    def __init__(self, username1, username2):
+    def __init__(self, username1, username2, patron1, patron2, patron3):
         self.width = 800
         self.height = 600
         self.pantalla = pygame.display.set_mode((self.width,self.height))
@@ -28,6 +28,10 @@ class rifaWindow:
         self.label_color = (0, 0, 0)
         self.red_label_color = (255, 0, 0)  # Color rojo para el nuevo texto
 
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
+
     def run(self):
         running = True
         while running:
@@ -38,11 +42,11 @@ class rifaWindow:
                     if event.button == 1:
                         if self.ready_button.collidepoint(event.pos):
                             print("se presionó")
-                            niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1)
+                            niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1, self.patron1, self.patron2, self.patron3)
                             niveles_window.run()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
-                        niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1)
+                        niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1, self.patron1, self.patron2, self.patron3)
                         niveles_window.run()
 
             self.pantalla.fill((255,255,255))
@@ -68,7 +72,7 @@ class rifaWindow:
 
 
 class AceptarPartidaMultiplayer:
-    def __init__(self, username1, username2, boolean):
+    def __init__(self, username1, username2, boolean, patron1, patron2, patron3):
         self.width = 800
         self.height = 600
         self.pantalla = pygame.display.set_mode((self.width,self.height))
@@ -86,6 +90,10 @@ class AceptarPartidaMultiplayer:
         self.label_color = (0, 0, 0)
         self.red_label_color = (0, 0, 0)  # Color rojo para el nuevo texto
 
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
+
     def run(self):
         running = True
         while running:
@@ -96,16 +104,16 @@ class AceptarPartidaMultiplayer:
                     if event.button == 1:
                         if self.ready_button.collidepoint(event.pos):
                             print("se presionó ready")
-                            rifa_ventana=rifaWindow(self.retador, self.player2)
+                            rifa_ventana=rifaWindow(self.retador, self.player2, self.patron1, self.patron2, self.patron3)
                             rifa_ventana.run()
 
                         if self.back_button.collidepoint(event.pos):
                             from Menu2Jugadores import menu2players
                             if self.boolean == True:
-                                back=menu2players(self.retador, self.player2)
+                                back=menu2players(self.retador, self.player2, self.patron1, self.patron2, self.patron3)
                                 back.run()
                             else:
-                                back=menu2players(self.player2, self.retador)
+                                back=menu2players(self.player2, self.retador, self.patron1, self.patron2, self.patron3)
                                 back.run()
 
             self.pantalla.fill((255,255,255))

@@ -12,19 +12,32 @@ from MenuSeleccion import UsersConfig
 
 
 class menu2players(Menu):
-    def __init__(self, username1, username2):
-        super().__init__(username1)
+    def __init__(self, username1, username2, patron1, patron2, patron3):
+        super().__init__(username1, patron1, patron2, patron3)
         self.player1 = self.user
         self.player2 = username2
-        self.width = 1000
+        self.width = 800
         self.height = 600
-        self.window = pygame.display.set_mode((self.width, self.height))
+        self.pantalla = pygame.display.set_mode((self.width,self.height))
+        pygame.display.set_caption("Menu de selección")
         self.input_data = {
                 "rifa_winner1": {'label':'¡Bienvenido ' + self.player1 +' al menú de GalactaTEC!', "pos": (50, 40), "text": ""},
-                "rifa_winner2": {'label':'¡Bienvenido ' + self.player2 + ' al menú de GalactaTEC!', "pos": (550, 40), "text": ""}
+                "rifa_winner2": {'label':'¡Bienvenido ' + self.player2 + ' al menú de GalactaTEC!', "pos": (435, 40), "text": ""}
             }
+        
+        # Define la fuente y tamaño de las etiquetas
+        self.font = pygame.font.Font(None, 20)
+        self.label_color = (0, 0, 0)
+
+
         self.scores_window = ScoreWindow(self.player1, self.player2)
         self.scores_window.previous_instance = self #Unica instancia para Scores
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
+
+        print(self.patron1, self.patron2, self.patron3)
 
     def run(self):
         running = True
@@ -46,13 +59,12 @@ class menu2players(Menu):
                             self.scores_window.run()
 
                         if self.ConfigPartida_button_player1.collidepoint(event.pos):
-                            config_partida = ConfigPartida(self.player1,self.player2)
-                            config_partida.previous_instance = self
+                            config_partida = ConfigPartida(self.player1,self.player2, self.patron1, self.patron2, self.patron3)
                             config_partida.run()
                             print("Se presiono Config Partida")
 
                         if self.Iniciar_button_player1.collidepoint(event.pos):
-                            pantalla_aceptar = AceptarPartidaMultiplayer(self.player1, self.player2, True)
+                            pantalla_aceptar = AceptarPartidaMultiplayer(self.player1, self.player2, True, self.patron1, self.patron2, self.patron3)
                             pantalla_aceptar.run()
 
                         if self.Exit_button_player1.collidepoint(event.pos):
@@ -78,13 +90,12 @@ class menu2players(Menu):
                             self.scores_window.run()
 
                         if self.ConfigPartida_button_player2.collidepoint(event.pos):
-                            config_partida = ConfigPartida(self.player2,self.player1)
-                            config_partida.previous_instance = self
+                            config_partida = ConfigPartida(self.player1,self.player2, self.patron1, self.patron2, self.patron3)
                             config_partida.run()
                             print("se presionó Config partida de player2")
 
                         if self.Iniciar_button_player2.collidepoint(event.pos):
-                            pantalla_aceptar = AceptarPartidaMultiplayer(self.player2, self.player1, False)
+                            pantalla_aceptar = AceptarPartidaMultiplayer(self.player2, self.player1, False, self.patron1, self.patron2, self.patron3)
                             pantalla_aceptar.run()
 
                         if self.Exit_button_player2.collidepoint(event.pos):
@@ -124,7 +135,7 @@ class menu2players(Menu):
 
     def draw_configuser_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.configuser_button_player1 = pygame.Rect(self.width // 2 - 375 , self.height // 2 - 200, 250, 50)
+        self.configuser_button_player1 = pygame.Rect(self.width // 2 - 325 , self.height // 2 - 200, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.configuser_button_player1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Configuración de user', True, (255, 255, 255))
@@ -133,7 +144,7 @@ class menu2players(Menu):
 
     def draw_fama_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.fama_button_player1 = pygame.Rect(self.width // 2 - 375, self.height // 2 - 140, 250, 50)
+        self.fama_button_player1 = pygame.Rect(self.width // 2 - 325, self.height // 2 - 140, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.fama_button_player1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Salón de la fama', True, (255, 255, 255))
@@ -142,7 +153,7 @@ class menu2players(Menu):
 
     def draw_ConfigPartida_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.ConfigPartida_button_player1 = pygame.Rect(self.width // 2 - 375, self.height // 2 - 80, 250, 50)
+        self.ConfigPartida_button_player1 = pygame.Rect(self.width // 2 - 325, self.height // 2 - 80, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.ConfigPartida_button_player1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Configuración de la partida', True, (255, 255, 255))
@@ -151,7 +162,7 @@ class menu2players(Menu):
 
     def draw_Inciar_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.Iniciar_button_player1 = pygame.Rect(self.width // 2 - 375, self.height // 2 - 20, 250, 50)
+        self.Iniciar_button_player1 = pygame.Rect(self.width // 2 - 325, self.height // 2 - 20, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Iniciar_button_player1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Iniciar partida', True, (255, 255, 255))
@@ -160,7 +171,7 @@ class menu2players(Menu):
 
     def draw_Exit_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.Exit_button_player1 = pygame.Rect(self.width // 2 - 375, self.height // 2 + 40, 250, 50)
+        self.Exit_button_player1 = pygame.Rect(self.width // 2 - 325, self.height // 2 + 40, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Exit_button_player1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Salir del juego', True, (255, 255, 255))
@@ -169,7 +180,7 @@ class menu2players(Menu):
 
     def draw_Help_button_Player1(self):
         # Crea el botón en el centro de la ventana
-        self.Help_button_player1 = pygame.Rect(self.width // 2 - 375, self.height // 2 + 100, 250, 50)
+        self.Help_button_player1 = pygame.Rect(self.width // 2 - 325, self.height // 2 + 100, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Help_button_player1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Ayuda', True, (255, 255, 255))
@@ -182,7 +193,7 @@ class menu2players(Menu):
 ########################################################################
     def draw_configuser_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.configuser_button_player2 = pygame.Rect(self.width // 2 + 125 , self.height // 2 - 200, 250, 50)
+        self.configuser_button_player2 = pygame.Rect(self.width // 2 + 80 , self.height // 2 - 200, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.configuser_button_player2)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Configuración de user', True, (255, 255, 255))
@@ -191,7 +202,7 @@ class menu2players(Menu):
 
     def draw_fama_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.fama_button_player2 = pygame.Rect(self.width // 2 + 125, self.height // 2 - 140, 250, 50)
+        self.fama_button_player2 = pygame.Rect(self.width // 2 + 80, self.height // 2 - 140, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.fama_button_player2)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Salón de la fama', True, (255, 255, 255))
@@ -200,7 +211,7 @@ class menu2players(Menu):
 
     def draw_ConfigPartida_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.ConfigPartida_button_player2 = pygame.Rect(self.width // 2 + 125, self.height // 2 - 80, 250, 50)
+        self.ConfigPartida_button_player2 = pygame.Rect(self.width // 2 + 80, self.height // 2 - 80, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.ConfigPartida_button_player2)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Configuración de la partida', True, (255, 255, 255))
@@ -209,7 +220,7 @@ class menu2players(Menu):
 
     def draw_Inciar_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.Iniciar_button_player2 = pygame.Rect(self.width // 2 + 125, self.height // 2 - 20, 250, 50)
+        self.Iniciar_button_player2 = pygame.Rect(self.width // 2 + 80, self.height // 2 - 20, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Iniciar_button_player2)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Iniciar partida', True, (255, 255, 255))
@@ -218,7 +229,7 @@ class menu2players(Menu):
 
     def draw_Exit_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.Exit_button_player2 = pygame.Rect(self.width // 2 + 125, self.height // 2 + 40, 250, 50)
+        self.Exit_button_player2 = pygame.Rect(self.width // 2 + 80, self.height // 2 + 40, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Exit_button_player2)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Salir del juego', True, (255, 255, 255))
@@ -227,7 +238,7 @@ class menu2players(Menu):
 
     def draw_Help_button_Player2(self):
         # Crea el botón en el centro de la ventana
-        self.Help_button_player2 = pygame.Rect(self.width // 2 + 125, self.height // 2 + 100, 250, 50)
+        self.Help_button_player2 = pygame.Rect(self.width // 2 + 80, self.height // 2 + 100, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.Help_button_player2)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('Ayuda', True, (255, 255, 255))

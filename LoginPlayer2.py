@@ -12,10 +12,13 @@ from Menu2Jugadores import menu2players
 #Se sobre escribe la clase de recuperar contraseña para editarla en el caso de 2 jugadores
 ##
 class editBackPassword(PasswordRecoveryWindow):
-    def __init__(self, width, height, player1):
+    def __init__(self, width, height, player1, patron1, patron2, patron3):
         super().__init__(width, height)
         self.player1 = player1
         print(self.player1)
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
 
     def run(self):
         running = True
@@ -33,7 +36,7 @@ class editBackPassword(PasswordRecoveryWindow):
                             field_data["active"] = False
                     #Boton back
                     if 520 <= event.pos[0] <= 595 and 520 <= event.pos[1] <= 580:
-                            self.loggeoPlayer2_screen = LoginPlayer2(800,600,self.player1)
+                            self.loggeoPlayer2_screen = LoginPlayer2(800,600,self.player1, self.patron1, self.patron2, self.patron3)
                             self.loggeoPlayer2_screen.run()
                 elif event.type == pygame.KEYDOWN:
                     for field_data in self.input_data.values():
@@ -42,7 +45,6 @@ class editBackPassword(PasswordRecoveryWindow):
                                 field_data["text"] = field_data["text"][:-1]
                             else:
                                 field_data["text"] += event.unicode
-
             self.draw_interface()
             self.welcome_window.draw_back_button()
             pygame.display.flip()
@@ -54,12 +56,11 @@ class editBackPassword(PasswordRecoveryWindow):
 # Se sobre escribe la clase de logueo para que acepte a un jugador más
 ##
 class LoginPlayer2(LoginWindow):
-    def __init__(self, width, height, player1):
+    def __init__(self, width, height, player1, patron1, patron2, patron3):
         super().__init__(width, height)
         self.player1 = player1  
         print(self.player1)
         
-        self.menu = Menu(self.player1)
 
         self.player2 = None
         self.input_data = {
@@ -67,6 +68,12 @@ class LoginPlayer2(LoginWindow):
             "user_password": {"label": "Password:", "pos": (150, 370), "rect": pygame.Rect(215, 400, 400, 50), "active": False, "text": ""},
             "info": {"label": "Logueo Player 2", "pos": (350, 90), "rect": pygame.Rect(0, 0, 0, 0), "active": False, "text": ""}
         }
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
+
+        self.menu = Menu(self.player1, self.patron1, self.patron2, self.patron3)
         
     def run(self):
         running = True
@@ -126,7 +133,7 @@ class LoginPlayer2(LoginWindow):
                 if self.user_data[username] == password:
                     print("Loggeado")
                     self.player2 = username  # Almacenar el nombre de usuario
-                    self.menu2players = menu2players(self.player1, self.player2)  # Crear una instancia de nivel1
+                    self.menu2players = menu2players(self.player1, self.player2, 1, 2, 3)
                     self.menu2players.run()
                 else:
                     self.show_error_message("Contraseña incorrecta")
@@ -156,7 +163,7 @@ class LoginPlayer2(LoginWindow):
     
     def handle_forgot_password(self):
         #Abre la ventana de recuperacion de contraseña
-        password_recovery_window = editBackPassword(self.width,self.height,self.player1)
+        password_recovery_window = editBackPassword(self.width,self.height,self.player1, self.patron1, self.patron2, self.patron3)
         password_recovery_window.run()
 
 

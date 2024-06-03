@@ -30,7 +30,9 @@ def set_vibration(left_motor, right_motor, duration):
     vibration = XINPUT_VIBRATION(0, 0)
     XInputSetState(0, ctypes.byref(vibration))
 
-
+#Funcion para las ventanas de Error
+def error_message(message):
+    ctypes.windll.user32.MessageBoxW(0,message,"Error",1)
 
 def joystick_check():
     pygame.init()
@@ -38,7 +40,7 @@ def joystick_check():
 
     # Verifica si hay mandos conectados
     if pygame.joystick.get_count() == 0:
-        print("No se detectaron mandos.")
+        error_message("No se detecto ningun mando")
         sys.exit()
 
     # Conecta el primer mando (índice 0)

@@ -15,7 +15,7 @@ from ConfigPartida import ConfigPartida
 
 
 class Menu:
-    def __init__(self, username1):
+    def __init__(self, username1, patron1, patron2, patron3):
         self.width = 800
         self.height = 600
         self.pantalla = pygame.display.set_mode((self.width,self.height))
@@ -30,6 +30,12 @@ class Menu:
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
         self.label_color = (0, 0, 0)
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
+
+        print(self.patron1, self.patron2, self.patron3)
 
     def run(self):
         running = True
@@ -52,18 +58,17 @@ class Menu:
 
 
                         if self.ConfigPartida_button.collidepoint(event.pos):
-                            config_partida = ConfigPartida(self.user)
-                            config_partida.previous_instance = self
+                            config_partida = ConfigPartida(self.user, None, self.patron1, self.patron2, self.patron3)
                             config_partida.run()
 
                         if self.Jugador2_Button.collidepoint(event.pos):
                             from LoginPlayer2 import LoginPlayer2  
-                            LoginPLayer2_window = LoginPlayer2(800,600, self.user)
+                            LoginPLayer2_window = LoginPlayer2(800, 600, self.user, self.patron1, self.patron2, self.patron3)
                             LoginPLayer2_window.run()
 
 
                         if self.Partida1_button.collidepoint(event.pos):
-                            Nivel1_window = nivel1(self.user, None, 3, 0, None, None)
+                            Nivel1_window = nivel1(self.user, None, 3, 0, None, None, None, None, self.patron1, self.patron2, self.patron3)
                             Nivel1_window.run()
 
                         if self.Exit_button.collidepoint(event.pos):
@@ -74,7 +79,7 @@ class Menu:
                             running = False
                             print("se presionó Ayuda")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             Menu.run(self)
                             
                 elif event.type == pygame.KEYDOWN:
@@ -175,7 +180,7 @@ class UsersConfig:
         self.previous_instance = previous_instance
         #,previous_instance=None
         pygame.init()
-        self.width = 1000
+        self.width = 800
         self.height = 600
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption('Configuración de user')
@@ -312,7 +317,7 @@ class UsersConfig:
             self.clock.tick(60)
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -325,7 +330,7 @@ class UsersConfig:
         return None
     
     def get_ship_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -338,7 +343,7 @@ class UsersConfig:
         return None
     
     def get_song_player(self):
-        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username in carpetas:
@@ -532,8 +537,8 @@ class UsersConfig:
                 new_username = self.new_value  # Almacenar el nuevo nombre de user
 
                 # Renombrar la carpeta asociada al nombre de user
-                old_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", old_username)
-                new_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", self.new_value)
+                old_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\User files", old_username)
+                new_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\User files", self.new_value)
                 os.rename(old_folder_path, new_folder_path)
             else:
                 self.data[self.username][self.editing] = self.new_value

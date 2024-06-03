@@ -6,28 +6,68 @@ import webbrowser
 
 
 class ConfigPartida:
-    def __init__(self, username1,previous_instance=None):
-        self.previous_instance = previous_instance
+    def __init__(self, player1, player2, patron1, patron2, patron3):
         self.width = 1000
         self.height = 600
         self.pantalla = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption("ConfigPartida de selección")
-        self.user = username1
+
+        self.player1 = player1
+        self.player2 = player2
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 =patron3
+
         self.lvlselect = 1
         
         
         self.input_data = {
-                "rifa_winner1": {'label':'¡Bienvenido al menú de GalactaTEC!', "pos": (255, 40), "text": ""}
+                "rifa_winner1": {'label':'¡Escoge los patrones para los niveles!', "pos": (340, 10), "text": ""}
             }
         
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
         self.label_color = (0, 0, 0)
 
-        
-    def run(self):
+        self.Nivel1 = pygame.Rect(self.width // 2 - 400, self.height // 2  - 250, 250, 50)
+        self.Nivel2 = pygame.Rect(self.width // 2 - 125, self.height // 2 - 250, 250, 50)
+        self.Nivel3 = pygame.Rect(self.width // 2 + 150, self.height // 2 - 250, 250, 50)
 
-        print(Patrones.InitialSet(self)) #Este print sirve para que no se caiga el programa al ponerle valores iniciales a los patrones, pero causa que cada que se entre a este menu se reinicien
+        # Agrega una lista de botones de patrones del nivel 1
+        self.patron_buttons_LVL1 = [pygame.Rect(self.width // 2 - 310, 125 + i*40, 80, 30) for i in range(5)]
+        self.show_patron_buttons_LVL1 = False
+
+        # Agrega una lista de botones de patrones del nivel 2
+        self.patron_buttons_LVL2 = [pygame.Rect(self.width // 2 - 35, 125 + i*40, 80, 30) for i in range(5)]
+        self.show_patron_buttons_LVL2 = False
+
+
+        # Agrega una lista de botones de patrones del nivel 3
+        self.patron_buttons_LVL3 = [pygame.Rect(self.width // 2 + 230, 125 + i*40, 80, 30) for i in range(5)]
+        self.show_patron_buttons_LVL3 = False
+
+
+        # Agrega un estado para cada patrón
+        self.patron_states = [True for _ in range(5)]  # Todos los patrones están activos al inicio
+
+        # Agrega un patrón seleccionado para cada nivel
+        self.selected_patron = [None for _ in range(3)]  # Ningún patrón está seleccionado al inicio
+
+
+        # Actualiza el estado inicial de los patrones según los valores de patron1, patron2 y patron3
+        if patron1 is not None:
+            self.patron_states[patron1-1] = False
+            self.selected_patron[0] = patron1-1
+        if patron2 is not None:
+            self.patron_states[patron2-1] = False
+            self.selected_patron[1] = patron2-1
+        if patron3 is not None:
+            self.patron_states[patron3-1] = False
+            self.selected_patron[2] = patron3-1
+
+                
+    def run(self):
 
         running = True
         while running:
@@ -36,69 +76,66 @@ class ConfigPartida:
                     running = False
                 elif event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        if self.Patron1.collidepoint(event.pos):
-                            Patrones.Patron1(self)
-                            print("se seleccionó patrón 1")
-
-                        if self.Patron2.collidepoint(event.pos):
-                            Patrones.Patron2(self)
-                            print("se seleccionó patrón 2")
-
-                        if self.Patron3.collidepoint(event.pos):
-                            Patrones.Patron3(self)
-                            print("se seleccionó patrón 3")
-
-                        if self.Patron4.collidepoint(event.pos):
-                            Patrones.Patron4(self)
-                            print("se seleccionó patrón 4")
-
-                        if self.Patron5.collidepoint(event.pos):
-                            Patrones.Patron5(self)
-                            print("se seleccionó patrón 5")
-                            
-                        if self.Lvl1.collidepoint(event.pos):
-                            self.lvlselect = 1
+                        
+                        if self.Nivel1.collidepoint(event.pos):
                             print("se seleccionó Nivel 1")
+                            self.show_patron_buttons_LVL1 = True
 
-                        if self.Lvl2.collidepoint(event.pos):
-                            self.lvlselect = 2
+                        if self.Nivel2.collidepoint(event.pos):
+                            self.show_patron_buttons_LVL2 = True
                             print("se seleccionó Nivel 2")
 
-                        if self.Lvl3.collidepoint(event.pos):
-                            self.lvlselect = 3
+                        if self.Nivel3.collidepoint(event.pos):
+                            self.show_patron_buttons_LVL3 = True
                             print("se seleccionó Nivel 3")
 
+
+                        # Interactúa con los botones de patrones de todos los niveles
+                        for lvl in range(1, 4):
+                            if getattr(self, f'show_patron_buttons_LVL{lvl}'):
+                                for i, button in enumerate(getattr(self, f'patron_buttons_LVL{lvl}')):
+                                    if button.collidepoint(event.pos) and self.patron_states[i]:  # Solo interactúa si el patrón está activo
+                                        print(f"Se seleccionó el patrón {i+1}")
+                                        if self.selected_patron[lvl-1] is not None:  # Si ya hay un patrón seleccionado para este nivel
+                                            self.patron_states[self.selected_patron[lvl-1]] = True  # Reactiva el patrón anterior
+                                        self.selected_patron[lvl-1] = i  # Actualiza el patrón seleccionado
+                                        self.patron_states[i] = False  # Desactiva el patrón
+                                        setattr(self, f'patron{lvl}', i+1)  # Actualiza la variable de patrón correspondiente
+
+
                         if self.Back_button.collidepoint(event.pos): #Aca se crea la instancia anterior
-                            running = False
-                            if self.previous_instance is not None:
-                                    self.previous_instance.run()  # Llama al método run() de la instancia anterior
+                            if self.player2 != None:
+                                from Menu2Jugadores import menu2players
+                                ventana = menu2players(self.player1, self.player2, self.patron1, self.patron2, self.patron3)
+                                ventana.run()
+
                             else:
-                                pygame.quit()
-                                return
+                                from MenuSeleccion import Menu
+                                ventana = Menu(self.player1, self.patron1, self.patron2, self.patron3)
+                                ventana.run()
                             
                         if self.Help_button.collidepoint(event.pos):
                             running = False
-                            print("se presionó Ayuda")
-                            #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            print("nivel 1 tiene el patron:" , Patrones.GetPatron(self))    
-                            print("nivel 2 tiene el patron:" , Patrones.GetPatron(self))
-                            print("nivel 3 tiene el patron:" , Patrones.GetPatron(self))  
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
-                            ConfigPartida.run(self)
+                            pass
+                            #webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
-                
+   
             self.pantalla.fill((255,255,255))
             self.draw_text_inputs()
-            self.draw_Patron1()
-            self.draw_Patron2()
-            self.draw_Patron3()
-            self.draw_Patron4()
-            self.draw_Patron5()
-            self.draw_Lvl1()
-            self.draw_Lvl2()
-            self.draw_Lvl3()
+            self.draw_Niveles()
             self.draw_Back_button()
             self.draw_Help_button()
+
+
+            # Dibuja los botones de patrones de todos los niveles
+            for lvl in range(1, 4):
+                if getattr(self, f'show_patron_buttons_LVL{lvl}'):
+                    for i, button in enumerate(getattr(self, f'patron_buttons_LVL{lvl}')):
+                        color = (0, 0, 0) if self.patron_states[i] else (255, 0, 0)  # Cambia el color si el patrón está inactivo
+                        if self.selected_patron[lvl-1] == i:  # Si este patrón está seleccionado para este nivel
+                            color = (0, 255, 0)  # Cambia el color a verde
+                        pygame.draw.rect(self.pantalla, color, button)  # Dibuja el botón
+                        self.pantalla.blit(self.font.render(f'Patron {i+1}', True, (255, 255, 255)), (button.x, button.y))  # Dibuja el texto
 
             pygame.display.flip()
 
@@ -121,7 +158,7 @@ class ConfigPartida:
         elif self.lvlselect == 3:
             self.Patron1 = pygame.Rect(self.width // 2 + 145, self.height // 2 - 140, 250, 50)
 
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.Patron1)
+        pygame.draw.rect(self.pantalla, self.Patron1_color, self.Patron1)
         font = pygame.font.Font(None, 24)
         text_surface = font.render('patrón 1', True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=self.Patron1.center)
@@ -187,32 +224,23 @@ class ConfigPartida:
         text_rect = text_surface.get_rect(center=self.Patron5.center)
         self.pantalla.blit(text_surface, text_rect)
 
-    def draw_Lvl1(self):
-        # Crea el botón en el centro de la ventana
-        self.Lvl1 = pygame.Rect(self.width // 2 - 395, self.height // 2 - 200, 250, 50)
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.Lvl1)
-        font = pygame.font.Font(None, 24)
-        text_surface = font.render('Nivel 1', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.Lvl1.center)
-        self.pantalla.blit(text_surface, text_rect)
+    def draw_Niveles(self):
+        pygame.draw.rect(self.pantalla, (0,0,0), self.Nivel1)
+        pygame.draw.rect(self.pantalla, (0,0,0), self.Nivel2)
+        pygame.draw.rect(self.pantalla, (0,0,0), self.Nivel3)
 
-    def draw_Lvl2(self):
-        # Crea el botón en el centro de la ventana
-        self.Lvl2 = pygame.Rect(self.width // 2 - 125, self.height // 2 - 200, 250, 50)
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.Lvl2)
         font = pygame.font.Font(None, 24)
-        text_surface = font.render('Nivel 2', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.Lvl2.center)
-        self.pantalla.blit(text_surface, text_rect)
+        text_surface1 = font.render('Nivel 1', True, (255, 255, 255))
+        text_surface2 = font.render('Nivel 2', True, (255, 255, 255))
+        text_surface3 = font.render('Nivel 3', True, (255, 255, 255))
 
-    def draw_Lvl3(self):
-        # Crea el botón en el centro de la ventana
-        self.Lvl3 = pygame.Rect(self.width // 2 + 145, self.height // 2 - 200, 250, 50)
-        pygame.draw.rect(self.pantalla, (0, 0, 0), self.Lvl3)
-        font = pygame.font.Font(None, 24)
-        text_surface = font.render('Nivel 3', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.Lvl3.center)
-        self.pantalla.blit(text_surface, text_rect)
+        text_rect1 = text_surface1.get_rect(center=self.Nivel1.center)
+        text_rect2 = text_surface2.get_rect(center=self.Nivel2.center)
+        text_rect3 = text_surface3.get_rect(center=self.Nivel3.center)
+
+        self.pantalla.blit(text_surface1, text_rect1)
+        self.pantalla.blit(text_surface2, text_rect2)
+        self.pantalla.blit(text_surface3, text_rect3)
 
     def draw_Back_button(self):
         # Crea el botón en el centro de la ventana
@@ -232,103 +260,5 @@ class ConfigPartida:
         text_rect = text_surface.get_rect(center=self.Help_button.center)
         self.pantalla.blit(text_surface, text_rect)
 
-    def Getconfig(self):
-        #print(Patrones.GetPatron(self))
-        self.nivel1 = Patrones.GetPatron(self)
-        self.nivel2 = Patrones.GetPatron(self)
-        self.nivel3 = Patrones.GetPatron(self)
-
-        if self.lvlselect == 1:
-            self.nivel1 = Patrones.GetPatron(self)
-            print (self.nivel1)
-        
-        elif self.lvlselect == 2:
-            self.nivel1 = Patrones.GetPatron(self)
-            print (self.nivel2)
-
-        elif self.lvlselect == 3:
-            self.nivel1 = Patrones.GetPatron(self)
-            print (self.nivel3)
             
           
-
-class Patrones:
-    
-    def __init__(self):
-        self.patron1 = True
-        self.patron2 = False
-        self.patron3 = False
-        self.patron4 = False
-        self.patron5 = False
-        self.PatronSeleccionado = 1
-    
-    def InitialSet(self):
-        self.patron1 = True
-        self.patron2 = False
-        self.patron3 = False
-        self.patron4 = False
-        self.patron5 = False
-
-    def Patron1(self):
-        self.patron1 = True
-        self.patron2 = False
-        self.patron3 = False
-        self.patron4 = False
-        self.patron5 = False
-
-    def Patron2(self):
-        self.patron1 = False
-        self.patron2 = True
-        self.patron3 = False
-        self.patron4 = False
-        self.patron5 = False
-
-    def Patron3(self):
-        self.patron1 = False
-        self.patron2 = False
-        self.patron3 = True
-        self.patron4 = False
-        self.patron5 = False
-    
-    def Patron4(self):
-        self.patron1 = False
-        self.patron2 = False
-        self.patron3 = False
-        self.patron4 = True
-        self.patron5 = False
-
-    def Patron5(self):
-        self.patron1 = False
-        self.patron2 = False
-        self.patron3 = False
-        self.patron4 = False
-        self.patron5 = True
-    
-    def GetPatron(self):
-
-        if self.patron1 == True:
-            self.PatronSeleccionado = 1
-        
-        elif self.patron2 == True:
-            self.PatronSeleccionado = 2
-        
-        elif self.patron3 == True:
-            self.PatronSeleccionado = 3
-
-        elif self.patron4 == True:
-            self.PatronSeleccionado = 4
-
-        elif self.patron5 == True:
-            self.PatronSeleccionado = 5
-
-        else:
-            print ("error")
-
-        return self.PatronSeleccionado
-        """
-        print (self.patron1)
-        print (self.patron2)
-        print (self.patron3)
-        print (self.patron4)
-        print (self.patron5)
-        print(self.PatronSeleccionado)"""

@@ -22,9 +22,14 @@ from Enemies import Enemigo
 from Enemies import Enemigo_LVL2
 from Enemies import Enemigo_LVL3
 
+import ctypes
+#Funcion para las ventanas de Error
+def error_message(message):
+    ctypes.windll.user32.MessageBoxW(0,message,"Notificación",1)
+
 
 class nivel1:
-    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2, patron1, patron2, patron3):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -81,6 +86,10 @@ class nivel1:
 
         self.escudo = Escudo(self.pantalla, self.nave, 3)
         self.puntos_dobles = DoublePoint(self.pantalla, self.nave)
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
 
     def run(self):
         clock = pygame.time.Clock()
@@ -178,9 +187,20 @@ class nivel1:
                 Enemigo.actualizar(self.nave, self.escudo, self.puntos_dobles) #Aca se manda a la funcion 
 
             if Enemigo.todos_movimientos_presentacion_terminados():
-                #patrones.patron_descenso(Enemigo.enemigos)
-                patrones.patron3(Enemigo.enemigos)
-                #patrones.patron4(Enemigo.enemigos)
+                if self.patron1 == 1:
+                    patrones.patron1(Enemigo.enemigos) #Zigzag
+
+                elif self.patron1 == 2:
+                    patrones.patron2(Enemigo.enemigos) #Ciruclos 
+
+                elif self.patron1 == 3:
+                    patrones.patron_descenso(Enemigo.enemigos) #Descenso Aleatorio
+
+                elif self.patron1 == 4:
+                    patrones.patron3(Enemigo.enemigos) #Columnas divididas
+
+                elif self.patron1 == 5:
+                    patrones.patron4(Enemigo.enemigos) #Senoidal
             
             if Enemigo.cambio_turno(self.nave):
                 if self.username2 != None:
@@ -188,25 +208,43 @@ class nivel1:
                         pygame.mixer.quit()
                         Enemigo.reiniciar()
                         Enemigo.eliminar_todos_enemigos()
-                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
+
                     elif self.nivel_actual_player2 == 2:
                         pygame.mixer.quit()
                         Enemigo.reiniciar()
                         Enemigo.eliminar_todos_enemigos()
-                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2,self.patron1, self.patron2, self.patron3)
                         ventana.run()
+
                     elif self.nivel_actual_player2 == 3:
                         pygame.mixer.quit()
                         Enemigo.reiniciar()
                         Enemigo.eliminar_todos_enemigos()
-                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
+
+                    elif self.nivel_actual_player2 == 4:
+                        error_message(self.username2 + " ya completó los 3 niveles," + self.username + " vas a jugar el mismo nivel")
+                        if self.nivel_actual_player1 == 1:
+                            pygame.mixer.quit()
+                            Enemigo.reiniciar()
+                            Enemigo.eliminar_todos_enemigos()
+                            ventana=nivel1(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
+                            ventana.run()
+
+                        elif self.nivel_actual_player1 == 2:
+                            pass
+
+                        elif self.nivel_actual_player1  == 3:
+                            pass
+
                 else:
                     pygame.mixer.quit()
                     Enemigo.reiniciar()
                     Enemigo.eliminar_todos_enemigos()
-                    ventana=windowLost1player(self.username, self.username2, self.nave.vidas, self.nave.puntos)
+                    ventana=windowLost1player(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.patron1, self.patron2, self.patron3)
                     ventana.run()
                 continue
                 
@@ -232,13 +270,13 @@ class nivel1:
                     pygame.mixer.quit()
                     Enemigo.reiniciar()
                     Enemigo.eliminar_todos_enemigos()
-                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                     ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo.reiniciar()
                     Enemigo.eliminar_todos_enemigos()
-                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, None, None)
+                    ventana=nivel2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, None, None, self.patron1, self.patron2, self.patron3)
                     ventana.run()
 
             if self.escudo_dibujado:
@@ -309,7 +347,7 @@ class nivel1:
 ###########################################################################################################################
 ###########################################################################################################################
 class nivel2(nivel1):
-    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2, patron1, patron2, patron3):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -366,6 +404,10 @@ class nivel2(nivel1):
 
         self.escudo = Escudo(self.pantalla, self.nave, 3)
         self.puntos_dobles = DoublePoint(self.pantalla, self.nave)
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
 
     def run(self):
         clock = pygame.time.Clock()
@@ -463,9 +505,20 @@ class nivel2(nivel1):
                 Enemigo_LVL2.actualizar(self.nave, self.escudo, self.puntos_dobles) #Aca se manda a la funcion 
 
             if Enemigo_LVL2.todos_movimientos_presentacion_terminados():
-                #patrones.patron_descenso(Enemigo.enemigos)
-                patrones.patron3(Enemigo_LVL2.enemigos)
-                #patrones.patron4(Enemigo.enemigos)
+                if self.patron2 == 1:
+                    patrones.patron1(Enemigo_LVL2.enemigos) #Zigzag
+                    
+                elif self.patron2 == 2:
+                    patrones.patron2(Enemigo_LVL2.enemigos) #Ciruclos 
+
+                elif self.patron2 == 3:
+                    patrones.patron_descenso(Enemigo_LVL2.enemigos) #Descenso Aleatorio
+
+                elif self.patron2 == 4:
+                    patrones.patron3(Enemigo_LVL2.enemigos) #Columnas divididas
+
+                elif self.patron2 == 5:
+                    patrones.patron4(Enemigo_LVL2.enemigos) #Senoidal
             
             if Enemigo_LVL2.cambio_turno(self.nave):
                 if self.username2 != None:
@@ -473,26 +526,26 @@ class nivel2(nivel1):
                         pygame.mixer.quit()
                         Enemigo_LVL2.reiniciar()
                         Enemigo_LVL2.eliminar_todos_enemigos()
-                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
                     elif self.nivel_actual_player2 == 2:
                         pygame.mixer.quit()
                         Enemigo_LVL2.reiniciar()
                         Enemigo_LVL2.eliminar_todos_enemigos()
-                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
                     elif self.nivel_actual_player2 == 3:
                         pygame.mixer.quit()
                         Enemigo_LVL2.reiniciar()
                         Enemigo_LVL2.eliminar_todos_enemigos()
-                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
 
                 else:
                     pygame.mixer.quit()
                     Enemigo_LVL2.reiniciar()
                     Enemigo_LVL2.eliminar_todos_enemigos()
-                    ventana=windowLost1player_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos)
+                    ventana=windowLost1player_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.patron1, self.patron2, self.patron3)
                     ventana.run()
                 continue
                 
@@ -519,13 +572,13 @@ class nivel2(nivel1):
                     pygame.mixer.quit()
                     Enemigo_LVL2.reiniciar()
                     Enemigo_LVL2.eliminar_todos_enemigos()
-                    ventana=nivel3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                    ventana=nivel3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                     ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo_LVL2.reiniciar()
                     Enemigo_LVL2.eliminar_todos_enemigos()
-                    ventana=nivel3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2)
+                    ventana=nivel3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                     ventana.run()
 
             if self.escudo_dibujado:
@@ -554,7 +607,7 @@ class nivel2(nivel1):
 ###########################################################################################################################
 ###########################################################################################################################
 class nivel3(nivel1):
-    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2):
+    def __init__(self, username1, username2, vidas_player1, puntos_player1, vidas_player2, puntos_player2, Nivel_player1, Nivel_player2, patron1, patron2, patron3):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         self.pantalla = pygame.display.set_mode((0, 0),
                                                 pygame.RESIZABLE)
@@ -611,6 +664,10 @@ class nivel3(nivel1):
 
         self.escudo = Escudo(self.pantalla, self.nave, 3)
         self.puntos_dobles = DoublePoint(self.pantalla, self.nave)
+
+        self.patron1 = patron1
+        self.patron2 = patron2
+        self.patron3 = patron3
 
     def run(self):
         clock = pygame.time.Clock()
@@ -709,9 +766,20 @@ class nivel3(nivel1):
 
             
             if Enemigo_LVL3.todos_movimientos_presentacion_terminados():
-                #patrones.patron_descenso(Enemigo.enemigos)
-                patrones.patron3(Enemigo_LVL3.enemigos)
-                #patrones.patron4(Enemigo.enemigos)
+                if self.patron3 == 1:
+                    patrones.patron1(Enemigo_LVL3.enemigos) #Zigzag
+                    
+                elif self.patron3 == 2:
+                    patrones.patron2(Enemigo_LVL3.enemigos) #Ciruclos 
+
+                elif self.patron3 == 3:
+                    patrones.patron_descenso(Enemigo_LVL3.enemigos) #Descenso Aleatorio
+
+                elif self.patron3 == 4:
+                    patrones.patron3(Enemigo_LVL3.enemigos) #Columnas divididas
+
+                elif self.patron3 == 5:
+                    patrones.patron4(Enemigo_LVL3.enemigos) #Senoidal
             
             if Enemigo_LVL3.cambio_turno(self.nave):
                 if self.username2 != None:
@@ -719,25 +787,25 @@ class nivel3(nivel1):
                         pygame.mixer.quit()
                         Enemigo_LVL3.reiniciar()
                         Enemigo_LVL3.eliminar_todos_enemigos()
-                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
                     elif self.nivel_actual_player2 == 2:
                         pygame.mixer.quit()
                         Enemigo_LVL3.reiniciar()
                         Enemigo_LVL3.eliminar_todos_enemigos()
-                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
                     elif self.nivel_actual_player2 == 3:
                         pygame.mixer.quit()
                         Enemigo_LVL3.reiniciar()
                         Enemigo_LVL3.eliminar_todos_enemigos()
-                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2)
+                        ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
                         ventana.run()
                 else:
                     pygame.mixer.quit()
                     Enemigo_LVL3.reiniciar()
                     Enemigo_LVL3.eliminar_todos_enemigos()
-                    ventana=windowLost1player_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos)
+                    ventana=windowLost1player_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.patron1, self.patron2, self.patron3)
                     ventana.run()
                 continue
                 
@@ -756,6 +824,42 @@ class nivel3(nivel1):
                     juego_terminado = FinalizarJuego(self.username, None, self.nave.puntos, None)
                     juego_terminado.run()
                 continue
+
+
+            if Enemigo_LVL3.cambio_nivel():
+                if self.username2 != None:
+                    self.nivel_actual_player1 = 4
+                    if self.nivel_actual_player1 and self.nivel_actual_player2 == 4:
+                        print("Dos jugadores")
+                        self.game_over = True
+                        pygame.mixer.quit()
+                        juego_terminado = FinalizarJuego(self.username, self.username2, self.nave.puntos, None)
+                        juego_terminado.run()
+                    else:
+                        if self.nivel_actual_player2 == 1:
+                            pygame.mixer.quit()
+                            Enemigo_LVL2.reiniciar()
+                            Enemigo_LVL2.eliminar_todos_enemigos()
+                            ventana=windowLost2players(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
+                            ventana.run()
+                        elif self.nivel_actual_player2 == 2:
+                            pygame.mixer.quit()
+                            Enemigo_LVL2.reiniciar()
+                            Enemigo_LVL2.eliminar_todos_enemigos()
+                            ventana=windowLost2players_LVL2(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
+                            ventana.run()
+                        elif self.nivel_actual_player2 == 3:
+                            pygame.mixer.quit()
+                            Enemigo_LVL2.reiniciar()
+                            Enemigo_LVL2.eliminar_todos_enemigos()
+                            ventana=windowLost2players_LVL3(self.username, self.username2, self.nave.vidas, self.nave.puntos, self.vidas_player2, self.puntos_player2, self.nivel_actual_player1, self.nivel_actual_player2, self.patron1, self.patron2, self.patron3)
+                            ventana.run()
+                else:
+                    print("Un jugador")
+                    self.game_over = True
+                    pygame.mixer.quit()
+                    juego_terminado = FinalizarJuego(self.username, None, self.nave.puntos, None)
+                    juego_terminado.run()
 
             if self.escudo_dibujado:
                 self.escudo.draw()
