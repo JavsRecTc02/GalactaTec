@@ -10,7 +10,7 @@ class windowLost1player:
         self.player1 = username1
         self.player2 = username2
 
-        self.vidas = vidas
+        self.vidas = max(0, vidas)  # Asegura que las vidas no sean menores que 0
         self.puntos = puntos
 
         self.label = '¡'+ self.player1 + ", haz perdido una o mas vidas, vas a comenzar el mismo nivel!"
@@ -55,7 +55,7 @@ class windowLost1player:
             pygame.display.flip()
 
         pygame.quit()
-    
+
     def draw_text_inputs(self):
         # Renderizar las etiquetas
         label_surface = self.font.render(self.label, True, self.label_color)
@@ -81,10 +81,10 @@ class windowLost2players:
         self.player1 = username1
         self.player2 = username2
 
-        self.vidas_player1 = vidas_player1
+        self.vidas_player1 = max(0,vidas_player1)
         self.puntos_player1 = puntos_player1
 
-        self.vidas_player2 = vidas_player2
+        self.vidas_player2 = max(0,vidas_player2)
         self.puntos_player2 = puntos_player2
 
         self.nivel_actual_player1 = Nivel_player1
@@ -157,34 +157,6 @@ class windowLost2players:
         text_rect = text_surface.get_rect(center=self.ready_button.center)
         self.pantalla.blit(text_surface, text_rect)
 
-
-
-    def run(self):
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    running = False
-                elif event.type == MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        if self.ready_button.collidepoint(event.pos):
-                            from Niveles import nivel1
-                            juego=nivel1(self.player2,self.player1,self.vidas_player2,self.puntos_player2, self.vidas_player1, self.puntos_player1, self.nivel_actual_player2, self.nivel_actual_player1, self.patron1, self.patron2, self.patron3)
-                            juego.run()
-                            print("se presionó ready")
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
-                        from Niveles import nivel1
-                        juego=nivel1(self.player2,self.player1,self.vidas_player2,self.puntos_player2, self.vidas_player1, self.puntos_player1, self.nivel_actual_player2, self.nivel_actual_player1, self.patron1, self.patron2, self.patron3)
-                        juego.run()
-
-            self.pantalla.blit(self.fondo, (0,0))
-            self.draw_text_inputs1()
-            self.draw_text_inputs2()
-            self.draw_ready_button()
-            pygame.display.flip()
-
-        pygame.quit()
     
     def draw_text_inputs1(self):
         # Renderizar las etiquetas
@@ -222,7 +194,7 @@ class windowLost1player_LVL2:
         self.player1 = username1
         self.player2 = username2
 
-        self.vidas = vidas
+        self.vidas = max(0, vidas)
         self.puntos = puntos
 
         self.label = '¡'+ self.player1 + ", haz perdido una o mas vidas, vas a comenzar el mismo nivel!"
@@ -294,10 +266,10 @@ class windowLost2players_LVL2:
         self.player1 = username1
         self.player2 = username2
 
-        self.vidas_player1 = vidas_player1
+        self.vidas_player1 = max(0,vidas_player1)
         self.puntos_player1 = puntos_player1
 
-        self.vidas_player2 = vidas_player2
+        self.vidas_player2 = max(0,vidas_player2)
         self.puntos_player2 = puntos_player2
 
         self.nivel_actual_player1 = Nivel_player1
@@ -381,7 +353,7 @@ class windowLost1player_LVL3:
         self.player1 = username1
         self.player2 = username2
 
-        self.vidas = vidas
+        self.vidas = max(vidas)
         self.puntos = puntos
 
         self.label = '¡'+ self.player1 + ", haz perdido una o mas vidas, vas a comenzar el mismo nivel!"
@@ -452,10 +424,10 @@ class windowLost2players_LVL3:
         self.player1 = username1
         self.player2 = username2
 
-        self.vidas_player1 = vidas_player1
+        self.vidas_player1 = max(0,vidas_player1)
         self.puntos_player1 = puntos_player1
 
-        self.vidas_player2 = vidas_player2
+        self.vidas_player2 = max(0,vidas_player2)
         self.puntos_player2 = puntos_player2
 
         self.nivel_actual_player1 = Nivel_player1
