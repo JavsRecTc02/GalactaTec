@@ -21,13 +21,17 @@ class menu2players(Menu):
         self.pantalla = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption("Menu de selección")
         self.input_data = {
-                "rifa_winner1": {'label':'¡Bienvenido ' + self.player1 +' al menú de GalactaTEC!', "pos": (50, 40), "text": ""},
-                "rifa_winner2": {'label':'¡Bienvenido ' + self.player2 + ' al menú de GalactaTEC!', "pos": (435, 40), "text": ""}
+                "rifa_winner1": {'label':'¡Bienvenido ' + self.player1 +' al menú de GalactaTEC!', "pos": (50, 65), "text": ""},
+                "rifa_winner2": {'label':'¡Bienvenido ' + self.player2 + ' al menú de GalactaTEC!', "pos": (435, 65), "text": ""}
             }
         
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 20)
-        self.label_color = (0, 0, 0)
+        self.label_color = (255, 255, 255)
+
+        # Cargar y escalar la imagen de fondo
+        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\Menu_seleccion1.png")
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
 
         self.scores_window = ScoreWindow(self.player1, self.player2)
@@ -38,6 +42,9 @@ class menu2players(Menu):
         self.patron3 = patron3
 
         print(self.patron1, self.patron2, self.patron3)
+
+    def draw_background(self):
+        self.pantalla.blit(self.background_image, (0, 0))
 
     def run(self):
         running = True
@@ -69,6 +76,7 @@ class menu2players(Menu):
 
                         if self.Exit_button_player1.collidepoint(event.pos):
                             running = False
+                            pygame.quit()
                             sys.exit()
 
                         if self.Help_button_player1.collidepoint(event.pos):
@@ -100,6 +108,7 @@ class menu2players(Menu):
 
                         if self.Exit_button_player2.collidepoint(event.pos):
                             running = False
+                            pygame.quit()
                             sys.exit()
 
                         if self.Help_button_player2.collidepoint(event.pos):
@@ -109,7 +118,7 @@ class menu2players(Menu):
                             webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             menu2players.run(self)
 
-            self.pantalla.fill((255,255,255))
+            self.draw_background()
             self.draw_text_inputs()
             self.draw_configuser_button_Player1()
             self.draw_fama_button_Player1()

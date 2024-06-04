@@ -21,7 +21,7 @@ class windowLost1player:
         self.red_label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -97,7 +97,7 @@ class windowLost2players:
         self.label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -205,7 +205,7 @@ class windowLost1player_LVL2:
         self.red_label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -282,7 +282,7 @@ class windowLost2players_LVL2:
         self.label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -364,7 +364,7 @@ class windowLost1player_LVL3:
         self.red_label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 
@@ -440,7 +440,7 @@ class windowLost2players_LVL3:
         self.label_color = (255, 255, 255)
 
         # Carga la imagen de fondo
-        self.fondo = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
+        self.fondo = pygame.image.load(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\cambio de turnos.webp')
         # Ajusta la imagen al tamaño de la ventana
         self.fondo = pygame.transform.scale(self.fondo, (self.width, self.height))
 

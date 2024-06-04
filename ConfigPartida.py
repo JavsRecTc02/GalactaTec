@@ -12,6 +12,10 @@ class ConfigPartida:
         self.pantalla = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption("ConfigPartida de selección")
 
+        # Cargar y escalar la imagen de fondo
+        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\ConfigP.webp")
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+
         self.player1 = player1
         self.player2 = player2
 
@@ -28,7 +32,7 @@ class ConfigPartida:
         
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
-        self.label_color = (0, 0, 0)
+        self.label_color = (255, 255, 255)
 
         self.Nivel1 = pygame.Rect(self.width // 2 - 400, self.height // 2  - 250, 250, 50)
         self.Nivel2 = pygame.Rect(self.width // 2 - 125, self.height // 2 - 250, 250, 50)
@@ -66,6 +70,8 @@ class ConfigPartida:
             self.patron_states[patron3-1] = False
             self.selected_patron[2] = patron3-1
 
+    def draw_background(self):
+        self.pantalla.blit(self.background_image, (0, 0))
                 
     def run(self):
 
@@ -120,7 +126,7 @@ class ConfigPartida:
                             #webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
    
-            self.pantalla.fill((255,255,255))
+            self.draw_background()
             self.draw_text_inputs()
             self.draw_Niveles()
             self.draw_Back_button()

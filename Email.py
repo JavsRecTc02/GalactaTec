@@ -62,7 +62,7 @@ class UsersEmail:
         while time.time() < start_time + self.expiration_time:
             remaining_time = int(start_time + self.expiration_time - time.time())
             verification_window.update_timer(remaining_time)
-            print(f"Tiempo restante: {remaining_time} segundos", end='\r')
+            #print(f"Tiempo restante: {remaining_time} segundos", end='\r')
             time.sleep(1)
         print("\nEl código de verificación ha expirado. Por favor, inténtelo de nuevo.")
         self.email_message("Error: El código de verificación ha expirado. Por favor, inténtelo de nuevo.")
@@ -71,6 +71,7 @@ class UsersEmail:
 
 class VerificationWindow:
     def __init__(self, verification_code, user_instance):
+        self.stop_thread = False  # Variable para detener el hilo
         self.verification_code = verification_code
         self.user_instance = user_instance
         self.screen_width = 600
@@ -83,11 +84,16 @@ class VerificationWindow:
         self.remaining_time = user_instance.expiration_time
         self.running = True
 
+        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\verificacion.jpg")
+        self.background_image = pygame.transform.scale(self.background_image, (self.screen_width, self.screen_height))
+
     def run(self):
-        while self.running:
+        while self.running and not self.stop_thread:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    self.stop_thread = True 
+                    #self.remaining_time(0)
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
@@ -96,24 +102,30 @@ class VerificationWindow:
                         self.entry_text = self.entry_text[:-1]
                     else:
                         self.entry_text += event.unicode
+            
+            if self.stop_thread:
+                break
 
-            self.screen.fill((245, 245, 245))  # Fondo gris claro
+            self.draw_background()
             self.draw_timer()
             self.draw_text()
             pygame.display.flip()
             self.clock.tick(60)
+    
+    def draw_background(self):
+        self.screen.blit(self.background_image, (0, 0))
 
     def update_timer(self, remaining_time):
         self.remaining_time = remaining_time
 
     def draw_timer(self):
         timer_text = f"Tiempo restante: {self.remaining_time // 60} min {self.remaining_time % 60} seg"
-        timer_surface = self.font.render(timer_text, True, (50, 50, 50))
+        timer_surface = self.font.render(timer_text, True, (255, 255, 255))
         timer_rect = timer_surface.get_rect(topright=(self.screen_width - 10, 10))
         self.screen.blit(timer_surface, timer_rect)
 
     def draw_text(self):
-        text_surface = self.font.render("Ingrese el código de verificación:", True, (50, 50, 50))  # Texto gris oscuro
+        text_surface = self.font.render("Ingrese el código de verificación:", True, (255, 255, 255)) 
         text_rect = text_surface.get_rect(midtop=(self.screen_width/2, 100))
         self.screen.blit(text_surface, text_rect)
         
@@ -123,9 +135,12 @@ class VerificationWindow:
         entry_surface_rect = entry_surface.get_rect(center=entry_rect.center)
         self.screen.blit(entry_surface, entry_surface_rect)
 
-        enter_msg_surface = self.font.render("Presione Enter para enviar", True, (50, 50, 50))  # Texto gris oscuro
+        enter_msg_surface = self.font.render("Presione Enter para enviar", True, (255, 255, 255))  # Texto gris oscuro
         enter_msg_rect = enter_msg_surface.get_rect(midtop=(self.screen_width/2, 250))
         self.screen.blit(enter_msg_surface, enter_msg_rect)
 
     def close(self):
         self.running = False
+        self.stop_thread = True
+        self.remaining_time = 0
+

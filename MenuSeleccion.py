@@ -22,20 +22,24 @@ class Menu:
         pygame.display.set_caption("Menu de selección")
         self.user = username1
 
-        self.input_data = {
-                "rifa_winner1": {'label':'¡Bienvenido al menú de GalactaTEC!', "pos": (255, 40), "text": ""}
-            }
-        
+        self.input_data = { "rifa_winner1": {'label':'¡Bienvenido al menú de GalactaTEC!', "pos": (255, 65), "text": "", "color": (255,255,255)} }
 
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
-        self.label_color = (0, 0, 0)
+        self.label_color = (255, 255, 255)
+
+        # Cargar y escalar la imagen de fondo
+        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\Menu_seleccion1.png")
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
         self.patron1 = patron1
         self.patron2 = patron2
         self.patron3 = patron3
 
         print(self.patron1, self.patron2, self.patron3)
+
+    def draw_background(self):
+        self.pantalla.blit(self.background_image, (0, 0))
 
     def run(self):
         running = True
@@ -73,13 +77,14 @@ class Menu:
 
                         if self.Exit_button.collidepoint(event.pos):
                             running = False
+                            pygame.quit()
                             sys.exit()
 
                         if self.Help_button.collidepoint(event.pos):
                             running = False
                             print("se presionó Ayuda")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             Menu.run(self)
                             
                 elif event.type == pygame.KEYDOWN:
@@ -87,7 +92,7 @@ class Menu:
                         Nivel1_window = nivel1(self.user, None, 3, 0, None, None)
                         Nivel1_window.run()
 
-            self.pantalla.fill((255,255,255))
+            self.draw_background()
             self.draw_text_inputs()
             self.draw_configuser_button()
             self.draw_fama_button()
@@ -115,7 +120,7 @@ class Menu:
         self.configuser_button = pygame.Rect(self.width // 2 - 125, self.height // 2 - 200, 250, 50)
         pygame.draw.rect(self.pantalla, (0, 0, 0), self.configuser_button)
         font = pygame.font.Font(None, 24)
-        text_surface = font.render('Configuración de user', True, (255, 255, 255))
+        text_surface = font.render('Configuración de Jugador', True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=self.configuser_button.center)
         self.pantalla.blit(text_surface, text_rect)
 
@@ -197,6 +202,10 @@ class UsersConfig:
         self.spaceship_image_path = None
         self.user_song_path = None
 
+        # Cargar y escalar la imagen de fondo
+        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\ConfigPlayer.jpg")
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+
         # Rectángulos para botones de editar y confirmar/cancelar
         self.username_edit_rect = pygame.Rect(100, 120, 60, 30)
         self.nombre_edit_rect = pygame.Rect(100, 170, 60, 30)
@@ -213,6 +222,10 @@ class UsersConfig:
 
         # Configurar posiciones de los botones
         self.set_button_positions()
+
+    def draw_background(self):
+        self.screen.blit(self.background_image, (0, 0))
+
 
     def load_user_data(self):
     # Cargar los datos del user desde el archivo users.txt
@@ -311,13 +324,13 @@ class UsersConfig:
                             else:
                                 self.new_value += event.unicode
 
-            self.screen.fill((255, 255, 255))
+            self.draw_background()
             self.draw_user_data()
             pygame.display.flip()
             self.clock.tick(60)
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -330,7 +343,7 @@ class UsersConfig:
         return None
     
     def get_ship_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -343,7 +356,7 @@ class UsersConfig:
         return None
     
     def get_song_player(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if self.username in carpetas:
@@ -395,29 +408,29 @@ class UsersConfig:
     def draw_user_data(self):
         if self.username in self.data:
 
-            jugador_label = self.font.render('Jugador', True, (0, 0, 0))
+            jugador_label = self.font.render('Perfil', True, (255, 255, 255))
             self.screen.blit(jugador_label, (510, 50))  # Ajusta las coordenadas según tu diseño
 
-            nave_label = self.font.render('Nave', True, (0, 0, 0))
+            nave_label = self.font.render('Nave', True, (255, 255, 255))
             self.screen.blit(nave_label, (510, 150))  # Ajusta las coordenadas según tu diseño
 
-            musica_label = self.font.render('Música', True, (0, 0, 0))
+            musica_label = self.font.render('Música', True, (255, 255, 255))
             self.screen.blit(musica_label, (510, 250)) 
 
             user_info = self.data[self.username]
             # Mostrar los datos del user en la ventana
-            username_text = f'user: {self.username}'
-            username_rendered = self.font.render(username_text, True, (0, 0, 0))
+            username_text = f'Usuario: {self.username}'
+            username_rendered = self.font.render(username_text, True, (255, 255, 255))
             username_rect = username_rendered.get_rect(topleft=(100, 50))
             self.screen.blit(username_rendered, username_rect)
 
             nombre_text = f'Nombre: {user_info["nombre"]}'
-            nombre_rendered = self.font.render(nombre_text, True, (0, 0, 0))
+            nombre_rendered = self.font.render(nombre_text, True, (255, 255, 255))
             nombre_rect = nombre_rendered.get_rect(topleft=(100, 150))
             self.screen.blit(nombre_rendered, nombre_rect)
 
             correo_text = f'Correo: {user_info["correo"]}'
-            correo_rendered = self.font.render(correo_text, True, (0, 0, 0))
+            correo_rendered = self.font.render(correo_text, True, (255, 255, 255))
             correo_rect = correo_rendered.get_rect(topleft=(100, 250))
             self.screen.blit(correo_rendered, correo_rect)
 
@@ -537,8 +550,8 @@ class UsersConfig:
                 new_username = self.new_value  # Almacenar el nuevo nombre de user
 
                 # Renombrar la carpeta asociada al nombre de user
-                old_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\User files", old_username)
-                new_folder_path = os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\User files", self.new_value)
+                old_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", old_username)
+                new_folder_path = os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files", self.new_value)
                 os.rename(old_folder_path, new_folder_path)
             else:
                 self.data[self.username][self.editing] = self.new_value

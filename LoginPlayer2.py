@@ -74,6 +74,13 @@ class LoginPlayer2(LoginWindow):
         self.patron3 = patron3
 
         self.menu = Menu(self.player1, self.patron1, self.patron2, self.patron3)
+
+        # Cargar y escalar la imagen de fondo
+        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\iniciar2.jpg")
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+
+    def draw_background(self):
+        self.welcome_window.window.blit(self.background_image, (0, 0))
         
     def run(self):
         running = True
@@ -110,7 +117,7 @@ class LoginPlayer2(LoginWindow):
                                 field["text"] = field["text"][:-1]
                             else:
                                 field["text"] += event.unicode
-            self.welcome_window.window.fill((0, 0, 255))
+            self.draw_background()
             self.welcome_window.draw_back_button()
             self.draw_entry_button()
             self.draw_text_inputs()
