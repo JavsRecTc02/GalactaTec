@@ -30,7 +30,7 @@ class menu2players(Menu):
         self.label_color = (255, 255, 255)
 
         # Cargar y escalar la imagen de fondo
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\Menu_seleccion1.png")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\Menu_seleccion1.png")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
 
@@ -83,7 +83,7 @@ class menu2players(Menu):
                             running = False
                             print("se presionó Ayuda del player1")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             menu2players.run(self)
 
                         ##Para el jugador 2
@@ -115,7 +115,7 @@ class menu2players(Menu):
                             running = False
                             print("se presionó Ayuda del player2")
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                             menu2players.run(self)
 
             self.draw_background()

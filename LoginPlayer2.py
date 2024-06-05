@@ -66,7 +66,7 @@ class LoginPlayer2(LoginWindow):
         self.input_data = {
             "user_name": {"label": "User Name:", "pos": (150, 270), "rect": pygame.Rect(215, 300, 400, 50), "active": False, "text": ""},
             "user_password": {"label": "Password:", "pos": (150, 370), "rect": pygame.Rect(215, 400, 400, 50), "active": False, "text": ""},
-            "info": {"label": "Logueo Player 2", "pos": (350, 90), "rect": pygame.Rect(0, 0, 0, 0), "active": False, "text": ""}
+            "info": {"label": "", "pos": (350, 90), "rect": pygame.Rect(0, 0, 0, 0), "active": False, "text": ""}
         }
 
         self.patron1 = patron1
@@ -76,7 +76,7 @@ class LoginPlayer2(LoginWindow):
         self.menu = Menu(self.player1, self.patron1, self.patron2, self.patron3)
 
         # Cargar y escalar la imagen de fondo
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\iniciar2.jpg")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\iniciar2.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
     def draw_background(self):

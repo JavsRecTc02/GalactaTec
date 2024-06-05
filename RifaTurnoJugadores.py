@@ -25,12 +25,16 @@ class rifaWindow:
 
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
-        self.label_color = (0, 0, 0)
+        self.label_color = (255, 255, 255)
         self.red_label_color = (255, 0, 0)  # Color rojo para el nuevo texto
 
         self.patron1 = patron1
         self.patron2 = patron2
         self.patron3 = patron3
+
+        # Cargar la imagen de fondo
+        self.background = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\Animacion final_juego\frame_24_delay-0.09s.png')
+        self.background = pygame.transform.scale(self.background, (self.width, self.height))
 
     def run(self):
         running = True
@@ -42,14 +46,16 @@ class rifaWindow:
                     if event.button == 1:
                         if self.ready_button.collidepoint(event.pos):
                             print("se presionó")
-                            niveles_window = nivel1(self.winner, self.loser, 5, 0, 3, 0, 1, 1, self.patron1, self.patron2, self.patron3)
+                            niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1, self.patron1, self.patron2, self.patron3)
                             niveles_window.run()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         niveles_window = nivel1(self.winner, self.loser, 3, 0, 3, 0, 1, 1, self.patron1, self.patron2, self.patron3)
                         niveles_window.run()
 
-            self.pantalla.fill((255,255,255))
+            # Dibujar la imagen de fondo
+            self.pantalla.blit(self.background, (0, 0))
+
             self.draw_text_inputs()
             self.draw_ready_button()
             pygame.display.flip()
@@ -87,12 +93,17 @@ class AceptarPartidaMultiplayer:
 
         # Define la fuente y tamaño de las etiquetas
         self.font = pygame.font.Font(None, 25)
-        self.label_color = (0, 0, 0)
-        self.red_label_color = (0, 0, 0)  # Color rojo para el nuevo texto
+        self.label_color = (255, 255, 255)
+        self.red_label_color = (255, 0, 0)  # Color rojo para el nuevo texto
 
         self.patron1 = patron1
         self.patron2 = patron2
         self.patron3 = patron3
+
+                # Cargar la imagen de fondo
+        self.background = pygame.image.load(r'C:\Users\Usuario\Desktop\GalactaTec\Animacion final_juego\frame_24_delay-0.09s.png')
+        self.background = pygame.transform.scale(self.background, (self.width, self.height))
+
 
     def run(self):
         running = True
@@ -116,7 +127,8 @@ class AceptarPartidaMultiplayer:
                                 back=menu2players(self.player2, self.retador, self.patron1, self.patron2, self.patron3)
                                 back.run()
 
-            self.pantalla.fill((255,255,255))
+            # Dibujar la imagen de fondo
+            self.pantalla.blit(self.background, (0, 0))
             self.draw_text_inputs()
             self.draw_ready_button()
             self.draw_red_text()

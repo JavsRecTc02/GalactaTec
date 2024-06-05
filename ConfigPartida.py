@@ -13,7 +13,7 @@ class ConfigPartida:
         pygame.display.set_caption("ConfigPartida de selección")
 
         # Cargar y escalar la imagen de fondo
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\ConfigP.webp")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\ConfigP.webp")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
         self.player1 = player1
@@ -123,7 +123,7 @@ class ConfigPartida:
                         if self.Help_button.collidepoint(event.pos):
                             running = False
                             pass
-                            #webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            #webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
    
             self.draw_background()

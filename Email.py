@@ -84,7 +84,7 @@ class VerificationWindow:
         self.remaining_time = user_instance.expiration_time
         self.running = True
 
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\verificacion.jpg")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\verificacion.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.screen_width, self.screen_height))
 
     def run(self):
