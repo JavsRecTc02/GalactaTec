@@ -121,9 +121,8 @@ class ConfigPartida:
                                 ventana.run()
                             
                         if self.Help_button.collidepoint(event.pos):
-                            running = False
                             pass
-                            #webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
    
             self.draw_background()
