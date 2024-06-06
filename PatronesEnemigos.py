@@ -6,7 +6,7 @@ class PatronesEnemigos:
         self.zigzag_direction = 1
         self.time = 0
 
-#patrón en zigzag
+    # Patrón en zigzag
     def patron1(self, enemigos):
         velocidad_x = 5
         velocidad_y = 1
@@ -21,7 +21,7 @@ class PatronesEnemigos:
         if any(enemigo.rect.x >= enemigo.pantalla.get_width() - enemigo.rect.width or enemigo.rect.x <= 0 for enemigo in enemigos):
             self.zigzag_direction *= -1
 
-#patrón en circulos
+    # Patrón en círculos
     def patron2(self, enemigos):
         radius = 100
         speed = 0.05
@@ -37,7 +37,7 @@ class PatronesEnemigos:
                 enemigo.rect.y = -enemigo.rect.height
                 enemigo.rect.x = centro_x + radius * math.cos(self.time + enemigo.offset)
 
-#patrón de spawn superior aleatorio
+    # Patrón de spawn superior aleatorio
     def patron_descenso(self, enemigos):
         velocidad_y = 2
 
@@ -48,7 +48,7 @@ class PatronesEnemigos:
                 enemigo.rect.y = -enemigo.rect.height
                 enemigo.rect.x = random.randint(0, enemigo.pantalla.get_width() - enemigo.rect.width)
 
-#patrón por división en columnas
+    # Patrón por división en columnas
     def patron3(self, enemigos):
         velocidad_x = 5
         velocidad_y = 1
@@ -68,8 +68,7 @@ class PatronesEnemigos:
             if enemigo.rect.y > enemigo.pantalla.get_height():
                 enemigo.rect.y = -enemigo.rect.height
 
-
-#patrón tipo senoidal
+    # Patrón tipo senoidal
     def patron4(self, enemigos):
         velocidad_y = 2
         amplitud = 20
@@ -82,3 +81,4 @@ class PatronesEnemigos:
 
             if enemigo.rect.y > enemigo.pantalla.get_height():
                 enemigo.rect.y = -enemigo.rect.height
+

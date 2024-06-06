@@ -6,10 +6,19 @@ import csv
 import ctypes
 from pygame import USEREVENT
 
+#####Patron de comportamiento#####
+
+class ScoreMemento:
+    def __init__(self, scores):
+        self._scores = scores
+
+    def get_saved_scores(self):
+        return self._scores
+
 
 class Scores:
     def __init__(self, file_path, username):
-        self.player1 = username # este user lo mandamos a la user config
+        self.player1 = username
         print(self.player1)
         self.file_path = file_path
         self.scores = self.read_scores()
@@ -31,7 +40,7 @@ class Scores:
         return top_scores
 
     def get_profile_image(self, username):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
         if username in carpetas:
@@ -43,9 +52,16 @@ class Scores:
                 return pygame.transform.scale(imagen_perfil, (50, 50))
         return None
 
+    def create_memento(self):
+        return ScoreMemento(self.scores)
+
+    def set_memento(self, memento):
+        self.scores = memento.get_saved_scores()
+
+
 
 class ScoreWindow:
-    def __init__(self,username,previous_instance=None):
+    def __init__(self, username, previous_instance=None):
         self.previous_instance = previous_instance
         self.player = username
         pygame.init()
@@ -53,7 +69,7 @@ class ScoreWindow:
         pygame.display.set_caption('Top Scores')
         self.clock = pygame.time.Clock()
         self.scores = Scores('scores.txt', self.player)
-        self.background = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
+        self.background = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\scorebg.jpg").convert()
 
         # Definir las coordenadas y dimensiones del botón
         self.button_rect = pygame.Rect(700, 500, 80, 40)  # Posición y tamaño del botón
@@ -67,7 +83,7 @@ class ScoreWindow:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # Verificar si se hizo clic en el botón "Back"
                     if self.previous_instance is not None:
-                            self.previous_instance.run()  # Llama al método run() de la instancia anterior
+                        self.previous_instance.run()  # Llama al método run() de la instancia anterior
                     else:
                         pygame.quit()
                         return
@@ -94,10 +110,11 @@ class ScoreWindow:
         for i, score in enumerate(top_scores):
             text = f"{i + 1}. {score['username']}: {score['score']}"
             rendered_text = font.render(text, True, (255, 255, 255))
-            self.screen.blit(rendered_text, (30, (y+45)))
+            self.screen.blit(rendered_text, (30, (y + 45)))
 
             profile_image = self.scores.get_profile_image(score['username'])
             if profile_image:
-                self.screen.blit(profile_image, (300, (y+45)))  # Ajusta las coordenadas según tu diseño
+                self.screen.blit(profile_image, (300, (y + 45)))  # Ajusta las coordenadas según tu diseño
 
             y += 80
+

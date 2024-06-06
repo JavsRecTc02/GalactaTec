@@ -4,7 +4,9 @@ import pygame
 from pygame.locals import *
 from NaveJugador import Nave
 from Enemies import Enemigo
-from PatronesEnemigos import PatronesEnemigos
+#from PatronesEnemigos import PatronesEnemigos
+#No es necesario porque se tiene un Facade
+from PatronesFacade import EnemyPatternsFacade 
 from Bonus import Bonus_de_nivel
 from Escudo import Escudo
 from FinalizarJuego import FinalizarJuego 
@@ -72,10 +74,10 @@ class nivel1:
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo")):
+        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación Fondo", filename))
+                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación Fondo", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -110,7 +112,7 @@ class nivel1:
         self.escudo_dibujado = False  # Añade esta línea en la inicialización de tu clase
         self.aura =  False
 
-        patrones = PatronesEnemigos()
+        patterns_facade = EnemyPatternsFacade()
         while self.running and not self.game_over:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -188,19 +190,19 @@ class nivel1:
 
             if Enemigo.todos_movimientos_presentacion_terminados():
                 if self.patron1 == 1:
-                    patrones.patron1(Enemigo.enemigos) #Zigzag
+                    patterns_facade.zigzag_pattern(Enemigo.enemigos) #Zigzag
 
                 elif self.patron1 == 2:
-                    patrones.patron2(Enemigo.enemigos) #Ciruclos 
+                    patterns_facade.circular_pattern(Enemigo.enemigos) #Ciruclos 
 
                 elif self.patron1 == 3:
-                    patrones.patron_descenso(Enemigo.enemigos) #Descenso Aleatorio
+                    patterns_facade.descending_pattern(Enemigo.enemigos) #Descenso Aleatorio
 
                 elif self.patron1 == 4:
-                    patrones.patron3(Enemigo.enemigos) #Columnas divididas
+                    patterns_facade.column_pattern(Enemigo.enemigos) #Columnas divididas
 
                 elif self.patron1 == 5:
-                    patrones.patron4(Enemigo.enemigos) #Senoidal
+                    patterns_facade.sinusoidal_pattern(Enemigo.enemigos) #Senoidal
             
             if Enemigo.cambio_turno(self.nave):
                 if self.username2 != None:
@@ -344,7 +346,7 @@ class nivel1:
 
 
     def loadPerfil1(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -358,7 +360,7 @@ class nivel1:
             self.pantalla.blit(self.imagen_perfil1, (8, 8))
 
     def loadPerfil2(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -377,7 +379,7 @@ class nivel1:
             self.pantalla.blit(label_surface, field_data["pos"])
 
     def loadMusic(self):
-        ruta_directorio_carpetas = r"C:\Users\Usuario\Desktop\GalactaTec\User files"
+        ruta_directorio_carpetas = r"C:\Users\Javier Tenorio\Desktop\GalactaTec\User files"
         carpetas = [nombre for nombre in os.listdir(ruta_directorio_carpetas) if
                     os.path.isdir(os.path.join(ruta_directorio_carpetas, nombre))]
         carpetas.sort()
@@ -438,10 +440,10 @@ class nivel2(nivel1):
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL2")):
+        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL2")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL2", filename))
+                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL2", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -469,14 +471,14 @@ class nivel2(nivel1):
 
         bonus_count = 0
 
-        self.loadMusic(r'C:\Users\Usuario\Desktop\GalactaTec\Animación LVL2\LVL2.mp3')
+        self.loadMusic(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL2\LVL2.mp3')
 
         Enemigo_LVL2.generar_enemigos(self.pantalla, 6)
 
         self.escudo_dibujado = False  # Añade esta línea en la inicialización de tu clase
         self.aura =  False
 
-        patrones = PatronesEnemigos()
+        patterns_facade = EnemyPatternsFacade()
         while self.running and not self.game_over:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -554,19 +556,19 @@ class nivel2(nivel1):
 
             if Enemigo_LVL2.todos_movimientos_presentacion_terminados():
                 if self.patron2 == 1:
-                    patrones.patron1(Enemigo_LVL2.enemigos) #Zigzag
+                    patterns_facade.zigzag_pattern(Enemigo_LVL2.enemigos) #Zigzag
                     
                 elif self.patron2 == 2:
-                    patrones.patron2(Enemigo_LVL2.enemigos) #Ciruclos 
+                    patterns_facade.circular_pattern(Enemigo_LVL2.enemigos) #Ciruclos 
 
                 elif self.patron2 == 3:
-                    patrones.patron_descenso(Enemigo_LVL2.enemigos) #Descenso Aleatorio
+                    patterns_facade.descending_pattern(Enemigo_LVL2.enemigos) #Descenso Aleatorio
 
                 elif self.patron2 == 4:
-                    patrones.patron3(Enemigo_LVL2.enemigos) #Columnas divididas
+                    patterns_facade.column_pattern(Enemigo_LVL2.enemigos) #Columnas divididas
 
                 elif self.patron2 == 5:
-                    patrones.patron4(Enemigo_LVL2.enemigos) #Senoidal
+                    patterns_facade.sinusoidal_pattern(Enemigo_LVL2.enemigos) #Senoidal
             
             if Enemigo_LVL2.cambio_turno(self.nave):
                 if self.username2 != None:
@@ -754,10 +756,10 @@ class nivel3(nivel1):
 
         # Carga las imágenes del GIF
         self.gif_images = []
-        for filename in sorted(os.listdir(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL3")):
+        for filename in sorted(os.listdir(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL3")):
             if filename.endswith('.png'):  # Solamente los archivos png
                 imagen = pygame.image.load(
-                    os.path.join(r"C:\Users\Usuario\Desktop\GalactaTec\Animación LVL3", filename))
+                    os.path.join(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL3", filename))
                 # Redimensiona la imagen para que se ajuste a la ventana
                 imagen_escalada = pygame.transform.scale(imagen, (self.width, self.height))
                 self.gif_images.append(imagen_escalada)
@@ -785,14 +787,14 @@ class nivel3(nivel1):
 
         bonus_count = 0
 
-        self.loadMusic(r'C:\Users\Usuario\Desktop\GalactaTec\Animación LVL3\LVL3.mp3')
+        self.loadMusic(r'C:\Users\Javier Tenorio\Desktop\GalactaTec\Animación LVL3\LVL3.mp3')
 
         Enemigo_LVL3.generar_enemigos(self.pantalla, 6)
 
         self.escudo_dibujado = False  # Añade esta línea en la inicialización de tu clase
         self.aura =  False
 
-        patrones = PatronesEnemigos()
+        patterns_facade = EnemyPatternsFacade()
         while self.running and not self.game_over:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -871,19 +873,19 @@ class nivel3(nivel1):
             
             if Enemigo_LVL3.todos_movimientos_presentacion_terminados():
                 if self.patron3 == 1:
-                    patrones.patron1(Enemigo_LVL3.enemigos) #Zigzag
+                    patterns_facade.zigzag_pattern(Enemigo_LVL3.enemigos) #Zigzag
                     
                 elif self.patron3 == 2:
-                    patrones.patron2(Enemigo_LVL3.enemigos) #Ciruclos 
+                    patterns_facade.circular_pattern(Enemigo_LVL3.enemigos) #Ciruclos 
 
                 elif self.patron3 == 3:
-                    patrones.patron_descenso(Enemigo_LVL3.enemigos) #Descenso Aleatorio
+                    patterns_facade.descending_pattern(Enemigo_LVL3.enemigos) #Descenso Aleatorio
 
                 elif self.patron3 == 4:
-                    patrones.patron3(Enemigo_LVL3.enemigos) #Columnas divididas
+                    patterns_facade.column_pattern(Enemigo_LVL3.enemigos) #Columnas divididas
 
                 elif self.patron3 == 5:
-                    patrones.patron4(Enemigo_LVL3.enemigos) #Senoidal
+                    patterns_facade.sinusoidal_pattern(Enemigo_LVL3.enemigos) #Senoidal
             
             if Enemigo_LVL3.cambio_turno(self.nave):
                 if self.username2 != None:
