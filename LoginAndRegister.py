@@ -32,7 +32,7 @@ class WelcomeWindow:
         self.help_button_visible = False
 
         # Cargar y escalar la imagen de fondo
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\mainwindow.jpg")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\mainwindow.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
     def draw_background(self):
@@ -111,7 +111,7 @@ class WelcomeWindow:
 
                         elif 0 <= x <= 120 and 550 <= y <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
             self.window.fill(self.WHITE)
             self.draw_background() 
@@ -133,7 +133,7 @@ class LoginWindow:
         self.user_data = self.load_user_data()
         # Define las coordenadas y rectángulos para los campos de entrada
         self.input_data = {
-            "user_name": {"label": "Javier Tenorio:", "pos": (150, 270), "rect": pygame.Rect(215, 300, 400, 50), "active": False, "text": ""},
+            "user_name": {"label": "Usuario:", "pos": (150, 270), "rect": pygame.Rect(215, 300, 400, 50), "active": False, "text": ""},
             "user_password": {"label": "Contraseña:", "pos": (150, 370), "rect": pygame.Rect(215, 400, 400, 50), "active": False, "text": ""}
         }
         # Define la fuente y tamaño de las etiquetas
@@ -145,7 +145,7 @@ class LoginWindow:
         self.forgot_password_button_active = False
 
         # Cargar y escalar la imagen de fondo
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\iniciar.jpg")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\iniciar.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
     def draw_background(self):
@@ -194,7 +194,7 @@ class LoginWindow:
 
                         elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
 
                         # Verificar si se hizo clic en el botón "Entry"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
@@ -235,8 +235,8 @@ class LoginWindow:
                 self.error_message("Contraseña incorrecta")
                 print("Contraseña incorrecta")
         else:
-            self.error_message("El Javier Tenorio no se encuentra registrado")
-            print("El Javier Tenorio no se encuentra registrado")
+            self.error_message("El Usuario no se encuentra registrado")
+            print("El Usuario no se encuentra registrado")
 
     def handle_forgot_password(self):
         #Abre la ventana de recuperacion de contraseña
@@ -293,7 +293,7 @@ class PasswordRecoveryWindow:
         self.font = pygame.font.Font(None, 25)
         self.label_color = (255, 255, 255)
         # Cargar y escalar la imagen de fondo
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\recuperacion.jpg")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\recuperacion.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
     #Funcion para los msj de error
@@ -332,7 +332,7 @@ class PasswordRecoveryWindow:
                     #Boton help
                     elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                 elif event.type == pygame.KEYDOWN:
                     for field_data in self.input_data.values():
                         if field_data["active"]:
@@ -484,9 +484,9 @@ class PasswordRecoveryWindow:
                 lines[i] = ",".join(parts) + "\n"  # Unir los elementos de parts en una cadena y asignar a lines[i]
                 break
         else:
-            print("No se encontró ningún Javier Tenorio con el correo electrónico proporcionado:", email)
-            self.error_message("Error: No se encontró ningún Javier Tenorio con el correo electrónico proporcionado:", email)
-            #return  # Salir de la función si no se encuentra el Javier Tenorio
+            print("No se encontró ningún Usuario con el correo electrónico proporcionado:", email)
+            self.error_message("Error: No se encontró ningún Usuario con el correo electrónico proporcionado:", email)
+            #return  # Salir de la función si no se encuentra el Usuario
     # Escribir las líneas actualizadas de vuelta al archivo
         with open("users.txt", "w") as file:
             file.writelines(lines)
@@ -519,7 +519,7 @@ class RegisterWindow:
         self.font = pygame.font.Font(None, 25)
         self.label_color = (255, 255, 255)
 
-        self.background_image = pygame.image.load(r"C:\Users\Javier Tenorio\Desktop\GalactaTec\backgrounds\registro.jpg")
+        self.background_image = pygame.image.load(r"C:\Users\Usuario\Desktop\GalactaTec\backgrounds\registro.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
 
         # Botones para subir imágenes y canciones
@@ -558,7 +558,7 @@ class RegisterWindow:
                         #Verificar si hizo clic en el botón "Help"
                         elif 0 <= event.pos[0] <= 120 and 550 <= event.pos[1] <= 600:
                             #Colocar la dirección en la que se encuentra el pdf ---> file://C:\path\to\file.pdf
-                            webbrowser.open_new(r'file://C:\Users\Javier Tenorio\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
+                            webbrowser.open_new(r'file://C:\Users\Usuario\Desktop\GalactaTec\Manual_de_ayuda_GalactaTec_prefinal.pdf')
                         # Verificar si se hizo clic en el botón "Submit"
                         elif self.width - 150 <= event.pos[0] <= self.width - 50 and self.height - 80 <= event.pos[1] <= self.height - 30:
                             for field in self.input_data.values():
@@ -658,7 +658,7 @@ class RegisterWindow:
             text_rect = text_surface.get_rect(center=upload_buttons[i].center)
             self.welcome_window.window.blit(text_surface, text_rect)
 
-    #Funciones para guardar datos y verificacion de Javier Tenorio ya registrado
+    #Funciones para guardar datos y verificacion de Usuario ya registrado
     def user_already_exists(self):
         # Verificar si el User ya existe
         user_name = self.input_data["user_name"]["text"]
@@ -669,12 +669,12 @@ class RegisterWindow:
             print("Invalid email address. Must be use a Gmail address")
             return False 
             
-        # Verificar si ya existe un Javier Tenorio con el mismo nombre de Javier Tenorio o correo electrónico
+        # Verificar si ya existe un Usuario con el mismo nombre de Usuario o correo electrónico
         with open("users.txt", "r") as file:
             for line in file:
                 data = line.strip().split(",")
                 if data[0] == user_name or data[2] == user_correo:
-                    self.error_message("Error: El Javier Tenorio o correo electrónico ya se encuentra registrado en la base de datos")
+                    self.error_message("Error: El Usuario o correo electrónico ya se encuentra registrado en la base de datos")
                     return False
 
         return True
@@ -714,7 +714,7 @@ class RegisterWindow:
     
     #Guarda name,user_name, correo y password en .txt
     def save_user_data(self):
-        # Guardar los datos del Javier Tenorio en el archivo de texto "users.txt"
+        # Guardar los datos del Usuario en el archivo de texto "users.txt"
         user_name = self.input_data["user_name"]["text"]
         name = self.input_data["name"]["text"]
         user_correo = self.input_data["user_correo"]["text"]
@@ -741,28 +741,28 @@ class RegisterWindow:
     # Verificar si se han seleccionado los tres archivos requeridos
         return hasattr(self, 'spaceship_image_path') and hasattr(self, 'profile_image_path') and hasattr(self, 'user_song_path')
 
-    #Funcion que crea las carpetas con el nombre de Javier Tenorio en /User file/username
+    #Funcion que crea las carpetas con el nombre de Usuario en /User file/username
     def create_user_folder(self):
-        # Obtener el nombre de Javier Tenorio
+        # Obtener el nombre de Usuario
         user_name = self.input_data["user_name"]["text"]
         # Crear la carpeta User files si no existe
         user_files_folder = os.path.join(os.getcwd(), "User files")
         if not os.path.exists(user_files_folder):
             os.makedirs(user_files_folder)
-        # Crear la carpeta del Javier Tenorio dentro de User files
+        # Crear la carpeta del Usuario dentro de User files
         user_folder = os.path.join(user_files_folder, user_name)
         if not os.path.exists(user_folder):
             os.makedirs(user_folder)
 
     #Funcion que almacena las imagenes y sonidos dentro de la carpeta
     def save_images_and_song(self):
-        # Obtener el nombre de Javier Tenorio
+        # Obtener el nombre de Usuario
         user_name = self.input_data["user_name"]["text"]
-        # Ruta donde se guardará la carpeta del Javier Tenorio
+        # Ruta donde se guardará la carpeta del Usuario
         user_folder = os.path.join(os.getcwd(), "User files", user_name)
         # Verificar si se han seleccionado imágenes y una canción
         if self.spaceship_image_path and self.profile_image_path and self.user_song_path:
-            # Copiar las imágenes y la canción a la carpeta del Javier Tenorio
+            # Copiar las imágenes y la canción a la carpeta del Usuario
             shutil.copy(self.spaceship_image_path, os.path.join(user_folder, 'nave_espacial.png'))
             shutil.copy(self.profile_image_path, os.path.join(user_folder, 'perfil.png'))
             shutil.copy(self.user_song_path, os.path.join(user_folder, 'cancion.mp3'))
